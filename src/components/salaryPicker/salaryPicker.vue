@@ -64,7 +64,7 @@
 			handleChange(e) {
 				const index1 = e.detail.value[0]
 				const index2 = e.detail.value[1]
-				let hopeSalary = {}
+				let hopeSalary = ''
 				if(index2 === null) {
 					hopeSalary = `${this.firstList[index1]} - ${this.firstList[index1+1]}`
 				}else if(index1 === 99) {
@@ -77,7 +77,7 @@
 					icon: "none"
 				})
 				
-				this.$emit('comfirm', hopeSalary)
+				this.$emit('comfirm', { type: 'hopeSalary', data: hopeSalary})
 			}
 		}
 		

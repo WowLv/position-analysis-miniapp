@@ -80,7 +80,7 @@
 			},
 			comfirmCity(e) {
 				// console.log(e.target.dataset.city)
-				this.$store.dispatch('setHopeCity', e.target.dataset.city)
+				this.$store.dispatch('setHopeData', { type: 'hopeCity', data: e.target.dataset.city })
 				uni.navigateBack({
 					delta: 1
 				})

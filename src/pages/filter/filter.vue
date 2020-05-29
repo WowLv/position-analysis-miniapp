@@ -9,6 +9,9 @@
 				<view v-if="item.type === 'hopeSalary'" class="item_salary">
 					<salary-picker :pName="item.name" :pValue="hopeObj[item.type]" @comfirm="handleComfirm"></salary-picker>
 				</view>
+				<view v-else-if="item.type === 'hopeDate'">
+					<date-picker :pName="item.name" :pValue="hopeObj[item.type]" @comfirm="handleComfirm"></date-picker>
+				</view>
 				<view v-else class="no_salary">
 					<text class="item_title">{{item.name}}</text>
 					<view class="item_right">
@@ -26,11 +29,14 @@
 
 <script>
 	import SalaryPicker from '../../components/salaryPicker/salaryPicker.vue'
+	import DatePicker from '../../components/datePicker/datePicker'
 	import { debounce } from '../../utils/utils.js'
 	import { mapGetters, mapActions} from 'vuex'
+	
 	export default {
 		components: {
-			SalaryPicker
+			SalaryPicker,
+			DatePicker
 		},
 		data() {
 			return {
@@ -53,30 +59,32 @@
 						name: '期望城市'
 					},
 					{
-						type: 'hopeStart',
+						type: 'hopeDate',
 						name: '到岗时间'
 					}
 				]
 			}
 		},
+		
 		computed: {
 			...mapGetters([
 				'hopeSalary',
 				'hopeCity',
-				'hopeType'
+				'hopeType',
+				'hopeDate'
 			]),
 			hopeObj() {
 				return {
 					hopeSalary: this.hopeSalary,
 					hopeCity: this.hopeCity,
-					hopeType: this.hopeType
+					hopeType: this.hopeType,
+					hopeDate: this.hopeDate
 				}
 			}
 		},
 		methods: {
 			...mapActions([
-				'setHopeSalary',
-				'setHopeType'
+				'setHopeData'
 			]),
 			handleClick(type, list) {
 				switch(type) {
@@ -88,7 +96,7 @@
 							itemList: list,
 							success: (res) => {
 								let index = res.tapIndex
-								this.setHopeType(list[index])
+								this.setHopeData( {type: 'hopeType', data: list[index]} )
 								// this.filterList.forEach((item) => {
 								// 	if(item.type === type) {
 								// 		item.value = list[index]
@@ -111,7 +119,7 @@
 				}
 			},
 			handleComfirm(e) {
-				this.setHopeSalary(e)
+				this.setHopeData(e)
 			}
 			
 		}
