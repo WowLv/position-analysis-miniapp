@@ -3,8 +3,9 @@
 	class="picker"
 	mode="multiSelector" 
 	:range="[firstList, secondList]" 
+	@columnchange="handlePickerChange"
 	@change="handleChange" 
-	@columnchange="handlePickerChange">
+	>
 		<text class="item_title">{{pName}}</text>
 		<text class="item_selected">{{pValue}}</text>
 		<text class="iconfont icon-arrow-right"></text>
@@ -26,7 +27,8 @@
 		data() {
 			return {
 				firstList: [],
-				secondList: []
+				secondList: [],
+				valueList: [null, null]
 			};
 		},
 		created() {
@@ -96,13 +98,13 @@
 		}
 		.item_selected {
 			position: absolute;
-			color: #a9acac;
+			color: $shallow-color;
 			font-size: $main-size;
 			right: 60rpx;
 		}
 		.icon-arrow-right {
 			position: absolute;
-			color: #a9acac;
+			color: $shallow-color;
 			margin-left: 20rpx;
 			right: 0;
 			font-size: $small-size;

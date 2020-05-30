@@ -55,13 +55,13 @@ import { getStartDate, getEndDate } from '../../utils/utils'
 		}
 		.item_selected {
 			position: absolute;
-			color: #a9acac;
+			color: $shallow-color;
 			font-size: $main-size;
 			right: 60rpx;
 		}
 		.icon-arrow-right {
 			position: absolute;
-			color: #a9acac;
+			color: $shallow-color;
 			margin-left: 20rpx;
 			right: 0;
 			font-size: $small-size;

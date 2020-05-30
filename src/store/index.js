@@ -10,7 +10,8 @@ export default new Vuex.Store({
 	mutations: {},
 	actions: {},
 	modules: {
-		hope,
-		user
+		user,
+		hope
+		
 	}
 })

@@ -1,5 +1,5 @@
 <template>
-	<view class="filter">
+	<view class="container">
 		<uni-list class="filter_list">
 			<uni-list-item 
 			v-for="(item, index) in filterList" 
@@ -89,7 +89,9 @@
 			handleClick(type, list) {
 				switch(type) {
 					case 'hopePos':
-						console.log('goto hopePos');
+						uni.navigateTo({
+							url: '../selectPosition/selectPosition?mode=hope'
+						})
 						break;
 					case 'hopeType':
 						uni.showActionSheet({
@@ -105,16 +107,10 @@
 							}
 						})
 						break;
-					case 'hopeSalary':
-						console.log('goto hopeSalary');
-						break;
 					case 'hopeCity':
 						uni.navigateTo({
-							url: '../selectRegion/selectRegion'
+							url: '../selectRegion/selectRegion?mode=hope'
 						})
-						break;
-					case 'hopeStart':
-						console.log('goto hopeStart');
 						break;
 				}
 			},
@@ -128,14 +124,14 @@
 </script>
 
 <style scoped lang="scss">
-	.filter {
+	.container {
 		margin-top: 30rpx;
 		.filter_list {
 			display: flex;
 			flex-direction: column;
 			margin: 0 30rpx;
 			.border_bottom {
-				border-bottom: 1rpx solid $border-color;
+				border-bottom: 2rpx solid $border-color;
 			}
 			uni-list-item {	
 				width: 100%;
@@ -150,7 +146,7 @@
 						font-size: 35rpx;
 					}
 					.item_right {
-						color: #a9acac;
+						color: $shallow-color;
 						.item_selected {
 							font-size: $main-size;
 						}

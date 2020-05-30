@@ -1,5 +1,5 @@
 <template>
-	<view class="attachment">
+	<view class="container">
 		附件简历
 	</view>
 </template>

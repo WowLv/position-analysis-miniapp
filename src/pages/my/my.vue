@@ -1,5 +1,5 @@
 <template>
-	<view class="my">
+	<view class="container">
 		<view class="my_info">
 			<view class="my_login">
 				<text class="login_big">{{nowUserInfo.name}}</text>
@@ -100,7 +100,7 @@
 </script>
 
 <style scoped lang="scss">
-	.my {
+	.container {
 		display: flex;
 		flex-direction: column;
 		.my_info {
@@ -163,7 +163,7 @@
 							margin: 0 5%;
 							height: 1rpx;
 							width: 90%;
-							border: 1rpx solid #eef5fa;
+							border: 1rpx solid $border-color;
 						}
 					}
 					.list_btn {

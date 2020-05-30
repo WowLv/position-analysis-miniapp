@@ -1,5 +1,5 @@
 <template>
-	<view class="pos_detail">
+	<view class="container">
 		<!-- 职位信息 -->
 		<view class="pos_title">
 			<text class="in_pos_title">{{posObj.posName}}</text>
@@ -116,7 +116,7 @@
 </script>
 
 <style scoped lang="scss">
-	.pos_detail {
+	.container {
 		display: flex;
 		flex-direction: column;
 		margin: 0 30rpx;

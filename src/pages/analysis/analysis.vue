@@ -1,5 +1,5 @@
 <template>
-	<view class="analysis">
+	<view class="container">
 		<f2 class="f2-chart" :onInit="onInitChart" />
 	</view>
 </template>
@@ -36,7 +36,7 @@
 </script>
 
 <style lang="scss" scoped>
-.analysis {
+.container {
 	  width: 100%;
 	  height: 500rpx;
 	}

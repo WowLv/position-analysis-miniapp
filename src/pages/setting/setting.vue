@@ -1,5 +1,5 @@
 <template>
-	<view class="setting">
+	<view class="container">
 		设置
 	</view>
 </template>

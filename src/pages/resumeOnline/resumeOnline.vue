@@ -1,5 +1,5 @@
 <template>
-	<view class="online">
+	<view class="container">
 		在线简历
 	</view>
 </template>

@@ -1,7 +1,12 @@
 <template>
-	<view class="index">
+	<view class="container">
 		<view class="index_top">
-			<Top></Top>
+			<view class="top_title">
+				<text>CodeRush</text>
+			</view>
+			<navigator url="../search/search" class="top_search">
+				<text class="text iconfont icon-icon_search"> 搜索职位/公司</text>
+			</navigator>
 		</view>
 		<view class="index_swiper">
 			<swiper indicator-dots autoplay :interval="3000" circular>
@@ -24,7 +29,6 @@
 </template>
 
 <script>
-	import Top from '@/components/top/top.vue'
 	import PositionList from '@/components/positionList/positionList.vue'
 	export default {
 		data() {
@@ -36,25 +40,56 @@
 			}
 		},
 		components: {
-			Top,
 			PositionList
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
-.index {
+.container {
 	display: flex;
 	flex-direction: column;
 	.index_top {
+		// background-color: $theme-color;
+		background-image: linear-gradient(to bottom right, $theme-color, #6668e7);
 		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		.top_title {
+			height: 150rpx;
+			width: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			text{
+				font-size: 80rpx;
+				color: $border-color;
+				font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+			}
+		}
+		.top_search {
+			width: 90%;
+			height: 70rpx;
+			margin-bottom: 30rpx;
+			background-color: white;
+			border-radius: 35rpx;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			.text {
+				color: $shallow-color;
+				font-size: 30rpx;
+			}
+		}
+		
 	}
 	.index_swiper {
 		height: 340rpx;
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		background-color: #F0F1F7;
+		background-color: $back-color;
 		swiper {
 			height: 280rpx;
 			width: 90%;
@@ -67,6 +102,8 @@
 	}
 	.index_navigator {
 		height: 100rpx;
+		border-top-left-radius: 20rpx;
+		border-top-right-radius: 20rpx;
 		navigator {
 			width: 100%;
 			height: 100%;

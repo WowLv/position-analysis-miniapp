@@ -1,18 +1,23 @@
 const user = {
 	state: {
-		userInfo: null
+		userInfo: {}
 	},
 	getters: {
 		userInfo: state => state.userInfo
 	},
 	mutations: {
-		SET_USERINFO: (state, userInfo) => {
-			state.userInfo = userInfo
+		SET_USERLOCATION: (state, userInfo) => {
+			state.userInfo.location = userInfo
 		}
 	},
 	actions: {
 		setUserInfo({ commit }, userInfo) {
-			commit('SET_USERINFO', userInfo)
+			switch(userInfo.type) {
+				case 'location':
+					commit('SET_USERLOCATION', userInfo.data)
+					break
+			}
+			
 		}
 	}
 }

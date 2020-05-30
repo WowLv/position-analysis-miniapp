@@ -1,7 +1,11 @@
 {
 	"pages": [ 
 		{
-			"path": "pages/index/index"
+			"path": "pages/index/index",
+			"style": {
+				"enablePullDownRefresh": true
+			}
+			
 		},
 		{
 			"path":"pages/analysis/analysis",
@@ -68,26 +72,42 @@
 				"navigationBarTitleText": "设置求职意向",
 				"navigationBarTextStyle": "white"
 			}
-		}
-	    ,{
+		},
+	    {
             "path" : "pages/selectRegion/selectRegion",
             "style" : {
 				"navigationBarTitleText": "期望城市",
 				"navigationBarTextStyle": "white"
 			}
-        }
-        ,{
+        },
+        {
             "path" : "pages/posDetail/posDetail",
             "style" : {
 				"navigationBarTitleText": "职位详情",
 				"navigationBarTextStyle": "white"
+			}
+        },
+        {
+            "path" : "pages/search/search",
+            "style" : {
+				"navigationBarTitleText": "搜索",
+				"navigationBarTextStyle": "black",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+		{
+            "path" : "pages/selectPosition/selectPosition",
+            "style" : {
+				"navigationBarTitleText": "按分类搜索",
+				"navigationBarTextStyle": "black",
+				"navigationBarBackgroundColor": "#ffffff"
 			}
         }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarBackgroundColor": "#3a3cd7",
-		"backgroundColor": "#F8F8F8"
+		"backgroundColor": "F8F8F8"
 	},
 	"tabBar": {
 		"color":"#515151",
@@ -146,6 +166,16 @@
 			{
 				"name": "posDetail", 
 				"path":"pages/posDetail/posDetail",
+				"query": ""
+			},
+			{
+				"name": "search", 
+				"path":"pages/search/search",
+				"query": ""
+			},
+			{
+				"name": "selectPos", 
+				"path":"pages/selectPosition/selectPosition",
 				"query": ""
 			}
 		]

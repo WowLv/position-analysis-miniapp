@@ -99,7 +99,7 @@
 			height: 170rpx;
 			display: flex;
 			align-items: center;
-			border-top: 1px solid $border-color;
+			border-top: 2rpx solid $border-color;
 			image {
 				width: 120rpx;
 				// margin: 20 0rpx;
@@ -133,7 +133,7 @@
 						padding: 0 20rpx;
 						&:nth-of-type(1),
 						&:nth-of-type(2) {
-							border-right: 1px solid $border-color;
+							border-right: 2rpx solid $border-color;
 						}
 					}
 				}

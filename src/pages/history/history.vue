@@ -1,5 +1,5 @@
 <template>
-	<view class="history">
+	<view class="container">
 		投递记录
 	</view>
 </template>

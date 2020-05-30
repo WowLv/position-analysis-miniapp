@@ -1,5 +1,5 @@
 <template>
-	<view class="region">
+	<view class="container">
 		<scroll-view scroll-y class="left_list">
 			<view
 			v-for="(item, index) in leftList"
@@ -43,8 +43,13 @@
 			return {
 				leftList: [],
 				rightList: [],
-				currentIndex: 0
+				currentIndex: 0,
+				selectMode:''
 			};
+		},
+		onLoad(option) {
+			this.selectMode = option.mode
+			console.log(this.selectMode)
 		},
 		created() {
 			let arrs = regions[0].children
@@ -65,7 +70,7 @@
 				this.rightList = []
 				this.leftList[this.currentIndex].children.map((el, i) => {
 					if(el.value.indexOf('族') === -1) {
-						this.rightList.push({rid: i, value: el.value.replace(/(市|自治州|特别行政区|地区|盟|区)/g, '')})
+						this.rightList.push({rid: i, value: el.value.replace(/(市|自治州|特别行政区|地区|盟|区)/g, '').slice(0,4)})
 					}
 				})
 				// console.log(this.rightList)
@@ -80,7 +85,15 @@
 			},
 			comfirmCity(e) {
 				// console.log(e.target.dataset.city)
-				this.$store.dispatch('setHopeData', { type: 'hopeCity', data: e.target.dataset.city })
+				// this.$store.dispatch('setHopeData', { type: 'hopeCity', data: e.target.dataset.city })
+				switch(this.selectMode) {
+					case 'search':
+						this.$store.dispatch('setUserInfo', { type: 'location', data: e.target.dataset.city })
+						break
+					case 'hope':
+						this.$store.dispatch('setHopeData', { type: 'hopeCity', data: e.target.dataset.city })
+						break
+				}
 				uni.navigateBack({
 					delta: 1
 				})
@@ -90,7 +103,7 @@
 </script>
 
 <style lang="scss" scoped>
-.region {
+.container {
 	display: flex;
 	.left_list {
 		background-color: #f6f8f9;
@@ -134,7 +147,7 @@
 			width: 155rpx;
 			padding: 10rpx 0;
 			margin: 10rpx;
-			border: 1rpx solid $border-color;
+			border: 1rpx solid $circle-border-color;
 			display: inline-flex;
 			justify-content: center;
 			align-items: center;

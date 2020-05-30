@@ -1,5 +1,5 @@
 <template>
-	<view class="collect">
+	<view class="container">
 		我的收藏
 	</view>
 </template>
