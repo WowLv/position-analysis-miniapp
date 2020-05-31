@@ -15,18 +15,64 @@
 		</navigator>
 		<view class="top_input">
 			<text class="iconfont icon-icon_search"></text>
-			<input type="text">
+			<input type="text" v-model="inputData" @input="watchInput">
 		</view>
-		<view class="top_cancel">取消</view>
+		<view v-if="!inputData" class="top_cancel" @click="handleCancel">取消</view>
+		<view v-else class="top_cancel" @click="handleOk">完成</view>
 	</view>
 </template>
 
 <script>
+import {debounce} from '../../utils/utils'
+import {mapGetters, mapActions} from 'vuex'
 	export default {
+		data() {
+			return {
+				inputData: ''
+			}
+		},
 		props: {
 			location: {
 				type: String,
 				default: ''
+			},
+			nowInput: {
+				type: String,
+				default: ''
+			}
+		},
+		watch: {
+			nowInput: function(newVal) {
+				this.inputData = newVal
+			}
+		},
+		computed: {
+			...mapGetters([
+				'searchHistory'
+				])
+		},
+		methods: {
+			...mapActions([
+				'setSearchHistory'
+			]),
+			handleCancel() {
+				uni.navigateBack({
+					 delta: 1
+				});
+			},
+			handleOk() {
+				uni.$emit('searchPos', this.inputData)
+				const length = this.searchHistory.length
+				if(!length) {
+                    this.setSearchHistory({ value: this.inputData, id: 0})
+                }else {
+                    this.setSearchHistory({ value: this.inputData, id: length})
+                }
+			},
+			watchInput() {
+				if(!this.inputData) {
+					uni.$emit('searchPos', this.inputData)
+				}
 			}
 		}
 	}

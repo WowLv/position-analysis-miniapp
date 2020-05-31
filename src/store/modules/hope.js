@@ -4,13 +4,15 @@ const hope = {
 		hopeSalary: '',
 		hopeCity: '',
 		hopeType: '',
-		hopeDate: ''
+		hopeDate: '',
+		hopePos: ''
 	},
 	getters: {
 		hopeSalary: state => state.hopeSalary,
 		hopeCity: state => state.hopeCity,
 		hopeType: state => state.hopeType,
-		hopeDate: state => state.hopeDate
+		hopeDate: state => state.hopeDate,
+		hopePos: state => state.hopePos,
 	},
 	mutations: {
 		SET_HOPESALARY: (state, hopeSalary) => {
@@ -24,7 +26,10 @@ const hope = {
 		},
 		SET_HOPEDATE: (state, hopeDate) => {
 			state.hopeDate = hopeDate
-		}
+		},
+		SET_HOPEPOS: (state, hopePos) => {
+			state.hopePos = hopePos
+		},
 	},
 	actions: {
 		// setHopeSalary({ commit }, hopeSalary) {
@@ -52,6 +57,9 @@ const hope = {
 					break;
 				case 'hopeDate':
 					commit('SET_HOPEDATE', hopeData.data)
+					break;
+				case 'hopePos':
+					commit('SET_HOPEPOS', hopeData.data)
 					break;
 			}
 		}

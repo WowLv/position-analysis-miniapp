@@ -19,7 +19,7 @@
 		</view>
 		<view class="index_navigator">
 			<navigator url="../filter/filter" open-type="navigate">
-				<text class="nav_title">职位期望</text><text class="iconfont icon-arrow-right"></text>
+				<text class="nav_title">为你匹配</text><text class="iconfont icon-arrow-right"></text>
 			</navigator>
 		</view> 
 		<view class="position_list">

@@ -1,8 +1,7 @@
-import request from './request.js'
+import fly from './request.js'
 
-export function getPosDetail() {
-	return request({
-		url: "",
+export function getPosSelect() {
+	return fly.request("/position.json", null, {
 		methed: "get"
 	})
 }

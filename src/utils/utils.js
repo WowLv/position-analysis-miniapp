@@ -1,12 +1,32 @@
-export function debounce(fn, delay = 200) {
-	let timer = null
-	return function(...args) {
-		timer && clearTimeout(timer)
-		timer = setTimeout(()=>{
-			fn.apply(this,args)
-		},delay)
+export function debounce(fn, delay = 200,immediate = true) {
+	let timer;
+	
+	return function (...args) {
+		let context = this;
+		timer && clearTimeout(timer);
+		if (immediate) {
+			var callNow = !timer;
+			timer = setTimeout(() => {
+				timer = null;
+			}, delay)
+			callNow && fn.apply(context, args)
+		} else {
+			timer = setTimeout(function(){
+				func.apply(context, args)
+			}, delay);
+		}
 	}
 }
+
+// export function debounce(fn, delay = 200) {
+// 	let timer = null
+// 	return function(...args) {
+// 		timer && clearTimeout(timer)
+// 		timer = setTimeout(()=>{
+// 			fn.apply(this,args)
+// 		},delay)
+// 	}
+// }
 
 function formatter(date){
 	var strDate = date.getFullYear()+"-";
