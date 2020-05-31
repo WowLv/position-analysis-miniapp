@@ -23,7 +23,7 @@
 
 			</uni-list-item>
 		</uni-list>
-		<button class="filter_save">保存</button>
+		<button class="filter_save" @click="saveFilter">保存</button>
 	</view>
 </template>
 
@@ -71,14 +71,16 @@
 				'hopeSalary',
 				'hopeCity',
 				'hopeType',
-				'hopeDate'
+				'hopeDate',
+				'hopePos'
 			]),
 			hopeObj() {
 				return {
 					hopeSalary: this.hopeSalary,
 					hopeCity: this.hopeCity,
 					hopeType: this.hopeType,
-					hopeDate: this.hopeDate
+					hopeDate: this.hopeDate,
+					hopePos: this.hopePos
 				}
 			}
 		},
@@ -116,6 +118,12 @@
 			},
 			handleComfirm(e) {
 				this.setHopeData(e)
+			},
+			saveFilter() {
+				//后期将数据保存到服务器并筛选首页数据
+				uni.showToast({
+					title: '保存成功'
+				});
 			}
 			
 		}

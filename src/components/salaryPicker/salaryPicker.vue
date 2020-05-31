@@ -5,6 +5,7 @@
 	:range="[firstList, secondList]" 
 	@columnchange="handlePickerChange"
 	@change="handleChange" 
+	:value="valueList"
 	>
 		<text class="item_title">{{pName}}</text>
 		<text class="item_selected">{{pValue}}</text>
