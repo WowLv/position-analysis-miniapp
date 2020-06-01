@@ -21,7 +21,20 @@ const user = {
 			state.userInfo.location = userInfo
 		},
 		SET_SEARCHHISTORY: (state, searchHistory) => {
-			state.searchHistory.unshift(searchHistory)
+			let flag = 1
+			const length = state.searchHistory.length
+			if(length === 0) {
+				state.searchHistory.unshift(searchHistory)
+			}else {
+				state.searchHistory.map((item, index) => {
+					if(item.value === searchHistory.value) {
+						flag = 0
+					}
+				})
+				flag && state.searchHistory.unshift(searchHistory)
+			}
+
+			
 		},
 		CLEAR_SEARCHHISTORY: (state, searchHistory) => {
 			state.searchHistory = []

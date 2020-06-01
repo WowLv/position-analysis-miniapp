@@ -5,12 +5,14 @@
             <text class="result">暂时没有符合搜索条件的职位</text>
         </view>
         <view v-else class="search_box">
+            <!-- 分类搜索 -->
             <navigator url="../selectPosition/selectPosition?mode=search" class="search_filter">
                 <text class="title">按分类搜索</text>
                 <text class="search_comfirm">技术<text class="iconfont icon-arrow-down"></text></text>
             </navigator>
             <view class="border"></view>
             <view class="search_recommend">
+                <!-- 搜索记录 -->
                 <view class="search_history">
                     <view class="history_title">搜索记录<text class="iconfont icon-ashbin" @click="clearHistory"></text></view>
                     <view class="history_list" >
@@ -20,6 +22,36 @@
                         @click="selectHistory"
                         :data-index="item.id">
                         {{item.value}}
+                        </text>
+                    </view>
+                </view>
+                <!-- 热门职位 -->
+                <view class="recommend">
+                    <view class="recommend_title">猜你喜欢</view>
+                    <view class="recommend_list" >
+                        <text class="recommend_item" 
+                        v-for="(item ,index) in recommendList"
+                        :key="index"
+                        @click="handleSelect"
+                        :data-index="index"
+                        data-type="recommendList">
+                        <text 
+                        class="iconfont icon-fire"></text>
+                        {{item}}
+                        </text>
+                    </view>
+                </view>
+                <!-- 热门公司 -->
+                <view class="recommend">
+                    <view class="recommend_title">热门公司</view>
+                    <view class="recommend_list" >
+                        <text class="recommend_item" 
+                        v-for="(item ,index) in campanyList"
+                        :key="index"
+                        @click="handleSelect"
+                        :data-index="index"
+                        data-type="campanyList">
+                        {{item}}
                         </text>
                     </view>
                 </view>
@@ -36,7 +68,9 @@ export default {
         return {
             userLocation: '',
             sNowInput: '',
-            historyList: []
+            historyList: [],
+            recommendList: ['前端', 'java', 'ui', '自动化测试'],
+            campanyList: ['虎牙科技', '字节跳动', 'Bigo', '小鹏汽车', '唯品会']
         }
     },
     onShow() {
@@ -61,10 +95,19 @@ export default {
     },
     methods: {
         ...mapActions([
-            'clearSearchHistory'
+            'clearSearchHistory',
+            'setSearchHistory'
         ]),
         clearHistory() {
-            this.clearSearchHistory()
+            uni.showModal({
+                content: '确定删除全部搜索记录?',
+                success: (res) => {
+                    if (res.confirm) {
+                        this.clearSearchHistory()
+                    }
+                }
+            });
+            
         },
         //点击搜索记录再次搜索
         selectHistory(e) {
@@ -73,6 +116,18 @@ export default {
                      this.sNowInput = item.value
                  }
             })
+        },
+        handleSelect(e) {
+            const index = e.target.dataset.index
+            const type = e.target.dataset.type
+            this.sNowInput = this[type][index]
+
+            const length = this.searchHistory.length
+			if(!length) {
+                this.setSearchHistory({ value: this.sNowInput, id: 0})
+            }else {
+                this.setSearchHistory({ value: this.sNowInput, id: length})
+            }
         }
     }
 }
@@ -140,10 +195,36 @@ export default {
                             display: inline-block;
                             font-size: $middle-size;
                             color: $middle-color;
-                            padding: 10rpx;
+                            padding: 15rpx;
                             border: 1rpx solid $circle-border-color;
                             margin: 15rpx 30rpx 15rpx 0;
-                            
+                        }
+                    }
+                }
+                .recommend {
+                    width: 100%;
+                    padding-top: 60rpx;
+                    display: flex;
+                    flex-direction: column;
+                    .recommend_title {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        color: $main-color;
+                    }
+                    .recommend_list {
+                        width: 100%;
+                        .recommend_item {
+                            display: inline-block;
+                            font-size: $middle-size;
+                            color: $middle-color;
+                            padding: 15rpx;
+                            border: 1rpx solid $circle-border-color;
+                            margin: 15rpx 30rpx 15rpx 0;
+                            .icon-fire {
+                                margin: 0 10rpx;
+                                color: $salary-color;
+                            }
                         }
                     }
                     

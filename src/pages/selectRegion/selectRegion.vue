@@ -12,7 +12,7 @@
 		</scroll-view>
 		<view class="right_list" v-if="currentIndex === 0">
 			<text class="hot_title">当前定位</text>
-			<text class="hot_location iconfont icon-icon_GPS">深圳</text>
+			<text class="hot_location iconfont icon-icon_GPS" @click="getNowLocation">{{currentCity}}</text>
 			<text class="hot_title second_title">热门城市</text>
 			<view 
 			class="right_item" 
@@ -38,18 +38,29 @@
 
 <script>
 	import regions from './region.js'
+	var QQMapWX = require('../../utils/qqmap-wx-jssdk')
+	var qqmapsdk = new QQMapWX({
+		key: 'GPJBZ-PLHWG-KAKQS-IJN24-AHFYH-2SBOB'
+	});  
 	export default {
 		data() {
 			return {
 				leftList: [],
 				rightList: [],
 				currentIndex: 0,
-				selectMode:''
+				selectMode:'',
+				currentCity:''
 			};
 		},
 		onLoad(option) {
 			this.selectMode = option.mode
-			console.log(this.selectMode)
+			uni.getLocation({
+				type: 'wgs84',
+				success: (res) => {
+					const data = { latitude: res.latitude, longitude: res.longitude }
+					this.formatLoction(data)
+				}
+			});
 		},
 		created() {
 			let arrs = regions[0].children
@@ -97,6 +108,49 @@
 				uni.navigateBack({
 					delta: 1
 				})
+			},
+			formatLoction(location) {
+				qqmapsdk.reverseGeocoder({
+					location: location,
+					success: (res) => {
+						// console.log(res.result.address_component.city)
+						let city = res.result.address_component.city.replace("市", "")
+						this.currentCity = city
+					},
+					fail: (error) => {
+						uni.showToast({
+							title: 'error'
+						});
+					},
+				})
+			},
+			getNowLocation() {
+				if(!this.currentCity) {
+					uni.openSetting({
+						success: (res) => {
+							console.log(res.authSetting)
+							uni.getLocation({
+								type: 'wgs84',
+								success: (res) => {
+									const data = { latitude: res.latitude, longitude: res.longitude }
+									this.formatLoction(data)
+								}
+							});
+						}
+					});
+				}else {
+					switch(this.selectMode) {
+						case 'search':
+							this.$store.dispatch('setUserInfo', { type: 'location', data: this.currentCity })
+							break
+						case 'hope':
+							this.$store.dispatch('setHopeData', { type: 'hopeCity', data: this.currentCity })
+							break
+					}
+					uni.navigateBack({
+						delta: 1
+					})
+				}
 			}
 		}
 	}

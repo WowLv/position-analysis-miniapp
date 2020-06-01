@@ -15,7 +15,8 @@
 		</navigator>
 		<view class="top_input">
 			<text class="iconfont icon-icon_search"></text>
-			<input type="text" v-model="inputData" @input="watchInput">
+			<input v-model="inputData" @input="watchInput">
+			<text class="iconfont icon-close" v-if="inputData" @click="clearInput"></text>
 		</view>
 		<view v-if="!inputData" class="top_cancel" @click="handleCancel">取消</view>
 		<view v-else class="top_cancel" @click="handleOk">完成</view>
@@ -61,7 +62,7 @@ import {mapGetters, mapActions} from 'vuex'
 				});
 			},
 			handleOk() {
-				uni.$emit('searchPos', this.inputData)
+				// uni.$emit('searchPos', this.inputData)
 				const length = this.searchHistory.length
 				if(!length) {
                     this.setSearchHistory({ value: this.inputData, id: 0})
@@ -69,11 +70,14 @@ import {mapGetters, mapActions} from 'vuex'
                     this.setSearchHistory({ value: this.inputData, id: length})
                 }
 			},
+			clearInput() {
+				this.inputData = ''
+				uni.$emit('searchPos', this.inputData)
+			},
 			watchInput() {
-				if(!this.inputData) {
-					uni.$emit('searchPos', this.inputData)
-				}
+				uni.$emit('searchPos', this.inputData)
 			}
+			
 		}
 	}
 </script>
@@ -122,7 +126,11 @@ import {mapGetters, mapActions} from 'vuex'
 			input {
 				width: 100%;
 				height: 60rpx;
-				margin: 0 20rpx;
+				margin: 0 10rpx 0 20rpx;
+			}
+			.icon-close {
+				margin-right: 10rpx;
+				color: $main-color
 			}
 		}
 		.none {

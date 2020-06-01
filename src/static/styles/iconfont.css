@@ -1,5 +1,5 @@
 @font-face {font-family: "iconfont";
-  src: url('~@/static/styles/iconfont.ttf'); 
+  src: url('~@/static/styles/iconfont.ttf');
 }
 
 .iconfont {
@@ -8,6 +8,14 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-close:before {
+  content: "\e673";
+}
+
+.icon-fire:before {
+  content: "\e729";
 }
 
 .icon-share:before {
