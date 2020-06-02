@@ -118,9 +118,7 @@
 						this.currentCity = city
 					},
 					fail: (error) => {
-						uni.showToast({
-							title: 'error'
-						});
+						console.log(err)
 					},
 				})
 			},

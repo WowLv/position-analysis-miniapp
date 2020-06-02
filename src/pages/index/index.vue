@@ -23,24 +23,48 @@
 			</navigator>
 		</view> 
 		<view class="position_list">
-			<position-list></position-list>
+			<position-list :posList="posList"></position-list>
 		</view>
 	</view>
 </template>
 
 <script>
 	import PositionList from '@/components/positionList/positionList.vue'
+	import { mapActions } from 'vuex'
+	import { getPosDetailByPage } from '../../utils/api'
 	export default {
 		data() {
 			return {
 				pic: [
 					"https://ae01.alicdn.com/kf/Hf33da4c39811463abb757fdc47dedfb2A.jpg",
 					"https://ae01.alicdn.com/kf/Hd9c5474314df4ea29bd809cf72c5256e9.jpg",
-					"https://ae01.alicdn.com/kf/H98cff1aebac4456eaa3d7887688130539.jpg"]
+					"https://ae01.alicdn.com/kf/H98cff1aebac4456eaa3d7887688130539.jpg"
+				],
+				currentPage: 1,
+				posList: []
 			}
+		},
+		onLoad() {
+			this._getPosDetailByPage(3)
+		},
+		onReachBottom() {
+			this.currentPage ++
+			this._getPosDetailByPage(this.currentPage)
 		},
 		components: {
 			PositionList
+		},
+		methods: {
+			...mapActions([
+				'setLoadedPosList'
+			]),
+			async _getPosDetailByPage (page) {
+				let data = await getPosDetailByPage(page)
+				let dataArr = data.data
+				console.log(dataArr)
+				this.posList.push(...dataArr)
+				this.setLoadedPosList(dataArr)
+			}
 		}
 	}
 </script>
