@@ -2,7 +2,7 @@
     <view class="container">
         <Top :location="userLocation" :nowInput="_nowInput" @searchPos="nowSearchPos"></Top>
         <view class="result_box" v-if="_nowInput">
-            <text class="no_result" v-if="!resultShowing.length">暂时没有符合搜索条件的职位</text>
+            <text class="no_result" v-if="noResult">暂时没有符合搜索条件的职位</text>
             <view class="result_list" v-for="(item, index) in resultShowing" :key="index" v-else>
                 <text class="result"><text class="iconfont icon-icon_search"></text>{{item}}</text>
             </view>
@@ -75,17 +75,26 @@ export default {
         return {
             userLocation: '',
             sNowInput: '',
-            historyList: [],
             recommendList: ['前端', 'java', 'ui', '自动化测试'],
             campanyList: ['虎牙科技', '字节跳动', 'Bigo', '小鹏汽车', '唯品会'],
             resultList: [],
             noResult: false,
         }
     },
+    onLoad() {
+        let history = uni.getStorageSync("searchHistory") || []
+        this.setSearchHistory(history)
+    },
     onShow() {
         if(this.userInfo.location) {
             this.userLocation = this.userInfo.location
         }
+        uni.$on('searchPos', (data) => {
+            this.nowSearchPos(data)
+        })
+    },
+    onUnload() {
+        uni.setStorageSync('searchHistory', this.searchHistory)
     },
     computed: {
         ...mapGetters([
@@ -125,15 +134,21 @@ export default {
             const res = await searchPos(key)
             console.log(res.data)
             this.resultList = res.data
+            if(!res.data.length) {
+                this.noResult = true
+            }else {
+                this.noResult = false
+            }
         },
         nowSearchPos(data) {
+            console.log(data)
             this.sNowInput = data.trim()
             timer && clearTimeout(timer)
             timer = setTimeout(() => {
                 if(data.trim()) {
                     this._searchPos(data.trim())
                 }
-            }, 1000);
+            }, 800)
         },
         clearHistory() {
             uni.showModal({
@@ -149,15 +164,15 @@ export default {
         selectHistory(e) {
              this.searchHistory.map((item) => {
                  if(item.id === e.target.dataset.index) {
-                     this.sNowInput = item.value
+                     this.nowSearchPos(item.value)
                  }
             })
         },
         handleSelect(e) {
             const index = e.target.dataset.index
             const type = e.target.dataset.type
-            this.sNowInput = this[type][index]
 
+            this.nowSearchPos(this[type][index])
             const length = this.searchHistory.length
 			if(!length) {
                 this.setSearchHistory({ value: this.sNowInput, id: 0})

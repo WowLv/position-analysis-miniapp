@@ -21,23 +21,27 @@ const user = {
 			state.userInfo.location = userInfo
 		},
 		SET_SEARCHHISTORY: (state, searchHistory) => {
-			let flag = 1
-			const length = state.searchHistory.length
-			if(length === 0) {
-				state.searchHistory.unshift(searchHistory)
-			}else {
-				state.searchHistory.map((item, index) => {
-					if(item.value === searchHistory.value) {
-						flag = 0
-					}
-				})
-				flag && state.searchHistory.unshift(searchHistory)
+			// 首次加载从本地获取数组数据(模拟从服务器获取)
+			if(searchHistory instanceof Array) {
+				state.searchHistory = searchHistory
+			} else {
+				let flag = 1
+				const length = state.searchHistory.length
+				if(length === 0) {
+					state.searchHistory.unshift(searchHistory)
+				}else {
+					state.searchHistory.map((item, index) => {
+						if(item.value === searchHistory.value) {
+							flag = 0
+						}
+					})
+					flag && state.searchHistory.unshift(searchHistory)
+				}
 			}
-
-			
 		},
 		CLEAR_SEARCHHISTORY: (state, searchHistory) => {
 			state.searchHistory = []
+			uni.clearStorage('searchHistory');
 		}
 	},
 	actions: {
