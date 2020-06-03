@@ -45,10 +45,15 @@
 			}
 		},
 		onLoad() {
-			this._getPosDetailByPage(3)
+			this._getPosDetailByPage(this.currentPage)
 		},
 		onReachBottom() {
-			this.currentPage ++
+			this._getPosDetailByPage(this.currentPage)
+		},
+		onPullDownRefresh() {
+			this.currentPage = 1
+			this.clearPosList()
+			this.posList = []
 			this._getPosDetailByPage(this.currentPage)
 		},
 		components: {
@@ -56,14 +61,25 @@
 		},
 		methods: {
 			...mapActions([
-				'setLoadedPosList'
+				'setLoadedPosList',
+				'clearPosList'
 			]),
+			//分页获取信息，缓存到vuex中
 			async _getPosDetailByPage (page) {
+				this.currentPage ++
 				let data = await getPosDetailByPage(page)
 				let dataArr = data.data
 				console.log(dataArr)
-				this.posList.push(...dataArr)
-				this.setLoadedPosList(dataArr)
+				if(dataArr.length) {
+					this.posList.push(...dataArr)
+					this.setLoadedPosList(dataArr)
+				}else {
+					uni.showToast({
+						title: '已经到底了！',
+						icon: 'none'
+					});
+				}
+				
 			}
 		}
 	}

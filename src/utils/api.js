@@ -15,3 +15,11 @@ export function getPosDetailByPage(query = 1) {
 		data: { page: query }
 	})
 }
+
+export function searchPos(key) {
+	return request({
+		url: '/searchPos',
+		method: 'GET',
+		data: { key }
+	})
+}

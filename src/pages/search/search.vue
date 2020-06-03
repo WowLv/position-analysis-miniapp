@@ -1,8 +1,11 @@
 <template>
     <view class="container">
-        <Top :location="userLocation" :nowInput="_nowInput"></Top>
+        <Top :location="userLocation" :nowInput="_nowInput" @searchPos="nowSearchPos"></Top>
         <view class="result_box" v-if="_nowInput">
-            <text class="result">暂时没有符合搜索条件的职位</text>
+            <text class="no_result" v-if="!resultShowing.length">暂时没有符合搜索条件的职位</text>
+            <view class="result_list" v-for="(item, index) in resultShowing" :key="index" v-else>
+                <text class="result"><text class="iconfont icon-icon_search"></text>{{item}}</text>
+            </view>
         </view>
         <view v-else class="search_box">
             <!-- 分类搜索 -->
@@ -63,6 +66,10 @@
 <script>
 import Top from '../../components/top/top'
 import { mapGetters, mapActions } from 'vuex'
+import { searchPos } from '../../utils/api'
+// import { debounce } from '../../utils/utils'
+let timer = null
+
 export default {
     data() {
         return {
@@ -70,16 +77,15 @@ export default {
             sNowInput: '',
             historyList: [],
             recommendList: ['前端', 'java', 'ui', '自动化测试'],
-            campanyList: ['虎牙科技', '字节跳动', 'Bigo', '小鹏汽车', '唯品会']
+            campanyList: ['虎牙科技', '字节跳动', 'Bigo', '小鹏汽车', '唯品会'],
+            resultList: [],
+            noResult: false,
         }
     },
     onShow() {
         if(this.userInfo.location) {
             this.userLocation = this.userInfo.location
         }
-        uni.$on('searchPos', (data) => {
-            this.sNowInput = data
-        })
     },
     computed: {
         ...mapGetters([
@@ -88,6 +94,23 @@ export default {
         ]),
          _nowInput() {
              return this.sNowInput
+         },
+         resultShowing() {
+             let list = []
+             let reg = new RegExp(this.sNowInput,"gi")
+             this.resultList.map((itemOut, index) => {
+                //  list.push(...item.posLabel.filter(item => {
+                //     reg.test(item)
+                //  }))
+                itemOut.posLabel.map(itemIn => {
+                    if(reg.test(itemIn)) {
+                        if(list.indexOf(itemIn) === -1) {
+                            list.push(itemIn)
+                        }
+                    }
+                })
+             })
+             return list
          }
     },
     components: {
@@ -98,6 +121,20 @@ export default {
             'clearSearchHistory',
             'setSearchHistory'
         ]),
+        async _searchPos(key) {
+            const res = await searchPos(key)
+            console.log(res.data)
+            this.resultList = res.data
+        },
+        nowSearchPos(data) {
+            this.sNowInput = data.trim()
+            timer && clearTimeout(timer)
+            timer = setTimeout(() => {
+                if(data.trim()) {
+                    this._searchPos(data.trim())
+                }
+            }, 1000);
+        },
         clearHistory() {
             uni.showModal({
                 content: '确定删除全部搜索记录?',
@@ -106,8 +143,7 @@ export default {
                         this.clearSearchHistory()
                     }
                 }
-            });
-            
+            })
         },
         //点击搜索记录再次搜索
         selectHistory(e) {
@@ -232,15 +268,31 @@ export default {
             }
         }
         .result_box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 200rpx;
-            .result {
+            .no_result {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: 80rpx 0;
                 color: $main-color;
                 font-size: $main-size;
             }
+            .result_list {
+                display: flex;
+                flex-direction: column;
+                .result {
+                    width: 100%;
+                    height: 80rpx;
+                    line-height: 80rpx;
+                    font-size: $main-size;
+                    color: $middle-color;
+                    .icon-icon_search {
+                        font-size: 45rpx;
+                        color: $shallow-color;
+                        margin-right: 30rpx;
+                    }
+                }
+            }
+            
         }
     }
 </style>

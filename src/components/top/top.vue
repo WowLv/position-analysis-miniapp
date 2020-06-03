@@ -63,6 +63,7 @@ import {mapGetters, mapActions} from 'vuex'
 			},
 			handleOk() {
 				// uni.$emit('searchPos', this.inputData)
+				this.$emit('searchPos', this.inputData)
 				const length = this.searchHistory.length
 				if(!length) {
                     this.setSearchHistory({ value: this.inputData, id: 0})
@@ -72,10 +73,10 @@ import {mapGetters, mapActions} from 'vuex'
 			},
 			clearInput() {
 				this.inputData = ''
-				uni.$emit('searchPos', this.inputData)
+				this.$emit('searchPos', this.inputData)
 			},
 			watchInput() {
-				uni.$emit('searchPos', this.inputData)
+				this.$emit('searchPos', this.inputData)
 			}
 			
 		}
