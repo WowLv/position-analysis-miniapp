@@ -8,18 +8,25 @@ export function getPosDetailByPid(query) {
 	})
 }
 
-export function getPosDetailByPage(query = 1) {
+export function getPosDetailByPage(page = 1) {
 	return request({
 		url: '/getDetail',
 		method: 'GET',
-		data: { page: query }
+		data: { page }
 	})
 }
 
-export function searchPos(key) {
+export function searchPos(key, location, page) {
 	return request({
 		url: '/searchPos',
 		method: 'GET',
-		data: { key }
+		data: { key, location, page }
+	})
+}
+
+export function test() {
+	return request({
+		url: '/test',
+		method: 'GET'
 	})
 }

@@ -2,18 +2,21 @@
 	<view class="container">
 		<!-- 职位信息 -->
 		<view class="pos_title">
-			<text class="in_pos_title">{{posObj.posName}}</text>
+			<text class="in_pos_title">{{posObj.positionName}}</text>
 			<!-- 基本要求 -->
 			<view class="require">
-				<text class="salary">{{posObj.posInfo[0]}}</text>
-				<view class="require_list" v-for="(item, index) in posObj.posInfo" :key="index">
-					<text v-if="index !== 0">/{{item}}</text>
+				<text class="salary">{{posObj.salary}}</text>
+				<view class="require_list">
+					<text>/{{posObj.city}}</text>
+					<text>/{{posObj.workYear}}</text>
+					<text>/{{posObj.education}}</text>
+					<text>/{{posObj.jobNature}}</text>
 				</view>
 			</view>
 			<!-- 职位诱惑 -->
 			<view class="benefit">
 				<text class="benefit_title">职位诱惑:</text>
-				<view class="in_benefit" v-for="(item, index) in posObj.posBenefit" :key="index">
+				<view class="in_benefit" v-for="(item, index) in posObj.companyLabelList" :key="index">
 					<text v-if="index !== 0">、</text>
 					<text>{{item}}</text>
 				</view>
@@ -22,27 +25,29 @@
 		<!-- 公司信息 -->
 		<view class="pos_company">
 			<view class="left">
-				<text class="in_left_title">{{posObj.companyName}}</text>
-				<view class="in_company_descript" v-for="(item, index) in posObj.companyDes" :key="index">
-					<text v-if="index !== 0">/</text>
-					<text>{{item}}</text>
+				<text class="in_left_title">{{posObj.companyShortName}}</text>
+				<view class="in_company_descript">
+					<text>{{posObj.industryField}}/</text>
+					<text>{{posObj.financeStage}}/</text>
+					<text>{{posObj.companySize}}</text>
 				</view>
 			</view>
+			<!-- logo -->
 			<view class="right">
-				<image :src="posObj.imageUrl" mode="widthFix"></image>
+				<image :src="posObj.companyLogo" mode="widthFix"></image>
 			</view>
 		</view>
 		<!-- 职位描述 -->
 		<view class="pos_description">
 			<view class="posLabel">
 				<text class="in_title">职位相关</text>
-				<view class="posLabel_list" v-for="(item, index) in posObj.posLabel" :key="index">
+				<view class="posLabel_list" v-for="(item, index) in posObj.positionLables" :key="index">
 					<text class="posLabel_item">{{item}}</text>
 				</view>
 			</view>
 			<!-- 任职要求 -->
 			<view class="require">
-				<!-- 基本要求 -->
+				<!-- 基本要求 未改-->
 				<text class="in_title">任职要求</text>
 				<view class="require_list" v-for="(item, index) in posObj.posRequire" :key="index">
 					<text>{{item}}</text>
@@ -50,19 +55,19 @@
 			</view>
 		</view>
 		<!-- 发布者 -->
-		<text class="in_title publisher_title">职位发布者</text>
+		<!-- <text class="in_title publisher_title">职位发布者</text>
 		<view class="pos_publisher">
-			<view class="avatar"><image :src="posObj.publisher[0]" mode="widthFix" /></view>
+			<view class="avatar"><image src="https://www.lgstatic.com/thumbnail_100x100/common/image/pc/default_boy_headpic2.png" mode="widthFix" /></view>
 			<view class="publisher_des">
 				<text class="name">{{posObj.publisher[1]}}</text>
 				<text class="pos">{{posObj.publisher[2]}}</text>
 			</view>
-		</view>
+		</view> -->
 		<!-- 工作地点 -->
 		<view class="pos_location">
 			<text class="in_title">工作地址</text>
-			<text class="in_location iconfont icon-icon_GPS">{{posObj.posLocation[0]}}</text>
-			<text class="in_location_descript">{{posObj.posLocation[1]}}</text>
+			<text class="in_location iconfont icon-icon_GPS">{{posObj.city}}-{{posObj.district}}</text>
+			<!-- <text class="in_location_descript">{{posObj.posLocation[1]}}</text> -->
 		</view>
 		<!-- 底部栏 -->
 		<Bottom class="pos_bottom"></Bottom>
@@ -82,17 +87,17 @@
 			}
 		},
 		onLoad(option) {
-			// console.log(option.pid)
-			// console.log(option.mode)
-			// this.posObj = posDetail.data[0]
+			console.log(option.pid)
 			if(option.mode === 'point') {
-				this._getLocalPosDetail(parseInt(option.pid))
+				this._getLocalPosDetail(option.pid)
+			}else if(option.mode === 'search') {
+				this._getSearchedPosDeatil(option.pid)
 			}
-			
 		},
 		computed: {
 			...mapGetters([
-				'loadedPosList'
+				'loadedPosList',
+				'searchedPosList'
 			])
 		},
 		components: {
@@ -105,8 +110,35 @@
 			},
 			_getLocalPosDetail(pid) {
 				this.loadedPosList.map((item, index) => {
-					if(item.pid === pid) {
+					if(item.positionId === pid) {
 						this.posObj = item
+						this.posObj.posRequire = [
+							"职位描述:",
+							"1、熟悉HTML5/CSS3/JS，掌握Angular/React/Vue中一种或多种开发框架，熟悉React框架优先。",
+							"2、具备良好的沟通能力，对于用户体验、视觉及交互设计有一定的理解；",
+							"3、熟悉SVN、GIT 等常用管理工具优先；",
+							"4、具备良好的沟通能力，对于用户体验、视觉及交互设计有一定的理解。",
+							"职位要求:",
+							"1、二本以上计算机相关专业；",
+							"2、需要懂vue框架，需要精通，马上能上手的。"
+						]
+					}
+				})
+			},
+			_getSearchedPosDeatil(pid) {
+				this.searchedPosList.map((item, index) => {
+					if(item.positionId === pid) {
+						this.posObj = item
+						this.posObj.posRequire = [
+							"职位描述:",
+							"1、熟悉HTML5/CSS3/JS，掌握Angular/React/Vue中一种或多种开发框架，熟悉React框架优先。",
+							"2、具备良好的沟通能力，对于用户体验、视觉及交互设计有一定的理解；",
+							"3、熟悉SVN、GIT 等常用管理工具优先；",
+							"4、具备良好的沟通能力，对于用户体验、视觉及交互设计有一定的理解。",
+							"职位要求:",
+							"1、二本以上计算机相关专业；",
+							"2、需要懂vue框架，需要精通，马上能上手的。"
+						]
 					}
 				})
 			}
@@ -137,6 +169,9 @@
 				font-size: 50rpx;
 				font-weight: 500;
 				margin: 10rpx 0;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap
 			}
 			.require {
 				display: inline-flex;
@@ -199,7 +234,7 @@
 						display: flex;
 						justify-content: center;
 						padding: 8rpx 20rpx;
-						margin: 15rpx;
+						margin: 10rpx;
 						border: 2rpx solid $circle-border-color;
 						border-radius: 40rpx;
 					}

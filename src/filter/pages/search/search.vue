@@ -1,10 +1,28 @@
 <template>
     <view class="container">
-        <Top :location="userLocation" :nowInput="_nowInput" @searchPos="nowSearchPos"></Top>
-        <view class="result_box" v-if="_nowInput">
+        <Top
+        :location="userLocation" 
+        :nowInput="sNowInput" 
+        @searchPos="nowSearchPos" 
+        :isComfirm="isComfirm"></Top>
+        <!-- 搜索结果列表 -->
+        <view class="result_box" v-if="sNowInput">
             <text class="no_result" v-if="noResult">暂时没有符合搜索条件的职位</text>
-            <view class="result_list" v-for="(item, index) in resultShowing" :key="index" v-else>
-                <text class="result"><text class="iconfont icon-icon_search"></text>{{item}}</text>
+            <view v-if="searchedPosList.length">
+                <search-filter class="result_navbar"></search-filter>
+                <position-list 
+                :posList="searchedPosList" 
+                mode="search" 
+                isScroll
+                :searchKey="sNowInput"></position-list>
+            </view>
+            <view v-if="isSearching">
+                <ul class="searchKeys_list" v-for="(item, index) in searchShowing" :key="index">
+                    <li class="searchKeys" @click="handleSelect" data-type="searchShowing" :data-key="item">
+                        <text class="iconfont icon-icon_search"></text>
+                        {{item}}
+                    </li>
+                </ul>
             </view>
         </view>
         <view v-else class="search_box">
@@ -65,9 +83,12 @@
 
 <script>
 import Top from '../../components/top/top'
+import SearchFilter from '../../components/searchFilter/searchFilter'
+import PositionList from '../../../components/positionList/positionList'
 import { mapGetters, mapActions } from 'vuex'
-import { searchPos } from '../../utils/api'
-// import { debounce } from '../../utils/utils'
+import { searchPos } from '../../../utils/api'
+import keys from './search'
+// import { debounce } from '../../../utils/utils'
 let timer = null
 
 export default {
@@ -77,8 +98,10 @@ export default {
             sNowInput: '',
             recommendList: ['前端', 'java', 'ui', '自动化测试'],
             campanyList: ['虎牙科技', '字节跳动', 'Bigo', '小鹏汽车', '唯品会'],
-            resultList: [],
+            // resultList: [],
             noResult: false,
+            isSearching: false,
+            isComfirm: false
         }
     },
     onLoad() {
@@ -89,66 +112,83 @@ export default {
         if(this.userInfo.location) {
             this.userLocation = this.userInfo.location
         }
-        uni.$on('searchPos', (data) => {
+        uni.$on('request', (data) => {
             this.nowSearchPos(data)
+            this.sendRequest(data, 1)
+            this.isComfirm = true
         })
     },
     onUnload() {
         uni.setStorageSync('searchHistory', this.searchHistory)
+        this.clearSearchList()
     },
     computed: {
         ...mapGetters([
             'userInfo',
-            'searchHistory'
+            'searchHistory',
+            'searchedPosList'
         ]),
-         _nowInput() {
-             return this.sNowInput
-         },
-         resultShowing() {
+         //搜索提示词
+         searchShowing() {
              let list = []
-             let reg = new RegExp(this.sNowInput,"gi")
-             this.resultList.map((itemOut, index) => {
-                //  list.push(...item.posLabel.filter(item => {
-                //     reg.test(item)
-                //  }))
-                itemOut.posLabel.map(itemIn => {
-                    if(reg.test(itemIn)) {
-                        if(list.indexOf(itemIn) === -1) {
-                            list.push(itemIn)
-                        }
-                    }
-                })
+             let reg
+             if(this.sNowInput.replace(/[\^\$\*\+\?\=\!\.\(\)\\\/\[\]\{\}]/,"")) {
+                reg = new RegExp(this.sNowInput.replace(/[\^\$\+\?\=\!\.\(\)\\\/\[\]\{\}]/,""),"gi")
+             }else {
+                reg = /无结果/
+             }
+             
+             keys.map((item) => {
+                 if(reg.test(item)) {
+                     if(list.indexOf(item) === -1) {
+                         list.push(item)
+                     }
+                 }
              })
              return list
          }
     },
     components: {
-        Top
+        Top,
+        SearchFilter,
+        PositionList
     },
     methods: {
         ...mapActions([
             'clearSearchHistory',
-            'setSearchHistory'
+            'setSearchHistory',
+            'setSearchedPosList',
+			'clearSearchList'
         ]),
-        async _searchPos(key) {
-            const res = await searchPos(key)
+        async _searchPos(key, location, page) {
+            const res = await searchPos(key,location, page)
             console.log(res.data)
-            this.resultList = res.data
+            this.setSearchedPosList(res.data)
+            // this.resultList = res.data
             if(!res.data.length) {
                 this.noResult = true
             }else {
                 this.noResult = false
             }
         },
+        //获取当前搜索框的内容
         nowSearchPos(data) {
-            console.log(data)
             this.sNowInput = data.trim()
+            this.clearSearchList()
+            this.isComfirm = false
+            if(!this.isSearching) {
+                this.isSearching = true
+            }
+        },
+        //发送请求
+        sendRequest(key, page, delay = 800) {
+            this.isSearching = false
             timer && clearTimeout(timer)
             timer = setTimeout(() => {
-                if(data.trim()) {
-                    this._searchPos(data.trim())
+                if(key.trim()) {
+                    this._searchPos(key.trim(), this.userInfo.location, page)
                 }
-            }, 800)
+            }, delay)
         },
         clearHistory() {
             uni.showModal({
@@ -163,22 +203,33 @@ export default {
         //点击搜索记录再次搜索
         selectHistory(e) {
              this.searchHistory.map((item) => {
-                 if(item.id === e.target.dataset.index) {
+                 if(item.id === e.currentTarget.dataset.index) {
                      this.nowSearchPos(item.value)
+                     this.sendRequest(item.value, 1, 0)
                  }
             })
+            this.isComfirm = true
         },
         handleSelect(e) {
-            const index = e.target.dataset.index
-            const type = e.target.dataset.type
-
-            this.nowSearchPos(this[type][index])
+            //点击标签搜索
+            const type = e.currentTarget.dataset.type
+            if(type === 'searchShowing') {
+                const key = e.currentTarget.dataset.key
+                this.nowSearchPos(key)
+                this.sendRequest(key, 1, 0)
+            }else {
+                const index = e.currentTarget.dataset.index
+                this.nowSearchPos(this[type][index])
+                this.sendRequest(this[type][index], 1, 0)
+            }
+            //搜索之后保存记录
             const length = this.searchHistory.length
-			if(!length) {
+            if(!length) {
                 this.setSearchHistory({ value: this.sNowInput, id: 0})
             }else {
                 this.setSearchHistory({ value: this.sNowInput, id: length})
             }
+            this.isComfirm = true
         }
     }
 }
@@ -291,10 +342,13 @@ export default {
                 color: $main-color;
                 font-size: $main-size;
             }
-            .result_list {
+            .result_navbar {
+                width: 100%;
+            }
+            .searchKeys_list {
                 display: flex;
                 flex-direction: column;
-                .result {
+                .searchKeys {
                     width: 100%;
                     height: 80rpx;
                     line-height: 80rpx;

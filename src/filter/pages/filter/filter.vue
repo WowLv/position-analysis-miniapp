@@ -28,16 +28,12 @@
 </template>
 
 <script>
-	import SalaryPicker from '../../components/salaryPicker/salaryPicker.vue'
+	import SalaryPicker from '../../components/salaryPicker/salaryPicker'
 	import DatePicker from '../../components/datePicker/datePicker'
-	import { debounce } from '../../utils/utils.js'
+	import { debounce } from '../../../utils/utils'
 	import { mapGetters, mapActions} from 'vuex'
 	
 	export default {
-		components: {
-			SalaryPicker,
-			DatePicker
-		},
 		data() {
 			return {
 				filterList: [
@@ -65,7 +61,24 @@
 				]
 			}
 		},
-		
+		onLoad() {
+			if(uni.getStorageSync('hopeObj')) {
+				let firstHopeObj = uni.getStorageSync('hopeObj')
+				// { hopeSalary, hopeCity, hopeType, hopeDate, hopePos }
+				let keys = Object.keys(firstHopeObj)
+				Object.values(firstHopeObj).map((item, index) => {
+					if(item) {
+						this.setHopeData({type: keys[index], data: item})
+					}
+				})
+				console.log(this.hopeObj)
+				
+			}
+		},
+		components: {
+			SalaryPicker,
+			DatePicker
+		},
 		computed: {
 			...mapGetters([
 				'hopeSalary',
@@ -121,6 +134,7 @@
 			},
 			saveFilter() {
 				//后期将数据保存到服务器并筛选首页数据
+				uni.setStorageSync('hopeObj', this.hopeObj)
 				uni.showToast({
 					title: '保存成功'
 				});

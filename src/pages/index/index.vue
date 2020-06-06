@@ -4,7 +4,7 @@
 			<view class="top_title">
 				<text>CodeRush</text>
 			</view>
-			<navigator url="../search/search" class="top_search">
+			<navigator url="../../filter/pages/search/search" class="top_search">
 				<text class="text iconfont icon-icon_search"> 搜索职位/公司</text>
 			</navigator>
 		</view>
@@ -18,19 +18,19 @@
 			</swiper>
 		</view>
 		<view class="index_navigator">
-			<navigator url="../filter/filter" open-type="navigate">
+			<navigator url="../../filter/pages/filter/filter" open-type="navigate">
 				<text class="nav_title">为你匹配</text><text class="iconfont icon-arrow-right"></text>
 			</navigator>
 		</view> 
 		<view class="position_list">
-			<position-list :posList="posList"></position-list>
+			<position-list :posList="loadedPosList" mode="point"></position-list>
 		</view>
 	</view>
 </template>
 
 <script>
 	import PositionList from '@/components/positionList/positionList.vue'
-	import { mapActions } from 'vuex'
+	import { mapActions,mapGetters } from 'vuex'
 	import { getPosDetailByPage } from '../../utils/api'
 	export default {
 		data() {
@@ -40,8 +40,7 @@
 					"https://ae01.alicdn.com/kf/Hd9c5474314df4ea29bd809cf72c5256e9.jpg",
 					"https://ae01.alicdn.com/kf/H98cff1aebac4456eaa3d7887688130539.jpg"
 				],
-				currentPage: 1,
-				posList: []
+				currentPage: 1
 			}
 		},
 		onLoad() {
@@ -53,11 +52,18 @@
 		onPullDownRefresh() {
 			this.currentPage = 1
 			this.clearPosList()
-			this.posList = []
 			this._getPosDetailByPage(this.currentPage)
+		},
+		onUnload() {
+			this.clearPosList()
 		},
 		components: {
 			PositionList
+		},
+		computed: {
+			...mapGetters([
+				'loadedPosList'
+			])
 		},
 		methods: {
 			...mapActions([
@@ -71,7 +77,6 @@
 				let dataArr = data.data
 				console.log(dataArr)
 				if(dataArr.length) {
-					this.posList.push(...dataArr)
 					this.setLoadedPosList(dataArr)
 				}else {
 					uni.showToast({

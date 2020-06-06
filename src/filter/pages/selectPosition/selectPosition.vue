@@ -113,7 +113,7 @@ export default {
                 }else {
                     this.setSearchHistory({ value: this.rightList[index], id: length})
                 }
-                uni.$emit('searchPos', this.rightList[index])
+                uni.$emit('request', this.rightList[index])
 
             }
             uni.navigateBack({

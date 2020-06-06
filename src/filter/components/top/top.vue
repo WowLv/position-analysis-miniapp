@@ -6,6 +6,7 @@
 		url="../../pages/selectRegion/selectRegion?mode=search" 
 		class="top_location" 
 		:class="{'none':location === 'false'}"
+		v-if="!nowComfirm"
 		>
 			<text v-if="location" class="in_location" >
 				{{location}}
@@ -18,18 +19,22 @@
 			<input v-model="inputData" @input="watchInput">
 			<text class="iconfont icon-close" v-if="inputData" @click="clearInput"></text>
 		</view>
-		<view v-if="!inputData" class="top_cancel" @click="handleCancel">取消</view>
-		<view v-else class="top_cancel" @click="handleOk">完成</view>
+		<view v-if="!nowComfirm">
+			<view v-if="!inputData" class="top_cancel" @click="handleCancel">取消</view>
+			<view v-else class="top_cancel" @click="handleOk">完成</view>
+		</view>
+		
 	</view>
 </template>
 
 <script>
-import {debounce} from '../../utils/utils'
+import {debounce} from '../../../utils/utils'
 import {mapGetters, mapActions} from 'vuex'
 	export default {
 		data() {
 			return {
-				inputData: ''
+				inputData: '',
+				mIsComfirm: false
 			}
 		},
 		props: {
@@ -40,6 +45,10 @@ import {mapGetters, mapActions} from 'vuex'
 			nowInput: {
 				type: String,
 				default: ''
+			},
+			isComfirm: {
+				type: Boolean,
+				default: false
 			}
 		},
 		watch: {
@@ -50,7 +59,10 @@ import {mapGetters, mapActions} from 'vuex'
 		computed: {
 			...mapGetters([
 				'searchHistory'
-				])
+				]),
+			nowComfirm() {
+				return this.isComfirm || this.mIsComfirm
+			}
 		},
 		methods: {
 			...mapActions([
@@ -62,8 +74,9 @@ import {mapGetters, mapActions} from 'vuex'
 				});
 			},
 			handleOk() {
-				// uni.$emit('searchPos', this.inputData)
-				this.$emit('searchPos', this.inputData)
+				this.mIsComfirm = true
+				uni.$emit('request', this.inputData)
+				// this.$emit('searchPos', this.inputData)
 				const length = this.searchHistory.length
 				if(!length) {
                     this.setSearchHistory({ value: this.inputData, id: 0})
@@ -74,9 +87,11 @@ import {mapGetters, mapActions} from 'vuex'
 			clearInput() {
 				this.inputData = ''
 				this.$emit('searchPos', this.inputData)
+				this.mIsComfirm = false
 			},
 			watchInput() {
 				this.$emit('searchPos', this.inputData)
+				this.mIsComfirm = false
 			}
 			
 		}

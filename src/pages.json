@@ -8,7 +8,7 @@
 			
 		},
 		{
-			"path":"pages/analysis/analysis",
+			"path": "pages/analysis/analysis",
 			"style": {
 				"navigationBarTitleText": "职位分析",
 				"navigationBarTextStyle": "white",
@@ -66,44 +66,58 @@
 				"navigationBarTextStyle": "white"
 			}
 		},
-		{
-			"path":"pages/filter/filter",
-			"style": {
-				"navigationBarTitleText": "设置求职意向",
-				"navigationBarTextStyle": "white"
-			}
-		},
-	    {
-            "path" : "pages/selectRegion/selectRegion",
-            "style" : {
-				"navigationBarTitleText": "期望城市",
-				"navigationBarTextStyle": "white"
-			}
-        },
         {
             "path" : "pages/posDetail/posDetail",
             "style" : {
 				"navigationBarTitleText": "职位详情",
 				"navigationBarTextStyle": "white"
 			}
-        },
-        {
-            "path" : "pages/search/search",
-            "style" : {
-				"navigationBarTitleText": "搜索",
-				"navigationBarTextStyle": "black",
-				"navigationBarBackgroundColor": "#ffffff"
-			}
-		},
-		{
-            "path" : "pages/selectPosition/selectPosition",
-            "style" : {
-				"navigationBarTitleText": "按分类搜索",
-				"navigationBarTextStyle": "black",
-				"navigationBarBackgroundColor": "#ffffff"
-			}
         }
 	],
+	"subPackages": [
+		{
+			"root": "filter",
+			"name": "filter",
+			"pages": [
+				{
+					"path" : "pages/selectRegion/selectRegion",
+					"style" : {
+						"navigationBarTitleText": "期望城市",
+						"navigationBarTextStyle": "white"
+					}
+				},
+				{
+					"path" : "pages/selectPosition/selectPosition",
+					"style" : {
+						"navigationBarTitleText": "按分类搜索",
+						"navigationBarTextStyle": "black",
+						"navigationBarBackgroundColor": "#ffffff"
+					}
+				},
+				{
+					"path" : "pages/search/search",
+					"style" : {
+						"navigationBarTitleText": "搜索",
+						"navigationBarTextStyle": "black",
+						"navigationBarBackgroundColor": "#ffffff"
+					}
+				},
+				{
+					"path":"pages/filter/filter",
+					"style": {
+						"navigationBarTitleText": "设置求职意向",
+						"navigationBarTextStyle": "white"
+					}
+				}
+			]
+		}
+	],
+	"preloadRule": {
+		"pages/index/index": {
+			"network": "all",
+			"packages": ["filter"]
+		}
+	},
 	"globalStyle": {
 		"navigationBarBackgroundColor": "#3a3cd7"
 	},
@@ -153,12 +167,12 @@
 			},
 			{
 				"name": "filter", 
-				"path":"pages/filter/filter",
+				"path":"filter/pages/filter/filter",
 				"query": "" 
 			},
 			{
 				"name": "region", 
-				"path":"pages/selectRegion/selectRegion", 
+				"path":"filter/pages/selectRegion/selectRegion", 
 				"query": "" 
 			},
 			{
@@ -168,12 +182,12 @@
 			},
 			{
 				"name": "search", 
-				"path":"pages/search/search",
+				"path":"filter/pages/search/search",
 				"query": ""
 			},
 			{
 				"name": "selectPos", 
-				"path":"pages/selectPosition/selectPosition",
+				"path":"filter/pages/selectPosition/selectPosition",
 				"query": ""
 			}
 		]
