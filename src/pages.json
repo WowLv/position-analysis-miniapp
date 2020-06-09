@@ -189,6 +189,11 @@
 				"name": "selectPos", 
 				"path":"filter/pages/selectPosition/selectPosition",
 				"query": ""
+			},
+			{
+				"name": "analysis", 
+				"path":"pages/analysis/analysis",
+				"query": ""
 			}
 		]
 	}

@@ -6,7 +6,7 @@ const request = (params) => {
         mask: false
       })
 
-    const baseUrl = "http://192.168.0.5:3000"
+    const baseUrl = "https://39.106.60.145/Hbase_3.0"
     return new Promise((resolve, reject) => {
         uni.request({
             ...params,

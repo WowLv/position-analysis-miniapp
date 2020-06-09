@@ -17,15 +17,18 @@ export function debounce(fn, delay = 200,immediate = true, ctx) {
 	}
 }
 
-// export function debounce(fn, delay = 200) {
-// 	let timer = null
-// 	return function(...args) {
-// 		timer && clearTimeout(timer)
-// 		timer = setTimeout(()=>{
-// 			fn.apply(this,args)
-// 		},delay)
-// 	}
-// }
+export function TopFiveDate(obj) {
+	return obj.sort(compare('value')).slice(0, 5)
+}
+
+function compare(prop) {
+	return function(a, b) {
+		const val1 = a[prop]
+		const val2 = b[prop]
+		return val2 - val1
+	}
+}
+  
 
 function formatter(date){
 	var strDate = date.getFullYear()+"-";

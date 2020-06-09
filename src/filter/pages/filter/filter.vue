@@ -137,7 +137,13 @@
 				uni.setStorageSync('hopeObj', this.hopeObj)
 				uni.showToast({
 					title: '保存成功'
-				});
+				}).then(() => {
+					setTimeout(() => {
+						uni.navigateBack({
+							delta: 1
+						});
+					},1000)
+				})
 			}
 			
 		}

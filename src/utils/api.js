@@ -1,4 +1,5 @@
 import request from './request.js'
+import analysisReq from './analysisReq'
 
 export function getPosDetailByPid(query) {
 	return request({
@@ -23,10 +24,34 @@ export function searchPos(key, location, page) {
 		data: { key, location, page }
 	})
 }
-
-export function test() {
-	return request({
-		url: '/test',
+export function getProvinceRank() {
+	return analysisReq({
+		url: '/AllProvince_Job_Servlet',
 		method: 'GET'
 	})
 }
+
+export function getRegionRank(region) {
+	return analysisReq({
+		url: '/CountryJob_DayTop_Servlet',
+		method: 'GET',
+		data: region
+	})
+}
+
+export function getPosRank() {
+	return analysisReq({
+		url: '/CountryJob_DayTop_Servlet',
+		method: 'GET',
+		data: { position: 'other'}
+	})
+}
+
+
+
+// export function test() {
+// 	return request({
+// 		url: '/test',
+// 		method: 'GET'
+// 	})
+// }

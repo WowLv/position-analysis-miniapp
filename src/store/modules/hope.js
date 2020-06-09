@@ -1,11 +1,14 @@
-
+import { getRegionRank, getProvinceRank } from '@/utils/api'
+import { TopFiveDate } from '@/utils/utils'
 const hope = {
 	state: {
 		hopeSalary: '',
 		hopeCity: '',
 		hopeType: '',
 		hopeDate: '',
-		hopePos: ''
+		hopePos: '',
+		regionRank: [],
+		skillRank: []
 	},
 	getters: {
 		hopeSalary: state => state.hopeSalary,
@@ -13,6 +16,8 @@ const hope = {
 		hopeType: state => state.hopeType,
 		hopeDate: state => state.hopeDate,
 		hopePos: state => state.hopePos,
+		regionRank: state => state.regionRank,
+		skillRank: state => state.skillRank
 	},
 	mutations: {
 		SET_HOPESALARY: (state, hopeSalary) => {
@@ -30,6 +35,12 @@ const hope = {
 		SET_HOPEPOS: (state, hopePos) => {
 			state.hopePos = hopePos
 		},
+		SET_REGIONRANK: (state, regionRank) => {
+			state.regionRank = regionRank
+		},
+		SET_SKILLRANK: (state, skillRank) => {
+			state.skillRank = skillRank
+		}
 	},
 	actions: {
 		// setHopeSalary({ commit }, hopeSalary) {
@@ -44,13 +55,25 @@ const hope = {
 		// setHopeDate({ commit }, hopeDate) {
 		// 	commit('SET_HOPEDATE', hopeDate)
 		// }
-		setHopeData({ commit }, hopeData) {
+		async setHopeData({ commit }, hopeData) {
 			switch(hopeData.type){
 				case 'hopeSalary':
 					commit('SET_HOPESALARY', hopeData.data)
 					break;
 				case 'hopeCity':
+					console.log(hopeData.data)
 					commit('SET_HOPECITY', hopeData.data)
+					if(hopeData.data) {
+						let res = await getRegionRank({level: 3, region: hopeData.data})
+						commit('SET_REGIONRANK', res.data.hotRegion)
+						commit('SET_SKILLRANK', TopFiveDate(res.data.skill))
+					}else {
+						let regionRes = await getProvinceRank()
+						let skillRes = await getRegionRank()
+						commit('SET_REGIONRANK', TopFiveDate(regionRes.data))
+						commit('SET_SKILLRANK', TopFiveDate(skillRes.data.skill))
+					}
+					
 					break;
 				case 'hopeType':
 					commit('SET_HOPETYPE', hopeData.data)
