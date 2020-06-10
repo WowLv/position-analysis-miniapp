@@ -12,7 +12,12 @@
 			<f2 id="circle_chart" :onInit="onInitCircleChart" v-if="showRegion"/>
 		</view>
 		
-		
+		<text class="chart_title">招聘薪资数据</text>
+		<scroll-view scroll-x class="chart_scroll">
+			<view class="chart_box square_chart">
+				<f2 id="square_chart" :onInit="onInitSquareChart" v-if="showSalary"/>
+			</view>
+		</scroll-view>
 	</view>
 </template>
 
@@ -26,34 +31,52 @@ import { mapGetters, mapActions} from 'vuex'
 			return {
 				showSkill: false,
 				showRegion: false,
-				flag: false
+				showSalary: false,
+				flag: false,
+				mySalary: [ '3k及以下', '4k', '6k', '8k', '10k', '12k', '14k', '16k', '20k',  '24k', '28k', '30K及以上' ]
 			}
 		},
 		onLoad() {
 			if(uni.getStorageSync('hopeObj')) {
 				let firstHopeObj = uni.getStorageSync('hopeObj')
-				let keys = Object.keys(firstHopeObj)
-				Object.values(firstHopeObj).map((item, index) => {
-					if(item) {
-						this.setHopeData({type: keys[index], data: item})
-						.then(() => {
-							if(this.skillRank.length) {
-								this.showSkill = true
-							}
-							if(this.regionRank.length) {
-								this.showRegion = true
-							}
-						})
+				this.setReady(firstHopeObj).then(() => {
+					if(this.skillRank.length) {
+						this.showSkill = true
+					}
+					if(this.regionRank.length) {
+						this.showRegion = true
+					}
+					if(this.salaryList.length) {
+						this.showSalary = true
 					}
 				})
+				// Object.values(firstHopeObj).map((item, index) => {
+				// 	this.setHopeData({type: keys[index], data: item})
+				// 	this.setReady()
+				// 	.then(() => {
+				// 		if(this.skillRank.length) {
+				// 			this.showSkill = true
+				// 		}
+				// 		if(this.regionRank.length) {
+				// 			this.showRegion = true
+				// 		}
+				// 		if(this.salaryList.length) {
+				// 			this.showSalary = true
+				// 		}
+				// 	})
+
+				// })
 			}else {
-				this.setHopeData({type: 'hopeCity'})
+				this.setHopeData({type: 'noHope'})
 				.then(() => {
 					if(this.skillRank.length) {
 						this.showSkill = true
 					}
 					if(this.regionRank.length) {
 						this.showRegion = true
+					}
+					if(this.salaryList.length) {
+						this.showSalary = true
 					}
 				})
 			}
@@ -67,73 +90,39 @@ import { mapGetters, mapActions} from 'vuex'
 			if(this.flag && this.regionRank.length) {
 				this.showRegion = true
 			}
+			if(this.flag && this.salaryList.length) {
+				this.showSalary = true
+			}
 		},
 		onHide() {
 			this.showSkill = false
 			this.showRegion = false
+			this.showSalary = false 
 		},
 		computed: {
 			...mapGetters([
 				'hopeCity',
 				'regionRank',
-				'skillRank'
-			])
+				'skillRank',
+				'salaryList'
+			]),
+			nowSalaryList() {
+				let list = []
+				this.salaryList.map((item) => {
+					item.value.map((valueItem, valueIndex) => {
+						list.push({y: item.name, x: valueIndex, value: valueItem})
+					})
+				})
+				return list
+			}
 		},
 		methods: {
 			...mapActions([
-				'setHopeData'
+				'setHopeData',
+				'setReady'
 			]),
-			onInitLineChart(F2, config) {
-				const chart = new F2.Chart(config);
-				chart.source(data);
-				chart.scale('date', {
-					type: 'timeCat',
-					tickCount: 3
-				});
-				chart.scale('value', {
-					tickCount: 5
-				});
-				chart.axis('date', {
-					label: function label(text, index, total) {
-						// 只显示每一年的第一天
-						const textCfg = {};
-						if (index === 0) {
-							textCfg.textAlign = 'left';
-						} else if (index === total - 1) {
-							textCfg.textAlign = 'right';
-						}
-						return textCfg;
-					}
-				});
-				chart.tooltip({
-					custom: true, // 自定义 tooltip 内容框
-					onChange: function onChange(obj) {
-						const legend = chart.get('legendController').legends.top[0];
-						const tooltipItems = obj.items;
-						const legendItems = legend.items;
-						const map = {};
-						legendItems.forEach(function(item) {
-							map[item.name] = _.clone(item);
-						});
-						tooltipItems.forEach(function(item) {
-							const name = item.name;
-							const value = item.value;
-							if (map[name]) {
-								map[name].value = value;
-							}
-						});
-						legend.setItems(_.values(map));
-					},
-					onHide: function onHide() {
-						const legend = chart.get('legendController').legends.top[0];
-						legend.setItems(chart.getLegendItems().country);
-					}
-				});
-				chart.line().position('date*value').color('type');
-				chart.render();
-				return chart
-			},
 			onInitCircleChart(F2, config) {
+				F2.Global.fontFamily = 'sans-serif';
 				const chart= new F2.Chart(config);
 				chart.coord('polar', {
 					transposed: true,
@@ -232,16 +221,28 @@ import { mapGetters, mapActions} from 'vuex'
 				chart.render();
 				return chart;
 			},
-			// async _getRegionRank(region) {
-			// 	let res = await getRegionRank(region)
-			// 	console.log(res.data)
-			// 	this.regionRank = res.data.hotRegion
-			// 	this.skillRank = TopFiveDate(res.data.skill)
-			// }
-			// async _getPosRank() {
-			// 	let res = await getPosRank()
-			// 	this.posRank = TopFiveDate(res.data.other)
-			// }
+			onInitSquareChart(F2, config) {
+				// console.log(getCurrentPages()[0].data.nowSalaryList)
+				F2.Global.fontFamily = 'sans-serif';
+				var chart = new F2.Chart(config);
+				chart.source(getCurrentPages()[0].data.nowSalaryList, {
+					x: {
+						type: 'cat',
+						values: getCurrentPages()[0].data.mySalary
+					}
+				});
+				chart.polygon().position('x*y').color('value', '#BAE7FF-#1890FF-#0050B3').style({
+					lineWidth: 1,
+					stroke: '#fff'
+				}).animate({
+					appear: {
+					animation: 'fadeIn',
+					duration: 800
+					}
+				});
+				chart.render();
+				return chart;
+			}
 		}
 	}
 </script>
@@ -266,6 +267,14 @@ import { mapGetters, mapActions} from 'vuex'
 		width: 100%;
 		height: 500rpx
 	}
+	.chart_scroll {
+		width: 100vw;
+		.square_chart {
+			height: 600rpx;
+			width: 1000rpx;
+		}
+	}
+	
 }
 
 </style>

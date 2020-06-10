@@ -31,11 +31,11 @@ export function getProvinceRank() {
 	})
 }
 
-export function getRegionRank(region) {
+export function getRegionRank(obj) {
 	return analysisReq({
 		url: '/CountryJob_DayTop_Servlet',
 		method: 'GET',
-		data: region
+		data: obj
 	})
 }
 
@@ -47,6 +47,13 @@ export function getPosRank() {
 	})
 }
 
+export function getPosSalary(obj) {
+	return analysisReq({
+		url: '/Exp_Scalary_Servlet',
+		method: 'GET',
+		data: obj
+	})
+}
 
 
 // export function test() {

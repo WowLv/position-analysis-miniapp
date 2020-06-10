@@ -105,7 +105,7 @@ export default {
         selectRight(e) {
             const index = e.target.dataset.index
             if(this.selectMode === 'hope') {
-                this.setHopeData({ type: 'hopePos', data: this.rightList[index] }) 
+                this.setHopeData({ type: 'hopePos', data: `${this.leftList[this.currentIndex].value}-${this.rightList[index]}` }) 
             }else if(this.selectMode === 'search') {
                 const length = this.searchHistory.length
                 if(!length) {

@@ -15,7 +15,8 @@
 				<view v-else class="no_salary">
 					<text class="item_title">{{item.name}}</text>
 					<view class="item_right">
-						<text class="item_selected">{{hopeObj[item.type]}}</text>
+						<text class="item_selected" v-if="item.type === 'hopePos'">{{nowHopePos}}</text>
+						<text class="item_selected" v-else>{{hopeObj[item.type]}}</text>
 						<text class="iconfont icon-arrow-right"></text>
 					</view>
 					<view class="item_mask" @click="handleClick(item.type, item.typeList)"></view>
@@ -89,17 +90,26 @@
 			]),
 			hopeObj() {
 				return {
-					hopeSalary: this.hopeSalary,
-					hopeCity: this.hopeCity,
 					hopeType: this.hopeType,
 					hopeDate: this.hopeDate,
-					hopePos: this.hopePos
+					hopePos: this.hopePos,
+					hopeCity: this.hopeCity,
+					hopeSalary: this.hopeSalary
 				}
+			},
+			nowHopePos() {
+				if(this.hopePos) {
+					return this.hopePos.split('-')[1]
+				}else {
+					return this.hopePos
+				}
+				
 			}
 		},
 		methods: {
 			...mapActions([
-				'setHopeData'
+				'setHopeData',
+				'setReady'
 			]),
 			handleClick(type, list) {
 				switch(type) {
@@ -135,6 +145,7 @@
 			saveFilter() {
 				//后期将数据保存到服务器并筛选首页数据
 				uni.setStorageSync('hopeObj', this.hopeObj)
+				this.setReady(this.hopeObj)
 				uni.showToast({
 					title: '保存成功'
 				}).then(() => {

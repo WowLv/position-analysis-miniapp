@@ -1,25 +1,32 @@
-import { getRegionRank, getProvinceRank } from '@/utils/api'
+import { getRegionRank, getProvinceRank, getPosSalary } from '@/utils/api'
 import { TopFiveDate } from '@/utils/utils'
 const hope = {
 	state: {
+		isReady: false,
 		hopeSalary: '',
 		hopeCity: '',
 		hopeType: '',
 		hopeDate: '',
 		hopePos: '',
 		regionRank: [],
-		skillRank: []
+		skillRank: [],
+		salaryList: []
 	},
 	getters: {
+		isReady: state => state.isReady,
 		hopeSalary: state => state.hopeSalary,
 		hopeCity: state => state.hopeCity,
 		hopeType: state => state.hopeType,
 		hopeDate: state => state.hopeDate,
 		hopePos: state => state.hopePos,
 		regionRank: state => state.regionRank,
-		skillRank: state => state.skillRank
+		skillRank: state => state.skillRank,
+		salaryList: state => state.salaryList
 	},
 	mutations: {
+		SET_READY: (state, isReady) => {
+			state.isReady = isReady
+		},
 		SET_HOPESALARY: (state, hopeSalary) => {
 			state.hopeSalary = hopeSalary
 		},
@@ -40,40 +47,19 @@ const hope = {
 		},
 		SET_SKILLRANK: (state, skillRank) => {
 			state.skillRank = skillRank
+		},
+		SET_SALARYLIST: (state, salaryList) => {
+			state.salaryList = salaryList
 		}
 	},
 	actions: {
-		// setHopeSalary({ commit }, hopeSalary) {
-		// 	commit('SET_HOPESALARY', hopeSalary)
-		// },
-		// setHopeCity({ commit }, hopeCity) {
-		// 	commit('SET_HOPECITY', hopeCity)
-		// },
-		// setHopeType({ commit }, hopeType) {
-		// 	commit('SET_HOPETYPE', hopeType)
-		// },
-		// setHopeDate({ commit }, hopeDate) {
-		// 	commit('SET_HOPEDATE', hopeDate)
-		// }
 		async setHopeData({ commit }, hopeData) {
 			switch(hopeData.type){
 				case 'hopeSalary':
 					commit('SET_HOPESALARY', hopeData.data)
 					break;
 				case 'hopeCity':
-					console.log(hopeData.data)
 					commit('SET_HOPECITY', hopeData.data)
-					if(hopeData.data) {
-						let res = await getRegionRank({level: 3, region: hopeData.data})
-						commit('SET_REGIONRANK', res.data.hotRegion)
-						commit('SET_SKILLRANK', TopFiveDate(res.data.skill))
-					}else {
-						let regionRes = await getProvinceRank()
-						let skillRes = await getRegionRank()
-						commit('SET_REGIONRANK', TopFiveDate(regionRes.data))
-						commit('SET_SKILLRANK', TopFiveDate(skillRes.data.skill))
-					}
-					
 					break;
 				case 'hopeType':
 					commit('SET_HOPETYPE', hopeData.data)
@@ -84,7 +70,61 @@ const hope = {
 				case 'hopePos':
 					commit('SET_HOPEPOS', hopeData.data)
 					break;
+				case 'noHope':
+					let regionRes = await getProvinceRank()
+					let skillRes = await getRegionRank()
+					commit('SET_REGIONRANK', TopFiveDate(regionRes.data))
+					commit('SET_SKILLRANK', TopFiveDate(skillRes.data.skill))
+					let salaryRes = await getPosSalary()
+					commit('SET_SALARYLIST', salaryRes.data)
+						
 			}
+		},
+		async setReady({ commit }, hopeObj) {
+			let pos = hopeObj.hopePos.split('-')[0]
+			let city = hopeObj.hopeCity
+
+			let salaryRes
+			let regionRes
+			let skillRes
+			let res
+			if(pos && city) {
+				salaryRes = await getPosSalary({level: 3, region: city, position: pos})
+				res = await getRegionRank({level: 3, region: city, position: pos})
+				if(res.data.hotRegion) {
+					//nothing
+				}else {
+					res = await getRegionRank({ level: 3, region: city })
+				}
+				commit('SET_REGIONRANK', res.data.hotRegion)
+				commit('SET_SKILLRANK', TopFiveDate(res.data.skill))
+			}else if(pos && !city ) {
+				salaryRes = await getPosSalary({position: pos})
+				res = await getRegionRank({position: pos})
+				if(res.data.hotRegion) {
+					commit('SET_REGIONRANK', res.data.hotRegion)
+					commit('SET_SKILLRANK', TopFiveDate(res.data.skill))
+				}else {
+					regionRes = await getProvinceRank()
+					skillRes = await getRegionRank()
+					salaryRes = await getPosSalary()
+					commit('SET_REGIONRANK', TopFiveDate(regionRes.data))
+					commit('SET_SKILLRANK', TopFiveDate(skillRes.data.skill))
+				}
+				
+			}else if(!pos && city) {
+				salaryRes = await getPosSalary({level: 3, region: city})
+				res = await getRegionRank({level: 3, region: city})
+				commit('SET_REGIONRANK', res.data.hotRegion)
+				commit('SET_SKILLRANK', TopFiveDate(res.data.skill))
+			}else if(!pos && !city) {
+				regionRes = await getProvinceRank()
+				skillRes = await getRegionRank()
+				salaryRes = await getPosSalary()
+				commit('SET_REGIONRANK', TopFiveDate(regionRes.data))
+				commit('SET_SKILLRANK', TopFiveDate(skillRes.data.skill))
+			}
+			commit('SET_SALARYLIST', salaryRes.data)
 		}
 	}
 }
