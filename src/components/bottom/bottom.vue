@@ -18,20 +18,64 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 	export default {
+		props: {
+			mode: {
+				type: String,
+				default: ''
+			},
+			pid: {
+				type: Number,
+				default: ''
+			}
+		},
 		data() {
 			return {
-				isCollect: false
+				// isCollect: false
 			};
 		},
+		computed: {
+			...mapGetters([
+				'loadedPosList',
+				'searchedPosList',
+				'userCollect'
+			]),
+			isCollect() {
+				let flag = false
+				if(this.userCollect.length) {
+					this.userCollect.map((item) => {
+						if(parseInt(item.positionId) === this.pid) {
+							flag = true
+						}
+					})
+				}
+				return flag
+			}
+		},
 		methods: {
+			...mapActions([
+				'setCollect',
+				'deleteCollect'
+			]),
 			handleCollect() {
-				this.isCollect = !this.isCollect
-				if(this.isCollect) {
+				if(!this.isCollect) {
+					if(this.mode === 'search') {
+						let _collect = this.searchedPosList.find((item) => {
+							return parseInt(item.positionId) === this.pid
+						})
+						this.setCollect(_collect)
+					} else if(this.mode === 'point') {
+						let _collect = this.loadedPosList.find((item) => {
+							return parseInt(item.positionId) === this.pid
+						})
+						this.setCollect(_collect)
+					}
 					uni.showToast({
 						title: '收藏成功'
 					})
 				}else {
+					this.deleteCollect(this.pid)
 					uni.showToast({
 						title: '已取消'
 					})

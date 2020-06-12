@@ -102,6 +102,10 @@ import { searchPos } from '../../utils/api'
 					uni.navigateTo({
 						url: `../../../pages/posDetail/posDetail?pid=${pid}&mode=search`
 					})
+				}else {
+					uni.navigateTo({
+						url: `../../../pages/posDetail/posDetail?pid=${pid}`
+					})
 				}
 			},
 			async _searchPos(key, location, page) {

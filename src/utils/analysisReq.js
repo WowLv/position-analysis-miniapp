@@ -6,7 +6,7 @@ const request = (params) => {
         mask: false
       })
 
-    const baseUrl = "https://39.106.60.145/Hbase_3.0"
+    const baseUrl = "https://coderush.top/Hbase_3.0"
     return new Promise((resolve, reject) => {
         uni.request({
             ...params,

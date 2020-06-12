@@ -1,7 +1,8 @@
 const user = {
 	state: {
 		userInfo: {},
-		searchHistory: []
+		searchHistory: [],
+		userCollect: []
 	},
 	getters: {
 		userInfo: state => state.userInfo,
@@ -14,7 +15,8 @@ const user = {
 			}else {
 				return history.slice(0, 8)
 			}
-		}
+		},
+		userCollect: state => state.userCollect
 	},
 	mutations: {
 		SET_USERLOCATION: (state, userInfo) => {
@@ -39,9 +41,31 @@ const user = {
 				}
 			}
 		},
-		CLEAR_SEARCHHISTORY: (state, searchHistory) => {
+		CLEAR_SEARCHHISTORY: (state) => {
 			state.searchHistory = []
 			uni.clearStorage('searchHistory');
+		},
+		SET_COLLECT: (state, userCollect) => {
+			if(userCollect instanceof Array) {
+				state.userCollect = userCollect
+			}else {
+				// if(userCollect.companyLogo.indexOf('www.') > -1) {
+				// 	userCollect.companyLogo = `//www.lgstatic.com/thumbnail_160x160/${userCollect.companyLogo}`
+				// }
+				state.userCollect.unshift(userCollect)
+				console.log(userCollect)
+				uni.setStorageSync('collectList', state.userCollect)
+			}
+			
+		},
+		DELETE_COLLECT: (state, pid) => {
+			state.userCollect.map((item) => {
+				if(parseInt(item.positionId) === pid) {
+					let index = state.userCollect.indexOf(item)
+					state.userCollect.splice(index,1)
+				}
+			})
+			uni.setStorageSync('collectList', state.userCollect)
 		}
 	},
 	actions: {
@@ -57,6 +81,12 @@ const user = {
 		},
 		clearSearchHistory({ commit }) {
 			commit('CLEAR_SEARCHHISTORY')
+		},
+		setCollect({ commit }, userCollect) {
+			commit('SET_COLLECT', userCollect)
+		},
+		deleteCollect({ commit }, pid) {
+			commit('DELETE_COLLECT', pid)
 		}
 	}
 }
