@@ -8,6 +8,28 @@
 			
 		},
 		{
+			"path":"pages/filter/filter",
+			"style": {
+				"navigationBarTitleText": "设置求职意向",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path" : "pages/selectRegion/selectRegion",
+			"style" : {
+				"navigationBarTitleText": "期望城市",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path" : "pages/selectPosition/selectPosition",
+			"style" : {
+				"navigationBarTitleText": "按分类搜索",
+				"navigationBarTextStyle": "black",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+		{
 			"path": "pages/analysis/analysis",
 			"style": {
 				"navigationBarTitleText": "职位分析",
@@ -31,41 +53,6 @@
 				"navigationBarTextStyle": "white"
 			}
 		},
-		{
-			"path":"pages/resumeAttachment/resumeAttachment",
-			"style": {
-				"navigationBarTitleText": "附件简历",
-				"navigationBarTextStyle": "white"
-			}
-		},
-		{
-			"path":"pages/resumeOnline/resumeOnline",
-			"style": {
-				"navigationBarTitleText": "在线简历",
-				"navigationBarTextStyle": "white"
-			}
-		},
-		{
-			"path":"pages/history/history",
-			"style": {
-				"navigationBarTitleText": "投递记录",
-				"navigationBarTextStyle": "white"
-			}
-		},
-		{
-			"path":"pages/collect/collect",
-			"style": {
-				"navigationBarTitleText": "我的收藏",
-				"navigationBarTextStyle": "white"
-			}
-		},
-		{
-			"path":"pages/setting/setting",
-			"style": {
-				"navigationBarTitleText": "设置",
-				"navigationBarTextStyle": "white"
-			}
-		},
         {
             "path" : "pages/posDetail/posDetail",
             "style" : {
@@ -80,32 +67,51 @@
 			"name": "filter",
 			"pages": [
 				{
-					"path" : "pages/selectRegion/selectRegion",
-					"style" : {
-						"navigationBarTitleText": "期望城市",
-						"navigationBarTextStyle": "white"
-					}
-				},
-				{
-					"path" : "pages/selectPosition/selectPosition",
-					"style" : {
-						"navigationBarTitleText": "按分类搜索",
-						"navigationBarTextStyle": "black",
-						"navigationBarBackgroundColor": "#ffffff"
-					}
-				},
-				{
 					"path" : "pages/search/search",
 					"style" : {
 						"navigationBarTitleText": "搜索",
 						"navigationBarTextStyle": "black",
 						"navigationBarBackgroundColor": "#ffffff"
 					}
+				}
+			]
+		},
+		{
+			"root": "person",
+			"name": "person",
+			"pages": [
+				{
+					"path":"pages/resumeAttachment/resumeAttachment",
+					"style": {
+						"navigationBarTitleText": "附件简历",
+						"navigationBarTextStyle": "white"
+					}
 				},
 				{
-					"path":"pages/filter/filter",
+					"path":"pages/resumeOnline/resumeOnline",
 					"style": {
-						"navigationBarTitleText": "设置求职意向",
+						"navigationBarTitleText": "在线简历",
+						"navigationBarTextStyle": "white"
+					}
+				},
+				{
+					"path":"pages/history/history",
+					"style": {
+						"navigationBarTitleText": "投递记录",
+						"navigationBarTextStyle": "white"
+					}
+				},
+				{
+					"path":"pages/collect/collect",
+					"style": {
+						"navigationBarTitleText": "我的收藏",
+						"navigationBarTextStyle": "white"
+					}
+				},
+				{
+					"path":"pages/setting/setting",
+					"style": {
+						"navigationBarTitleText": "设置",
 						"navigationBarTextStyle": "white"
 					}
 				}
@@ -116,6 +122,10 @@
 		"pages/index/index": {
 			"network": "all",
 			"packages": ["filter"]
+		},
+		"pages/my/my": {
+			"network": "all",
+			"packages": ["person"]
 		}
 	},
 	"globalStyle": {

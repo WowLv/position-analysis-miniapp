@@ -41,11 +41,11 @@
 					avatar: "../../static/4.jpg"
 				},
 				settingList: [
-					{ name: '在线简历', class: 'icon-feeds', url: '../resumeOnline/resumeOnline'},
-					{ name: '附件简历', class: 'icon-folder', url: '../resumeAttachment/resumeAttachment'},
-					{ name: '投递记录', class: 'icon-history', url: '../history/history'},
-					{ name: '我的收藏', class: 'icon-collection', url: '../collect/collect'},
-					{ name: '设置', class: 'icon-zhanghucaozuo', url: '../setting/setting'}
+					{ name: '在线简历', class: 'icon-feeds', url: '../../person/pages/resumeOnline/resumeOnline'},
+					{ name: '附件简历', class: 'icon-folder', url: '../../person/pages/resumeAttachment/resumeAttachment'},
+					{ name: '投递记录', class: 'icon-history', url: '../../person/pages/history/history'},
+					{ name: '我的收藏', class: 'icon-collection', url: '../../person/pages/collect/collect'},
+					{ name: '设置', class: 'icon-zhanghucaozuo', url: '../../person/pages/setting/setting'}
 				],
 				userInfo: null
 			}

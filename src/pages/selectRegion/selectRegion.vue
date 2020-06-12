@@ -38,7 +38,7 @@
 
 <script>
 	import regions from './region.js'
-	var QQMapWX = require('../../../utils/qqmap-wx-jssdk')
+	var QQMapWX = require('../../utils/qqmap-wx-jssdk')
 	var qqmapsdk = new QQMapWX({
 		key: 'GPJBZ-PLHWG-KAKQS-IJN24-AHFYH-2SBOB'
 	});  

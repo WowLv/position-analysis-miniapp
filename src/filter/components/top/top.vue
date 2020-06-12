@@ -3,7 +3,7 @@
 		<!-- 把location设置为false时不适用位置组件 -->
 		<navigator 
 		hover-class="none"
-		url="../../pages/selectRegion/selectRegion?mode=search" 
+		url="../../../pages/selectRegion/selectRegion?mode=search" 
 		class="top_location" 
 		:class="{'none':location === 'false'}"
 		v-if="!nowComfirm"

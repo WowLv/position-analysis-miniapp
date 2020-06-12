@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { getStartDate, getEndDate } from '../../../utils/utils'
+import { getStartDate, getEndDate } from '../../utils/utils'
 	export default {
 		props: {
 			pName: {

@@ -18,7 +18,7 @@
 			</swiper>
 		</view>
 		<view class="index_navigator">
-			<navigator url="../../filter/pages/filter/filter" open-type="navigate">
+			<navigator url="../filter/filter" open-type="navigate">
 				<text class="nav_title">为你匹配</text><text class="iconfont icon-arrow-right"></text>
 			</navigator>
 		</view> 
@@ -31,7 +31,7 @@
 <script>
 	import PositionList from '@/components/positionList/positionList.vue'
 	import { mapActions,mapGetters } from 'vuex'
-	import { getPosDetailByPage } from '../../utils/api'
+	import { getPosDetailByPage } from '@/utils/api'
 	export default {
 		data() {
 			return {

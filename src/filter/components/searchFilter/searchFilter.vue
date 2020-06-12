@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import PopUp from '../uni-popup/uni-popup'
+import PopUp from '../../../components/uni-popup/uni-popup'
 // import { test } from '../../../utils/api'
 export default {
     data() {

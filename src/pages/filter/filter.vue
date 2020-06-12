@@ -31,7 +31,7 @@
 <script>
 	import SalaryPicker from '../../components/salaryPicker/salaryPicker'
 	import DatePicker from '../../components/datePicker/datePicker'
-	import { debounce } from '../../../utils/utils'
+	import { debounce } from '../../utils/utils'
 	import { mapGetters, mapActions} from 'vuex'
 	
 	export default {

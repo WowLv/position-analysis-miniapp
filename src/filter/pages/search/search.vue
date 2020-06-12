@@ -27,7 +27,7 @@
         </view>
         <view v-else class="search_box">
             <!-- 分类搜索 -->
-            <navigator url="../selectPosition/selectPosition?mode=search" class="search_filter">
+            <navigator url="../../../pages/selectPosition/selectPosition?mode=search" class="search_filter">
                 <text class="title">按分类搜索</text>
                 <text class="search_comfirm">技术<text class="iconfont icon-arrow-down"></text></text>
             </navigator>
