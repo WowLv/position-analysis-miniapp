@@ -17,5 +17,6 @@ import { mapActions } from 'vuex'
 </script>
 	
 <style>
+@import '~@/static/styles/weui.wxss'
 	/*每个页面公共css */
 </style>

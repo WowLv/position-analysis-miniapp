@@ -25,5 +25,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.container {
+	height: 100vh;
+	background-color: $back-color;
+}
 </style>

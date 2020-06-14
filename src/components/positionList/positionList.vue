@@ -139,55 +139,61 @@ import { searchPos } from '../../utils/api'
 .container {
 	.position_list {
 		height: 100%;
+		background-color: $back-color;
 		.list_main {
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
 			margin: 0 25rpx;
-			.item_box {
-				height: 170rpx;
-				display: flex;
-				align-items: center;
-				border-top: 2rpx solid $border-color;
-				image {
-					width: 120rpx;
-					// margin: 20 0rpx;
-				}
-				.item_detail {
-					flex: 1;
+			.list_item {
+				margin: 8rpx 0;
+				.item_box {
+					border-radius: 30rpx;
+					background-color: white;
+					height: 170rpx;
 					display: flex;
-					flex-direction: column;
-					justify-content: space-around;
-					margin: 10rpx 0;
-					.head {
-						color: $main-color;
-						padding-left: 20rpx;
-						font-size: $main-size;
-						position: relative;
-						.head_left {
-							overflow: hidden;
-							text-overflow: ellipsis;
-							white-space: nowrap
-						}
-						.head_right {
-							position: absolute;
-							right: 0;
-							color: $salary-color;
-						}
+					align-items: center;
+					border-top: 2rpx solid $border-color;
+					image {
+						width: 120rpx;
+						// margin: 20 0rpx;
 					}
-					.middle {
-						color: $middle-color;
-						font-size: $middle-size;
-						padding-left: 20rpx;
-					}
-					.bottom {
-						color: $shallow-color;
-						font-size: $small-size;
-						text {
-							padding: 0 20rpx;
-							&:nth-of-type(1),
-							&:nth-of-type(2) {
-								border-right: 2rpx solid $border-color;
+					.item_detail {
+						flex: 1;
+						display: flex;
+						flex-direction: column;
+						justify-content: space-around;
+						margin: 10rpx 0;
+						.head {
+							color: $main-color;
+							padding-left: 20rpx;
+							font-size: $main-size;
+							position: relative;
+							.head_left {
+								overflow: hidden;
+								text-overflow: ellipsis;
+								white-space: nowrap
+							}
+							.head_right {
+								position: absolute;
+								right: 10rpx;
+								color: $salary-color;
+							}
+						}
+						.middle {
+							color: $middle-color;
+							font-size: $middle-size;
+							padding-left: 20rpx;
+						}
+						.bottom {
+							color: $shallow-color;
+							font-size: $small-size;
+							text {
+								padding: 0 20rpx;
+								&:nth-of-type(1),
+								&:nth-of-type(2) {
+									border-right: 2rpx solid $border-color;
+								}
 							}
 						}
 					}

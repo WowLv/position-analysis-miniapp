@@ -98,7 +98,10 @@
 					"path":"pages/history/history",
 					"style": {
 						"navigationBarTitleText": "投递记录",
-						"navigationBarTextStyle": "white"
+						"navigationBarTextStyle": "white",
+						"usingComponents": {
+							"mp-slideview":"/wxcomponents/slideview/slideview"
+						}
 					}
 				},
 				{
@@ -161,7 +164,9 @@
 			}
 		]
 	},
-	
+	"useExtendedLib": {
+		"weui": true
+	  },
 	"condition" : { 
 		"current": 0, 
 		"list": [
