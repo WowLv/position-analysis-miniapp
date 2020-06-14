@@ -10,6 +10,18 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-tubiao09:before {
+  content: "\e609";
+}
+
+.icon-email:before {
+  content: "\e74f";
+}
+
+.icon-ipad:before {
+  content: "\e754";
+}
+
 .icon-close:before {
   content: "\e673";
 }

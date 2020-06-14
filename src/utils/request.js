@@ -6,7 +6,7 @@ const request = (params) => {
         mask: false
       })
 
-    const baseUrl = "http://192.168.0.4:3000"
+    const baseUrl = "http://192.168.0.6:3000"
     return new Promise((resolve, reject) => {
         uni.request({
             ...params,

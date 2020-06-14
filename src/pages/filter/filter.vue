@@ -37,6 +37,7 @@
 	export default {
 		data() {
 			return {
+				mode: '',
 				filterList: [
 					{
 						type: 'hopePos',
@@ -62,7 +63,8 @@
 				]
 			}
 		},
-		onLoad() {
+		onLoad(option) {
+			this.mode = option.mode
 			if(uni.getStorageSync('hopeObj')) {
 				let firstHopeObj = uni.getStorageSync('hopeObj')
 				// { hopeSalary, hopeCity, hopeType, hopeDate, hopePos }
@@ -75,6 +77,7 @@
 				console.log(this.hopeObj)
 				
 			}
+			
 		},
 		components: {
 			SalaryPicker,
@@ -138,6 +141,7 @@
 						})
 						break;
 				}
+				
 			},
 			handleComfirm(e) {
 				this.setHopeData(e)
@@ -156,6 +160,7 @@
 					},1000)
 				})
 			}
+			
 			
 		}
 	}

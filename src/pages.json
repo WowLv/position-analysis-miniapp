@@ -204,6 +204,11 @@
 				"name": "analysis", 
 				"path":"pages/analysis/analysis",
 				"query": ""
+			},
+			{
+				"name": "resume", 
+				"path":"person/pages/resumeOnline/resumeOnline",
+				"query": ""
 			}
 		]
 	}
