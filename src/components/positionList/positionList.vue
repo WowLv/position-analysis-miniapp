@@ -5,8 +5,13 @@
 		:scroll-y="isScroll" 
 		class="position_list" 
 		:class="{position_scroll_list : isScroll}">
-			<uni-list class="list_main">
-				<uni-list-item class="list_item" v-for="(item, index) in nowPosList" :key="index">
+			<view class="list_item" v-for="item in nowPosList" :key="item.pid">
+				<mp-slideview 
+				:buttons="slideButtons" 
+				icon="true" 
+				@buttontap="handleTap"
+				:disable="mode !== 'collect'"
+				:data-id="item.pid">
 					<view class="item_box" @click="toPosDetail" :data-pid="item.pid">
 						<image :src="item.imageUrl" mode="widthFix"></image>	
 						<view class="item_detail">
@@ -24,8 +29,8 @@
 							</view>
 						</view>
 					</view>
-				</uni-list-item>
-			</uni-list>
+				</mp-slideview>
+			</view>
 			<text class="no_more" v-if="noMore">没有更多了</text>
 		</scroll-view>
 	</view>
@@ -85,11 +90,21 @@ import { searchPos } from '../../utils/api'
 					curList.push(obj)
 				})
 				return curList
+			},
+			slideButtons() {
+				return [
+					{
+						text: "删除",
+						src: "/static/shanchu.svg"
+					}
+				]
 			}
+
 		},
 		methods: {
 			...mapActions([
-				'setSearchedPosList'
+				'setSearchedPosList',
+				'deleteCollect'
 			]),
 			toPosDetail(e) {
 				let pid = e.currentTarget.dataset.pid
@@ -129,6 +144,15 @@ import { searchPos } from '../../utils/api'
 						this._searchPos(this.searchKey, this.userInfo.location, this.searchCurrentPage)
 					}
 				}
+			},
+			handleTap(e) {
+				let pid = parseInt(e.currentTarget.dataset.id)
+				if(this.mode === 'collect') {
+					this.deleteCollect(pid)
+					uni.showToast({
+						title: '已取消'
+					})
+				}
 			}
 		}
 		
@@ -140,60 +164,54 @@ import { searchPos } from '../../utils/api'
 	.position_list {
 		height: 100%;
 		background-color: $back-color;
-		.list_main {
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			margin: 0 25rpx;
-			.list_item {
-				margin: 8rpx 0;
-				.item_box {
-					border-radius: 30rpx;
-					background-color: white;
-					height: 170rpx;
+		.list_item {
+			.item_box {
+				margin: 0 10rpx 10rpx 10rpx;
+				border-radius: 30rpx;
+				background-color: white;
+				height: 170rpx;
+				display: flex;
+				align-items: center;
+				border-top: 2rpx solid $border-color;
+				image {
+					width: 120rpx;
+					margin: 0 20rpx;
+				}
+				.item_detail {
+					flex: 1;
 					display: flex;
-					align-items: center;
-					border-top: 2rpx solid $border-color;
-					image {
-						width: 120rpx;
-						// margin: 20 0rpx;
+					flex-direction: column;
+					justify-content: space-around;
+					margin: 10rpx 0;
+					.head {
+						color: $main-color;
+						padding-left: 20rpx;
+						font-size: $main-size;
+						position: relative;
+						.head_left {
+							overflow: hidden;
+							text-overflow: ellipsis;
+							white-space: nowrap
+						}
+						.head_right {
+							position: absolute;
+							right: 10rpx;
+							color: $salary-color;
+						}
 					}
-					.item_detail {
-						flex: 1;
-						display: flex;
-						flex-direction: column;
-						justify-content: space-around;
-						margin: 10rpx 0;
-						.head {
-							color: $main-color;
-							padding-left: 20rpx;
-							font-size: $main-size;
-							position: relative;
-							.head_left {
-								overflow: hidden;
-								text-overflow: ellipsis;
-								white-space: nowrap
-							}
-							.head_right {
-								position: absolute;
-								right: 10rpx;
-								color: $salary-color;
-							}
-						}
-						.middle {
-							color: $middle-color;
-							font-size: $middle-size;
-							padding-left: 20rpx;
-						}
-						.bottom {
-							color: $shallow-color;
-							font-size: $small-size;
-							text {
-								padding: 0 20rpx;
-								&:nth-of-type(1),
-								&:nth-of-type(2) {
-									border-right: 2rpx solid $border-color;
-								}
+					.middle {
+						color: $middle-color;
+						font-size: $middle-size;
+						padding-left: 20rpx;
+					}
+					.bottom {
+						color: $shallow-color;
+						font-size: $small-size;
+						text {
+							padding: 0 20rpx;
+							&:nth-of-type(1),
+							&:nth-of-type(2) {
+								border-right: 2rpx solid $border-color;
 							}
 						}
 					}

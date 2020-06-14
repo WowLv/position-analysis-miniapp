@@ -65,6 +65,7 @@ const user = {
 					state.userCollect.splice(index,1)
 				}
 			})
+			console.log(state.userCollect)
 			uni.setStorageSync('collectList', state.userCollect)
 		}
 	},

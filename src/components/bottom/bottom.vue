@@ -114,8 +114,15 @@ import { mapGetters, mapActions } from 'vuex'
 				align-items: center;
 				color: $middle-color;
 				font-size: 24rpx;
+				position: relative;
+				.in_text {
+					position: absolute;
+					top: 55rpx
+				}
 				.iconfont {
 					font-size: 48rpx;
+					padding: 0;
+					margin: 0;
 				}
 			}
 			.share {

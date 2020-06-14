@@ -1,9 +1,10 @@
 <template>
 	<view class="container">
-		<view class="weui-slidecells">
-			<mp-slideview :buttons="slideButtons">
-				<view class="weui-slidecell">
-					左滑可以删除（图标Button）
+		<view v-for="item in list" :key="item.id">
+			<mp-slideview :buttons="slideButtons" icon="true" @buttontap="handleTap">
+				<view class="weui">
+					{{item.top}}
+					<view>{{item.bottom}}</view>
 				</view>
 			</mp-slideview>
 		</view>
@@ -11,20 +12,23 @@
 </template>
 
 <script>
-export default{
+export default {
 	data() {
 		return {
+			list: [
+				{ id: 1, top: '左滑可以删除(1)', bottom: '1'},
+				{ id: 2, top: '左滑可以删除(2)', bottom: '2'},
+			],
 			 slideButtons: [{
-			  text: '普通',
-			  extClass: 'test'
-            },{
-			  text: '普通',
-			  extClass: 'test'
-            },{
-              type: 'warn',
-			  text: '警示',
-			  extClass: 'test'
+				text: "收藏",
+				  src: "/static/shoucang.svg"
+				  //需要绝对路径
             }]
+		}
+	},
+	methods: {
+		handleTap(e) {
+			console.log(e)
 		}
 	}
 }
@@ -33,14 +37,15 @@ export default{
 <style lang="scss" scoped>
 
 .container {
-	height: 100vh;
+	height: 100%;
 	background-color: $back-color;
-	.weui-slidecells {
-		overflow: hidden;
+	.weui {
+		height: 170rpx;
+		display: flex;
+		flex-direction: column;
 		background-color: white;
-		.test {
-			background-color: aquamarine;
-		}
 	}
+	
+	
 }
 </style>

@@ -98,10 +98,7 @@
 					"path":"pages/history/history",
 					"style": {
 						"navigationBarTitleText": "投递记录",
-						"navigationBarTextStyle": "white",
-						"usingComponents": {
-							"mp-slideview":"/wxcomponents/slideview/slideview"
-						}
+						"navigationBarTextStyle": "white"
 					}
 				},
 				{
@@ -132,7 +129,10 @@
 		}
 	},
 	"globalStyle": {
-		"navigationBarBackgroundColor": "#3a3cd7"
+		"navigationBarBackgroundColor": "#3a3cd7",
+		"usingComponents": {
+			"mp-slideview":"/wxcomponents/slideview/slideview"
+		}
 	},
 	"tabBar": {
 		"color":"#515151",

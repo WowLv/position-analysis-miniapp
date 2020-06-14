@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<position-list :posList="userCollect"></position-list>
+		<position-list :posList="userCollect" mode="collect"></position-list>
 	</view>
 </template>
 
