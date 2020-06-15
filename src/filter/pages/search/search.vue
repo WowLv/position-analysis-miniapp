@@ -11,6 +11,7 @@
             <view v-if="searchedPosList.length">
                 <search-filter class="result_navbar"></search-filter>
                 <position-list 
+                class="result_list"
                 :posList="searchedPosList" 
                 mode="search" 
                 isScroll
@@ -342,8 +343,8 @@ export default {
                 color: $main-color;
                 font-size: $main-size;
             }
-            .result_navbar {
-                width: 100%;
+            .result_list {
+                
             }
             .searchKeys_list {
                 display: flex;

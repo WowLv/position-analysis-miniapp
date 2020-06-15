@@ -114,6 +114,13 @@
 						"navigationBarTitleText": "设置",
 						"navigationBarTextStyle": "white"
 					}
+				},
+				{
+					"path":"pages/edit/edit",
+					"style": {
+						"navigationBarTitleText": "编辑信息",
+						"navigationBarTextStyle": "white"
+					}
 				}
 			]
 		}
@@ -181,16 +188,6 @@
 				"query": "" 
 			},
 			{
-				"name": "filter", 
-				"path":"filter/pages/filter/filter",
-				"query": "" 
-			},
-			{
-				"name": "region", 
-				"path":"filter/pages/selectRegion/selectRegion", 
-				"query": "" 
-			},
-			{
 				"name": "posDetail", 
 				"path":"pages/posDetail/posDetail",
 				"query": ""
@@ -213,6 +210,11 @@
 			{
 				"name": "resume", 
 				"path":"person/pages/resumeOnline/resumeOnline",
+				"query": ""
+			},
+			{
+				"name": "edit", 
+				"path":"person/pages/edit/edit",
 				"query": ""
 			}
 		]

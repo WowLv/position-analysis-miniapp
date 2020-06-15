@@ -7,7 +7,8 @@
 		<view class="base_info">
 			<view class="info_top">
 				<view class="top_info">
-					<text class="name">吕鸿志<text class="iconfont icon-tubiao09">编辑</text></text>
+					<text class="name">吕鸿志</text>
+					<text class="iconfont icon-tubiao09" @click="toEdit">编辑</text>
 					<view class="info_box">
 						<text class="info">男</text>
 						<text class="info">22岁</text> 
@@ -29,6 +30,18 @@
 </template>
 
 <script>
+export default {
+	data() {
+		return {}
+	},
+	methods: {
+		toEdit() {
+			uni.navigateTo({
+				 url: '../edit/edit'
+			});
+		}
+	}
+}
 </script>
 
 <style lang="scss" scoped>
@@ -71,15 +84,18 @@
 				flex: 7;
 				display: flex;
 				flex-direction: column;
+				position: relative;
 				.name {
 					color: $main-color;
 					font-size: 40rpx;
 					margin: 20rpx 0;
-					.icon-tubiao09 {
-						margin-left: 50rpx;
-						font-size: $main-size;
-						color: $middle-color;
-					}
+				}
+				.icon-tubiao09 {
+					position: absolute;
+					left: 180rpx;
+					top: 30rpx;
+					font-size: $main-size;
+					color: $middle-color;
 				}
 				.info_box {
 					.info {

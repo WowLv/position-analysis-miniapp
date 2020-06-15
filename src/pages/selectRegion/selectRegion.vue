@@ -104,6 +104,8 @@
 					case 'hope':
 						this.$store.dispatch('setHopeData', { type: 'hopeCity', data: e.target.dataset.city })
 						break
+					case 'info':
+						uni.$emit('resumeRegion', e.target.dataset.city)
 				}
 				uni.navigateBack({
 					delta: 1
@@ -144,6 +146,8 @@
 						case 'hope':
 							this.$store.dispatch('setHopeData', { type: 'hopeCity', data: this.currentCity })
 							break
+						case 'info':
+							uni.$emit('resumeRegion', this.currentCity)
 					}
 					uni.navigateBack({
 						delta: 1

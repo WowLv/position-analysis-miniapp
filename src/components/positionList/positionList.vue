@@ -4,7 +4,7 @@
 		@scrolltolower="refreshPage"
 		:scroll-y="isScroll" 
 		class="position_list" 
-		:class="{position_scroll_list : isScroll}">
+		:class="[{position_scroll_list : isScroll}, {search_mode_list: mode === 'search'}]">
 			<view class="list_item" v-for="item in nowPosList" :key="item.pid">
 				<mp-slideview 
 				:buttons="slideButtons" 
@@ -229,6 +229,9 @@ import { searchPos } from '../../utils/api'
 	}
 	.position_scroll_list {
 		height: 87vh;
+	}
+	.search_mode_list {
+		background-color: white;
 	}
 }
 

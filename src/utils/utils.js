@@ -53,6 +53,10 @@ export function getStartDate() {
 	let start = new Date()
 	return formatter(start)
 }
+export function getNowDate() {
+	let now = new Date(Date.now())
+	return formatter(now)
+}
 export function getEndDate() {
 	let end = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30 * 6) 
 	return formatter(end)
