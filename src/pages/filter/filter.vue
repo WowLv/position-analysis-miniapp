@@ -1,37 +1,60 @@
 <template>
 	<view class="container">
-		<uni-list class="filter_list">
-			<uni-list-item 
-			v-for="(item, index) in filterList" 
-			:key="item.type" 
-			:class="index !== filterList.length - 1 ? 'border_bottom' : ''"
-			>
-				<view v-if="item.type === 'hopeSalary'" class="item_salary">
-					<salary-picker :pName="item.name" :pValue="hopeObj[item.type]" @comfirm="handleComfirm"></salary-picker>
-				</view>
-				<view v-else-if="item.type === 'hopeDate'">
-					<date-picker :pName="item.name" :pValue="hopeObj[item.type]" @comfirm="handleComfirm"></date-picker>
-				</view>
-				<view v-else class="no_salary">
-					<text class="item_title">{{item.name}}</text>
-					<view class="item_right">
-						<text class="item_selected" v-if="item.type === 'hopePos'">{{nowHopePos}}</text>
-						<text class="item_selected" v-else>{{hopeObj[item.type]}}</text>
-						<text class="iconfont icon-arrow-right"></text>
-					</view>
-					<view class="item_mask" @click="handleClick(item.type, item.typeList)"></view>
-				</view>
+		<cell 
+			cType="navigator" 
+			cUrl="../selectPosition/selectPosition?mode=hope" 
+			title="期望职位类别" 
+			:valueType="filterList[0].type" 
+			:value="nowHopePos"
+			@cellValue="handleCellValue">
+		</cell>
 
-			</uni-list-item>
-		</uni-list>
+		<cell 
+			cType="popup"  
+			title="工作性质" 
+			:cList="filterList[1].typeList" 
+			:valueType="filterList[1].type"
+			:value="hopeType"
+			@cellValue="handleCellValue">
+		</cell>
+
+		<cell 
+			cType="salary"  
+			title="期望工资" 
+			:valueType="filterList[2].type"
+			:value="hopeSalary"
+			@cellValue="handleCellValue">
+		</cell>
+
+		<cell 
+			cType="navigator" 
+			cUrl="../selectRegion/selectRegion?mode=hope" 
+			title="期望城市" 
+			:valueType="filterList[3].type" 
+			:value="hopeCity"
+			@cellValue="handleCellValue">
+		</cell>
+
+		<cell 
+			cType="date" 
+			:value="hopeDate" 
+			:valueType="filterList[4].type" 
+			@cellValue="handleCellValue" 
+			title="到岗时间" 
+			:start="start"
+			:end="end" 
+			bottom>
+		</cell>
+
 		<button class="filter_save" @click="saveFilter">保存</button>
 	</view>
 </template>
 
 <script>
+	import cell from '@/components/cell/cell'
 	import SalaryPicker from '../../components/salaryPicker/salaryPicker'
 	import DatePicker from '../../components/datePicker/datePicker'
-	import { debounce } from '../../utils/utils'
+	import { debounce, getNowDate, getEndDate } from '../../utils/utils'
 	import { mapGetters, mapActions} from 'vuex'
 	
 	export default {
@@ -60,11 +83,15 @@
 						type: 'hopeDate',
 						name: '到岗时间'
 					}
-				]
+				],
+				start: '',
+				end: ''
 			}
 		},
 		onLoad(option) {
 			this.mode = option.mode
+			this.start = getNowDate()
+			this.end = getEndDate()
 			if(uni.getStorageSync('hopeObj')) {
 				let firstHopeObj = uni.getStorageSync('hopeObj')
 				// { hopeSalary, hopeCity, hopeType, hopeDate, hopePos }
@@ -114,36 +141,8 @@
 				'setHopeData',
 				'setReady'
 			]),
-			handleClick(type, list) {
-				switch(type) {
-					case 'hopePos':
-						uni.navigateTo({
-							url: '../selectPosition/selectPosition?mode=hope'
-						})
-						break;
-					case 'hopeType':
-						uni.showActionSheet({
-							itemList: list,
-							success: (res) => {
-								let index = res.tapIndex
-								this.setHopeData( {type: 'hopeType', data: list[index]} )
-								// this.filterList.forEach((item) => {
-								// 	if(item.type === type) {
-								// 		item.value = list[index]
-								// 	}
-								// })
-							}
-						})
-						break;
-					case 'hopeCity':
-						uni.navigateTo({
-							url: '../selectRegion/selectRegion?mode=hope'
-						})
-						break;
-				}
-				
-			},
-			handleComfirm(e) {
+			handleCellValue(e) {
+				console.log(e)
 				this.setHopeData(e)
 			},
 			saveFilter() {
@@ -170,47 +169,6 @@
 <style scoped lang="scss">
 	.container {
 		margin-top: 30rpx;
-		.filter_list {
-			display: flex;
-			flex-direction: column;
-			margin: 0 30rpx;
-			.border_bottom {
-				border-bottom: 2rpx solid $border-color;
-			}
-			uni-list-item {	
-				width: 100%;
-				.no_salary {
-					height: 100rpx;
-					position: relative;
-					display: flex;
-					align-items: center;
-					justify-content: space-between;
-					.item_title {
-						color: $main-color;
-						font-size: 35rpx;
-					}
-					.item_right {
-						color: $shallow-color;
-						.item_selected {
-							font-size: $main-size;
-						}
-						.icon-arrow-right {
-							margin-left: 20rpx;
-							font-size: $small-size;
-						}
-					}
-					.item_mask {
-						position: absolute;
-						top: 0;
-						left: 0;
-						width: 100%;
-						height: 100%;
-					}
-				}
-				
-				
-			}
-		}
 		.filter_save {
 			margin-top: 150rpx;
 			width: 500rpx;

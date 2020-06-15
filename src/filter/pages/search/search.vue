@@ -324,6 +324,7 @@ export default {
                             padding: 15rpx;
                             border: 1rpx solid $circle-border-color;
                             margin: 15rpx 30rpx 15rpx 0;
+                            white-space: nowrap;
                             .icon-fire {
                                 margin: 0 10rpx;
                                 color: $salary-color;

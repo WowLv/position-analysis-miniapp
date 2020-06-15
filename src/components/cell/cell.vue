@@ -45,13 +45,22 @@
             </view>
             <view :class="{ border_bottom : !bottom }"></view>
         </view>
+        <view v-if="cType === 'salary'">
+            <salary-picker :pName="title" :pValue="value" :pType="valueType" @comfirmSalary="handleComfirm"></salary-picker>
+            <view :class="{ border_bottom : !bottom }"></view>
+        </view>
     </view>
 </template>
 
 <script>
+import SalaryPicker from '../salaryPicker/salaryPicker'
+import DatePicker from '../datePicker/datePicker'
 export default {
     data() {
         return {
+            valueList: [null, null],
+            firstList: [],
+			secondList: [],
             inputValue: '',
             now: ''
         }
@@ -109,12 +118,26 @@ export default {
     mounted() {
         if(this.cType ===  'input') {
             this.inputValue = this.value
+        }else if(this.cType ===  'salary') {
+            for(let i = 1; i <= 100; i++) {
+				if(i === 100) {
+					this.firstList.push('100K+')
+				}else {
+					this.firstList.push(`${i}K`)
+				}
+				
+			}
+			this.secondList = this.firstList.slice(1,100)
         }
+    },
+    components: {
+        SalaryPicker,
+        DatePicker
     },
     methods: {
         //input
         watchInput() {
-            this.$emit('cellValue', { type: this.valueType, value: this.inputValue })
+            this.$emit('cellValue', { type: this.valueType, data: this.inputValue })
         },
         //popup
         handleClick() {
@@ -122,7 +145,7 @@ export default {
                 uni.showActionSheet({
                     itemList: this.cList,
                     success: (res) => {
-                        this.$emit('cellValue', { type: this.valueType, value: this.cList[res.tapIndex] })
+                        this.$emit('cellValue', { type: this.valueType, data: this.cList[res.tapIndex] })
                     }
                 })
             }
@@ -133,7 +156,10 @@ export default {
         },
         //date
         handleDate(e) {
-            this.$emit('cellValue', { type: 'date', value: e.detail.value })
+            this.$emit('cellValue', { type: this.valueType, data: e.detail.value })
+        },
+        handleComfirm(e) {
+            this.$emit('cellValue', e)
         }
     }
 }
@@ -151,12 +177,12 @@ export default {
         align-items: center;
         position: relative;
         .cell_title {
-            flex: 3;
+            flex: 4;
             font-size: 34rpx;
             color: $main-color;
         }
         .cell_content {
-            flex: 7;
+            flex: 6;
             font-size: $main-size;
             color: $shallow-color;
             text-align: right;

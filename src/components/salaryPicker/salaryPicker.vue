@@ -23,6 +23,10 @@
 			pValue: {
 				type: String,
 				default: ''
+			},
+			pType: {
+				type: String,
+				default: ''
 			}
 		},
 		data() {
@@ -67,20 +71,20 @@
 			handleChange(e) {
 				const index1 = e.detail.value[0]
 				const index2 = e.detail.value[1]
-				let hopeSalary = ''
+				let salary = ''
 				if(index2 === null) {
-					hopeSalary = `${this.firstList[index1]} - ${this.firstList[index1+1]}`
+					salary = `${this.firstList[index1]} - ${this.firstList[index1+1]}`
 				}else if(index1 === 99) {
-					hopeSalary = this.firstList[index1]
+					salary = this.firstList[index1]
 				}else {
-					hopeSalary = `${this.firstList[index1]} - ${this.secondList[index2]}`
+					salary = `${this.firstList[index1]} - ${this.secondList[index2]}`
 				}
 				uni.showToast({
-					title: hopeSalary,
+					title: salary,
 					icon: "none"
 				})
 				
-				this.$emit('comfirm', { type: 'hopeSalary', data: hopeSalary})
+				this.$emit('comfirmSalary', { type: this.pType, data: salary})
 			}
 		}
 		

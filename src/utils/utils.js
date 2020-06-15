@@ -49,10 +49,6 @@ function formatter(date){
 } 
 
 
-export function getStartDate() {
-	let start = new Date()
-	return formatter(start)
-}
 export function getNowDate() {
 	let now = new Date(Date.now())
 	return formatter(now)

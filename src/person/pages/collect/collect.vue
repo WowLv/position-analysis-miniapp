@@ -1,6 +1,7 @@
 <template>
 	<view class="container">
-		<position-list :posList="userCollect" mode="collect"></position-list>
+		<view class="none" v-if="!userCollect.length">暂无收藏职位</view>
+		<position-list :posList="userCollect" mode="collect" v-else></position-list>
 	</view>
 </template>
 
@@ -28,5 +29,12 @@ export default {
 .container {
 	height: 100vh;
 	background-color: $back-color;
+	position: relative;
+	.none {
+		position: absolute;
+		top: 300rpx;
+		left: 38%;
+		color: $middle-color;
+	}
 }
 </style>

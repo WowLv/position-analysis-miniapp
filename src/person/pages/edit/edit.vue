@@ -2,7 +2,7 @@
     <view class="container">
         <cell cType="input" :value="infoObj.name" valueType="name" @cellValue="handleCellValue" title="真实姓名"></cell>
         <cell cType="popup" :value="infoObj.sex" valueType="sex" :cList="sexList" @cellValue="handleCellValue" title="性别"></cell>
-        <cell cType="date" :value="infoObj.date" @cellValue="handleCellValue" title="出生年月" start="1950-1-1" :end="now" bottom></cell>
+        <cell cType="date" :value="infoObj.date" valueType="date" @cellValue="handleCellValue" title="出生年月" start="1950-1-1" :end="now" bottom></cell>
         <view class="addBottom"></view>
         <cell cType="popup" :value="infoObj.status" valueType="status" :cList="stateList" @cellValue="handleCellValue" title="当前身份" bottom></cell>
         <view class="addBottom"></view>
@@ -43,7 +43,7 @@ export default {
     },
     methods: {
         handleCellValue(e) {
-             this.$set(this.infoObj, e.type, e.value)
+             this.$set(this.infoObj, e.type, e.data)
             console.log(this.infoObj)
         },
         saveInfo() {

@@ -10,20 +10,14 @@
 				<image :src="nowUserInfo.avatar" mode="widthFix"></image>
 			</view>
 		</view>
-		<view class="my_setting">
-			<uni-list class="setting_list">
-				<uni-list-item v-for="(item, index) in settingList" :key="index">
-					<navigator 
-					class="list_btn" 
-					open-type="navigate" 
-					:url="item.url">
-						<text class= "iconfont head" :class="item.class"></text>
-						{{item.name}}
-						<text class="iconfont icon-arrow-right tail"></text>
-					</navigator>
-					<view class="bottom"></view>
-				</uni-list-item>
-			</uni-list>
+		<view class="my_setting" >
+			<view v-for="(item, index) in settingList" :key="index">
+				<cell cType="navigator" :cUrl="item.url" isSlot :bottom="index === settingList.length-1">
+					<text class="iconfont" :class="item.class">
+						<text class="title">{{item.name}}</text>
+					</text>
+				</cell>
+			</view>
 			<view v-if="userInfo" class="my_logout" @click="handleLogout">
 				退出登录
 			</view>
@@ -32,6 +26,7 @@
 </template>
 
 <script>
+import cell from '@/components/cell/cell'
 	export default {
 		data() {
 			return {
@@ -61,6 +56,9 @@
 					return this.originInfo
 				}
 			}
+		},
+		components: {
+			cell
 		},
 		methods: {
 			handleUserInfo(e) {
@@ -145,44 +143,12 @@
 		}
 		.my_setting {
 			width: 100%;
-			.setting_list {
-				margin-top: 50rpx;
-				display: flex;
-				flex-direction: column;
-				align-items: center;
+			.iconfont {
+				font-size: 50rpx;
 				color: $main-color;
-				uni-list-item {
-					// box-sizing: border-box;
-					width: 100%;
-					background-color: white;
-					&:nth-of-type(1),
-					&:nth-of-type(2),
-					&:nth-of-type(3),
-					&:nth-of-type(4){
-						.bottom {
-							margin: 0 5%;
-							height: 1rpx;
-							width: 90%;
-							border: 1rpx solid $border-color;
-						}
-					}
-					.list_btn {
-						padding: 0 5%;
-						height: 100rpx;
-						display: flex;
-						align-items: center;
-						font-size: 34rpx;
-						position: relative;
-						.head {
-							font-size: 50rpx;
-							margin-right: 10rpx;
-						}
-						.tail {
-							position: absolute;
-							right: 5%;
-							font-size: 40rpx;
-						}
-					}
+				.title {
+					margin-left: 30rpx;
+					font-size: 34rpx;
 				}
 			}
 			.my_logout {
