@@ -33,7 +33,7 @@ import cell from '@/components/cell/cell'
 				originInfo: {
 					name: "未登录/注册",
 					detail: "点击头像可登陆、注册",
-					avatar: "../../static/4.jpg"
+					avatar: "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=145692761,4091651670&fm=26&gp=0.jpg"
 				},
 				settingList: [
 					{ name: '在线简历', class: 'icon-feeds', url: '../../person/pages/resumeOnline/resumeOnline'},

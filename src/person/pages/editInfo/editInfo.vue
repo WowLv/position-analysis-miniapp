@@ -18,6 +18,7 @@
 <script>
 import cell from '@/components/cell/cell'
 import { getNowDate } from '@/utils/utils'
+import { mapGetters,mapActions } from 'vuex'
 export default {
     data() {
         return {
@@ -28,35 +29,60 @@ export default {
         }
     },
     onLoad() {
-        this.infoObj = uni.getStorageSync('infoObj') || {}
+        this.infoObj = this.resumeInfo
         this.now = getNowDate()
     },
     onShow() {
         uni.$on('resumeRegion', (data) => {
             //使用$set将对象中的属性处理成响应式
             this.$set(this.infoObj, 'currentCity', data)
-            console.log(this.infoObj)
         })
     },
     components: {
         cell
     },
+    computed: {
+        ...mapGetters([
+            'resumeInfo'
+        ])
+    },
     methods: {
+        ...mapActions([
+            'setResumeInfo'
+        ]),
         handleCellValue(e) {
              this.$set(this.infoObj, e.type, e.data)
-            console.log(this.infoObj)
         },
         saveInfo() {
-            uni.setStorageSync('infoObj', this.infoObj)
-            uni.showToast({
-                title: '保存成功'
-            }).then(() => {
-                setTimeout(() => {
-                    uni.navigateBack({
-                        delta: 1
-                    });
-                },1000)
-            })
+            if(Object.keys(this.infoObj).length < 7){
+                uni.showToast({
+                    title: '请完善您的信息',
+                    icon: 'none'
+                })
+            }else{
+                var flag = 1
+                Object.values(this.infoObj).map((item, index) => {
+                    if(!item) {
+                        uni.showToast({
+                            title: '请完善您的信息',
+                            icon: 'none'
+                        })
+                        flag = 0
+                    }
+                })
+                if(flag) {
+                    this.setResumeInfo(this.infoObj)
+                    uni.showToast({
+                        title: '保存成功'
+                    }).then(() => {
+                        setTimeout(() => {
+                            uni.navigateBack({
+                                delta: 1
+                            });
+                        },1000)
+                    })
+                }
+            }
         }
     }
 }

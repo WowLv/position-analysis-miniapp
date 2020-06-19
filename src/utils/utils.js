@@ -30,7 +30,7 @@ function compare(prop) {
 }
   
 
-function formatter(date){
+function formatter(date ,mode){
 	var strDate = date.getFullYear()+"-";
 	if(date.getMonth()<10){
 		var s = date.getMonth()+1+"-";
@@ -45,15 +45,21 @@ function formatter(date){
 		strDate += date.getDate();
 	}
 
-	return strDate ;
+	if(mode === 'day') {
+		return strDate
+	}else if(mode === 'month') {
+		return strDate.split('-').splice(0,2).join('-')
+	}else if(mode === 'year') {
+		return date.getFullYear()
+	}
 } 
 
 
-export function getNowDate() {
+export function getNowDate(mode = 'day') {
 	let now = new Date(Date.now())
-	return formatter(now)
+	return formatter(now, mode)
 }
-export function getEndDate() {
-	let end = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30 * 6) 
-	return formatter(end)
+export function getEndDate(endTime, mode = 'day') {
+	let end = new Date(Date.now() + endTime)
+	return formatter(end, mode)
 }

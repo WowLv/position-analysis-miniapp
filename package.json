@@ -36,6 +36,7 @@
     "test:mp-weixin": "cross-env UNI_PLATFORM=mp-weixin jest -i"
   },
   "dependencies": {
+    "@antv/wx-f2": "^2.1.0",
     "@dcloudio/uni-app-plus": "^2.0.0-27820200527001",
     "@dcloudio/uni-h5": "^2.0.0-27820200527001",
     "@dcloudio/uni-helper-json": "*",
@@ -54,8 +55,7 @@
     "sass": "^1.26.7",
     "sass-loader": "^8.0.2",
     "vue": "^2.6.11",
-    "vuex": "^3.2.0",
-    "weui-miniprogram": "^1.0.3"
+    "vuex": "^3.2.0"
   },
   "devDependencies": {
     "@dcloudio/types": "*",

@@ -2,21 +2,34 @@
 import { mapActions } from 'vuex'
 	export default {
 		onLaunch() {
-			let list = uni.getStorageSync('collectList')
-			if(list && list.length) {
+			let collectList = uni.getStorageSync('collectList')
+			if(collectList && collectList.length) {
 				console.log('ok')
-				this.setCollect(list)
+				this.setCollect(collectList)
+			}
+
+			let resumeInfo = uni.getStorageSync('infoObj')
+			if(resumeInfo) {
+				this.setResumeInfo(resumeInfo)
+			}
+
+			let eduList = uni.getStorageSync('eduList')
+			if(eduList && eduList.length) {
+				this.setEduInfo(eduList)
 			}
 		},
 		methods: {
 			...mapActions([
-				'setCollect'
+				'setCollect',
+				'setEduInfo',
+				'setResumeInfo'
 			])
 		}
 	}
 </script>
 	
 <style>
-@import '~@/static/styles/weui.wxss'
-	/*每个页面公共css */
+/* @import unl('~@/static/styles/weui.wxss') */
+@import url('~@/static/styles/weui.wxss');
 </style>
+

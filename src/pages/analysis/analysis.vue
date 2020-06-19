@@ -3,27 +3,25 @@
 		<text v-if="hopeCity" class="chart_title">{{hopeCity}}市职业技能数据</text>
 		<text v-else class="chart_title">职业技能数据</text>
 		<view class="chart_box">
-			<f2 id="column_chart" :onInit="onInitColumnChart" v-if="showSkill"/>
+			<f2 :onInit="onInitColumnChart" v-if="showSkill"/>
 		</view>
 
 		<text v-if="hopeCity" class="chart_title">{{hopeCity}}市招聘地区排行</text>
 		<text v-else class="chart_title">招聘地区排行</text>
 		<view class="chart_box circle_chart">
-			<f2 id="circle_chart" :onInit="onInitCircleChart" v-if="showRegion"/>
+			<f2 :onInit="onInitCircleChart" v-if="showRegion"/>
 		</view>
 		
 		<text class="chart_title">招聘薪资数据</text>
 		<scroll-view scroll-x class="chart_scroll">
 			<view class="chart_box square_chart">
-				<f2 id="square_chart" :onInit="onInitSquareChart" v-if="showSalary"/>
+				<f2 :onInit="onInitSquareChart" v-if="showSalary"/>
 			</view>
 		</scroll-view>
 	</view>
 </template>
 
 <script>
-// import { getRegionRank} from '@/utils/api'
-// import { TopFiveDate } from '@/utils/utils'
 import { mapGetters, mapActions} from 'vuex'
 
 	export default {
@@ -130,15 +128,6 @@ import { mapGetters, mapActions} from 'vuex'
 					startAngle: Math.PI / 2,
 					innerRadius: 0.1
 				});
-				// console.log(getCurrentPages()[0].data)
-				// const data = [
-				// 	{name: "数据开发", value: 257},
-				// 	{name: "运维", value: 300},
-				// 	{name: "测试", value: 425},
-				// 	{name: "移动前端开发", value: 1058},
-				// 	{name: "后端开发", value: 1352}
-				// ]
-				// chart.source(data)
 				
 				chart.source(getCurrentPages()[0].data.regionRank.reverse());
 				
@@ -176,22 +165,12 @@ import { mapGetters, mapActions} from 'vuex'
 			onInitColumnChart(F2, config) {
 				F2.Global.fontFamily = 'sans-serif';
 				const chart = new F2.Chart(config);
-				// const data = [
-				// 	{name: "广东", value: 1342},
-				// 	{name: "北京", value: 1103},
-				// 	{name: "上海", value: 855},
-				// 	{name: "浙江", value: 274},
-				// 	{name: "四川", value: 215}
-				// ]
 				const rules = {
 					value: {
 						tickCount: 6
 					}
 				}
-				// console.log(getCurrentPages()[0].data.provinceRank)
 				chart.source(getCurrentPages()[0].data.skillRank, rules);
-				// chart.source(data, rules)
-
 				chart.interval()
 					.position('name*total')
 					.color('l(90) 0:#1890ff 1:#70cdd0');
@@ -222,7 +201,6 @@ import { mapGetters, mapActions} from 'vuex'
 				return chart;
 			},
 			onInitSquareChart(F2, config) {
-				// console.log(getCurrentPages()[0].data.nowSalaryList)
 				F2.Global.fontFamily = 'sans-serif';
 				var chart = new F2.Chart(config);
 				chart.source(getCurrentPages()[0].data.nowSalaryList, {

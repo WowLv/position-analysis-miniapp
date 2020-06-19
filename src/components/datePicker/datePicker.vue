@@ -2,7 +2,8 @@
 	<picker 
 	class="picker"
 	mode="date"
-    start="2020-05-29"
+	:fields="dateMode"
+    :start="start"
     :end="end"
     @change="handleDate">
 		<text class="item_title">{{pName}}</text>
@@ -12,9 +13,13 @@
 </template>
 
 <script>
-import { getStartDate, getEndDate } from '../../utils/utils'
+// import { getStartDate, getEndDate } from '../../utils/utils'
 	export default {
 		props: {
+			dateMode: {
+				type: String,
+				default: 'day'
+			},
 			pName: {
 				type: String,
 				default: ''
@@ -22,21 +27,26 @@ import { getStartDate, getEndDate } from '../../utils/utils'
 			pValue: {
 				type: String,
 				default: ''
+			},
+			pType: {
+				type: String,
+				default: ''
+			},
+			start: {
+				type: String,
+				default: ''
+			},
+			end: {
+				type: String,
+				default: ''
 			}
 		},
 		data() {
-			return {
-				start: '',
-				end: ''
-			};
-		},
-		created() {
-            this.start = getStartDate()
-            this.end = getEndDate()
+			return {}
 		},
 		methods: {
 			handleDate(e) {
-                this.$emit('comfirm', { type: 'hopeDate', data: e.detail.value})
+                this.$emit('comfirm', { type: this.pType, data: e.detail.value})
             }
 		}
 		

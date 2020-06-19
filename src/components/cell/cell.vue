@@ -22,16 +22,15 @@
         </view>
         <!-- 时间选择器 -->
         <view v-if="cType === 'date'">
-            <picker 
-            class="picker"
-            mode="date"
-            :start="start"
-            :end="end"
-            @change="handleDate">
-                <text class="item_title">{{title}}</text>
-                <text class="item_selected">{{value}}</text>
-                <text class="iconfont icon-arrow-right"></text>
-            </picker>
+            <date-picker 
+                :dateMode="dateMode"
+                :pName="title" 
+                :pValue="value" 
+                :pType="valueType" 
+                :start="start"
+                :end="end"
+                @comfirm="handleComfirm">
+            </date-picker>
             <view :class="{ border_bottom : !bottom }"></view>
         </view>
         <!-- 导航选择器 -->
@@ -46,7 +45,12 @@
             <view :class="{ border_bottom : !bottom }"></view>
         </view>
         <view v-if="cType === 'salary'">
-            <salary-picker :pName="title" :pValue="value" :pType="valueType" @comfirmSalary="handleComfirm"></salary-picker>
+            <salary-picker 
+                :pName="title" 
+                :pValue="value" 
+                :pType="valueType" 
+                @comfirm="handleComfirm">
+            </salary-picker>
             <view :class="{ border_bottom : !bottom }"></view>
         </view>
     </view>
@@ -105,6 +109,11 @@ export default {
         value: {
             type: String,
             default: ''
+        },
+        //日期选择器粒度（year,month,day）
+        dateMode: {
+            type: String,
+            default: 'day'
         },
         start: {
             type: String,
@@ -186,7 +195,7 @@ export default {
             font-size: $main-size;
             color: $shallow-color;
             text-align: right;
-            padding: 0 30rpx;
+            padding-right: 60rpx;
         }
         .icon-arrow-right {
             font-size: $main-size;
@@ -203,29 +212,6 @@ export default {
             opacity: 0;
         }
     }
-    .picker {
-        background-color: white;
-		width: 100%;
-		height: 100rpx;
-		position: relative;
-		line-height: 100rpx;
-		.item_title {
-			color: $main-color;
-			font-size: 34rpx;
-		}
-		.item_selected {
-			position: absolute;
-			color: $shallow-color;
-			font-size: $main-size;
-			right: 30rpx;
-		}
-		.icon-arrow-right {
-			position: absolute;
-			color: $shallow-color;
-			right: 0;
-			font-size: $main-size;
-		}
-	}
     .border_bottom {
         border-bottom: 2rpx solid $border-color;
     }

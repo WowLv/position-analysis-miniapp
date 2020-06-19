@@ -52,9 +52,9 @@
 
 <script>
 	import cell from '@/components/cell/cell'
-	import SalaryPicker from '../../components/salaryPicker/salaryPicker'
-	import DatePicker from '../../components/datePicker/datePicker'
-	import { debounce, getNowDate, getEndDate } from '../../utils/utils'
+	import SalaryPicker from '@/components/salaryPicker/salaryPicker'
+	import DatePicker from '@/components/datePicker/datePicker'
+	import { debounce, getNowDate, getEndDate } from '@/utils/utils'
 	import { mapGetters, mapActions} from 'vuex'
 	
 	export default {
@@ -91,7 +91,7 @@
 		onLoad(option) {
 			this.mode = option.mode
 			this.start = getNowDate()
-			this.end = getEndDate()
+			this.end = getEndDate(1000 * 60 * 60 * 24 * 30 * 6)
 			if(uni.getStorageSync('hopeObj')) {
 				let firstHopeObj = uni.getStorageSync('hopeObj')
 				// { hopeSalary, hopeCity, hopeType, hopeDate, hopePos }

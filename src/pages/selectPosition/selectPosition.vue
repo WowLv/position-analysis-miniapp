@@ -87,7 +87,7 @@ export default {
         },
         open(e) {
             this.$refs.popup.open()
-            const index = e.target.dataset.index
+            const index = e.currentTarget.dataset.index
             this.leftList = []
             data[index].children.map((item) => {
                 this.leftList.push(item)
@@ -95,7 +95,7 @@ export default {
             this.rightList = this.leftList[0].children
         },
         selectLeft(e) {
-            const index = e.target.dataset.index
+            const index = e.currentTarget.dataset.index
             this.currentIndex = index
             this.rightList = []
             this.leftList[index].children.map((item) => {
@@ -103,7 +103,7 @@ export default {
             })
         },
         selectRight(e) {
-            const index = e.target.dataset.index
+            const index = e.currentTarget.dataset.index
             if(this.selectMode === 'hope') {
                 this.setHopeData({ type: 'hopePos', data: `${this.leftList[this.currentIndex].value}-${this.rightList[index]}` }) 
             }else if(this.selectMode === 'search') {

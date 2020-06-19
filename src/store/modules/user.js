@@ -2,7 +2,9 @@ const user = {
 	state: {
 		userInfo: {},
 		searchHistory: [],
-		userCollect: []
+		userCollect: [],
+		eduInfo: [],
+		resumeInfo: {}
 	},
 	getters: {
 		userInfo: state => state.userInfo,
@@ -16,7 +18,9 @@ const user = {
 				return history.slice(0, 8)
 			}
 		},
-		userCollect: state => state.userCollect
+		userCollect: state => state.userCollect,
+		resumeInfo: state => state.resumeInfo,
+		eduInfo: state => state.eduInfo
 	},
 	mutations: {
 		SET_USERLOCATION: (state, userInfo) => {
@@ -53,7 +57,6 @@ const user = {
 				// 	userCollect.companyLogo = `//www.lgstatic.com/thumbnail_160x160/${userCollect.companyLogo}`
 				// }
 				state.userCollect.unshift(userCollect)
-				console.log(userCollect)
 				uni.setStorageSync('collectList', state.userCollect)
 			}
 			
@@ -67,6 +70,38 @@ const user = {
 			})
 			console.log(state.userCollect)
 			uni.setStorageSync('collectList', state.userCollect)
+		},
+		SET_RESUMEINFO: (state, resumeInfo) => {
+			state.resumeInfo = resumeInfo
+			uni.setStorageSync('infoObj', resumeInfo)
+		},
+		SET_EDU: (state, eduInfo) => {
+			if(eduInfo instanceof Array) {
+				state.eduInfo = eduInfo
+			}else {
+				var eduFlag = 1
+				state.eduInfo.forEach((item) => {
+					if(item.eid === eduInfo.eid) {
+						item = eduInfo
+						eduFlag = 0
+					}
+				})
+				if(eduFlag) {
+					state.eduInfo.push(eduInfo)
+				}
+				uni.setStorageSync('eduList', state.eduInfo)
+			}
+			// console.log(eduInfo)
+			console.log(state.eduInfo)
+		},
+		DELETE_EDU: (state, eid) => {
+			state.eduInfo.forEach((item) => {
+				if(item.eid === eid) {
+					let index = state.eduInfo.indexOf(item)
+					state.eduInfo.splice(index, 1)
+				}
+			})
+			uni.setStorageSync('eduList', state.eduInfo)
 		}
 	},
 	actions: {
@@ -88,6 +123,15 @@ const user = {
 		},
 		deleteCollect({ commit }, pid) {
 			commit('DELETE_COLLECT', pid)
+		},
+		setResumeInfo({ commit }, resumeInfo) {
+			commit('SET_RESUMEINFO', resumeInfo)
+		},
+		setEduInfo({ commit }, eduInfo) {
+			commit('SET_EDU', eduInfo)
+		},
+		deleteEduInfo({ commit }, eid) {
+			commit('DELETE_EDU', eid)
 		}
 	}
 }

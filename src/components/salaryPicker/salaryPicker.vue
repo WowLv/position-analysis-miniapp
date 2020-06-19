@@ -84,7 +84,7 @@
 					icon: "none"
 				})
 				
-				this.$emit('comfirmSalary', { type: this.pType, data: salary})
+				this.$emit('comfirm', { type: this.pType, data: salary})
 			}
 		}
 		
