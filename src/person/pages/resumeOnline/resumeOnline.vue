@@ -32,11 +32,7 @@
 			</view>
 		</view>
 		<!-- 教育经历 -->
-		<view class="no_info" v-if="!eduList.length">
-			<text class="iconfont icon-tubiao09" @click="addExperience">编辑</text>
-			请完善您的学历信息
-		</view>
-		<view class="experience" v-else>
+		<view class="experience">
 			<text class="title">教育经历</text>
 			<view class="edu_list" v-for="item in eduList" :key="item.eid">
 				<view class="education_box" >
@@ -55,10 +51,21 @@
 					</view>
 				</view>
 			</view>
-			<view class="add_experience" @click="addExperience"><text class="add">+</text>添加教育经历</view>
+			<view class="add_experience" @click="toExperience"><text class="add">+</text>添加教育经历</view>
 		</view>
-
-		<view class="test"></view>
+		<!-- 项目经验 -->
+		<view class="project">
+			<text class="title">项目经验</text>
+			<view class="project_box">
+				<text class="iconfont icon-tubiao09" @click="toProject"></text>
+				<text class="name item">就职分析平台</text>
+				<text class="position item">前端</text>
+				<text class="during item">2020.04-2020.05</text>
+				<text class="in_title item">项目内容</text>
+				<text class="content item">基于大数据的就业分析平台</text>
+			</view>
+			<view class="add_project" @click="toProject"><text class="add">+</text>添加项目经验</view>
+		</view>
 	</view>
 </template>
 
@@ -135,14 +142,16 @@ export default {
 			});
 		},
 		toExperience(e) {
-			uni.navigateTo({
-				 url: `../editEducation/editEducation?mode=edit&eid=${e.currentTarget.dataset.eid}`
-			});
-		},
-		addExperience() {
-			uni.navigateTo({
-				 url: `../editEducation/editEducation?mode=create`
-			});
+			if(e.currentTarget.dataset.eid) {
+				uni.navigateTo({
+					url: `../editEducation/editEducation?mode=edit&eid=${e.currentTarget.dataset.eid}`
+				});
+			}else {
+				uni.navigateTo({
+					url: `../editEducation/editEducation?mode=create`
+				});
+			}
+			
 		},
 		deleteEdu(e) {
 			uni.showModal({
@@ -156,6 +165,11 @@ export default {
 						});
 					}
 				}
+			});
+		},
+		toProject(e) {
+			uni.navigateTo({
+				 url: '../editProject/editProject'
 			});
 		}
 	}
@@ -271,13 +285,14 @@ export default {
 			font-size: $main-size;
 			color: $main-color;
 			display: block;
-			padding: 15rpx 0 0 30rpx;
+			padding: 15rpx 0 15rpx 30rpx;
+			border-bottom: 2rpx solid $border-color;
 		}
 		.edu_list {
 			.education_box {
 				display: flex;
-				margin: 20rpx 30rpx 0 30rpx;
-				padding-bottom: 20rpx;
+				margin: 0 30rpx 0 30rpx;
+				padding: 20rpx 0;
 				border-bottom: 2rpx solid $border-color;
 				.pic {
 					flex: 2;
@@ -339,10 +354,67 @@ export default {
 			}
 		}
 	}
-	.test {
+	.project {
 		background-color: white;
-		height: 200rpx;
 		margin-top: 20rpx;
+		.title {
+			font-size: $main-size;
+			color: $main-color;
+			display: block;
+			padding: 15rpx 0 15rpx 30rpx;
+			border-bottom: 2rpx solid $border-color;
+		}
+		.project_box {
+			margin: 0 30rpx 0 30rpx;
+			padding: 20rpx 0;
+			border-bottom: 2rpx solid $border-color;
+			display: flex;
+			flex-direction: column;
+			position: relative;
+			.iconfont {
+				position: absolute;
+				right: 50rpx;
+				top: 100rpx;
+				color: $middle-color;
+				font-size: $title-size;
+			}
+			.item {
+				display: block;
+				padding: 0 8rpx;
+			}
+			.name {
+				font-size: $main-size;
+				color: $actived-color
+			}
+			.position, .during {
+				font-size: $middle-size;
+				color: $middle-color;
+			}
+			.in_title {
+				margin-top: 8rpx;
+				font-size: $middle-size;
+				color: $main-color;
+			}
+			.content {
+				color: $middle-color;
+				font-size: $middle-size;
+			}
+		}
+		.add_project {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding: 15rpx 0;
+			font-size: $main-size;
+			color: $main-color;
+			.add {
+				margin: 0 10rpx;
+				padding-bottom: 10rpx;
+				font-size: 40rpx;
+				font-weight: 500;
+				color: $actived-color;
+			}
+		}
 	}
 }
 </style>

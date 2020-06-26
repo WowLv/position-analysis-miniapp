@@ -18,6 +18,7 @@
 				<f2 :onInit="onInitSquareChart" v-if="showSalary"/>
 			</view>
 		</scroll-view>
+
 	</view>
 </template>
 

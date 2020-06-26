@@ -135,6 +135,13 @@
 						"navigationBarTitleText": "编辑学历信息",
 						"navigationBarTextStyle": "white"
 					}
+				},
+				{
+					"path": "pages/editProject/editProject",
+					"style": {
+						"navigationBarTitleText": "编辑项目经验",
+						"navigationBarTextStyle": "white"
+					}
 				}
 				
 			]
