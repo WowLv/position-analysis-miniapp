@@ -17,13 +17,14 @@
                             class="item" 
                             :class="{actived: activedList.some(item => item === item2)}"
                             :data-item="item2"
+                            :data-type="item1.type"
                             @click="filterSelect">
                                 <text>{{item2}}</text>
                             </view>
                         </uni-list-item>
                     </uni-list>
                 </scroll-view>
-                <view class="pos_btn">确定</view>
+                <view class="pos_btn" @click="comfirm" data-type="posPop">确定</view>
             </view>
         </pop-up>
         <pop-up ref="companyPop" type="bottom" class="pop_up">
@@ -38,13 +39,14 @@
                             class="item"
                             :class="{actived: activedList.some(item => item === item2)}"
                             :data-item="item2"
+                            :data-type="item1.type"
                             @click="filterSelect">
                                 <text>{{item2}}</text>
                             </view>
                         </uni-list-item>
                     </uni-list>
                 </scroll-view>
-                <view class="pos_btn">确定</view>
+                <view class="pos_btn" @click="comfirm" data-type="companyPop">确定</view>
             </view>
         </pop-up>
         <pop-up ref="sortPop" type="bottom" class="pop_up">
@@ -68,17 +70,18 @@ export default {
     data() {
         return {
             posFilter: [
-                { name: '月薪范围', value: ['2k以下','2k-5k','5k-10','10k-15k','15k-25k','25k-50k','50k以上'] },
-                { name: '工作经验', value: ['应届毕业生', '三年及以下', '3-5年', '5-10年', '十年以上','经验不限'] },
-                { name: '学历要求', value: ['大专','本科','硕士','博士','不限'] },
-                { name: '工作性质', value: ['全职','兼职','实习'] }
+                { type: 'salary', name: '月薪范围', value: ['2k以下','2k-5k','5k-10','10k-15k','15k-25k','25k-50k','50k以上'] },
+                { type: 'workYear',name: '工作经验', value: ['应届毕业生', '三年及以下', '3-5年', '5-10年', '十年以上','经验不限'] },
+                { type: 'education',name: '学历要求', value: ['大专','本科','硕士','博士','不限'] },
+                { type: 'jobNature',name: '工作性质', value: ['全职','兼职','实习'] }
             ],
             companyFilter: [
-                { name: '公司规模', value: ['少于15人','15-50人','50-150人','150-500人','500-2000人','2000人以上'] },
-                { name: '融资阶段', value: [ '天使轮','A轮','B轮','C轮','D轮及以上','上市公司','不需要融资'] },
-                { name: '行业领域', value: ['不限','移动互联网','电商','金融','企业服务','教育','游戏','消费生活','硬件','社交','旅游','体育','工具','广告营销','数据服务','信息安全','人工智能','区块链','VR','AR','软件开发','通讯','房产家居','其他']}
+                { type: 'companySize', name: '公司规模', value: ['少于15人','15-50人','50-150人','150-500人','500-2000人','2000人以上'] },
+                { type: 'financeStage', name: '融资阶段', value: [ '天使轮','A轮','B轮','C轮','D轮及以上','上市公司','不需要融资'] },
+                { type: 'industryField', name: '行业领域', value: ['不限','移动互联网','电商','金融','企业服务','教育','游戏','消费生活','硬件','社交','旅游','体育','工具','广告营销','数据服务','信息安全','人工智能','区块链','VR','AR','软件开发','通讯','房产家居','其他']}
             ],
-            activedList: []
+            activedList: [],
+            filter: {}
         }
     },
     components: {
@@ -90,13 +93,23 @@ export default {
             this.$refs[type].open()
         },
         filterSelect(e) {
-            let item = e.currentTarget.dataset.item
-            console.log(item)
-            if(this.activedList.indexOf(item) === -1) {
+            let type = e.currentTarget.dataset.type
+            let item = e.currentTarget.dataset.item 
+            if(this.activedList.indexOf(item) === -1){
                 this.activedList.push(item)
+                if(Object.keys(this.filter).indexOf(type) === -1) {
+                    this.filter[type] = []
+                }
+                this.filter[type].push(item)
             }else {
                 this.activedList.splice(this.activedList.indexOf(item),1)
+                this.filter[type].splice(this.filter[type].indexOf(item),1)
             }
+        },
+        comfirm(e) {
+            let type = e.currentTarget.dataset.type
+            this.$refs[type].close()
+            uni.$emit('filterRequest',this.filter)
         }
     }
 }

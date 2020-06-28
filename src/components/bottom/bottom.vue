@@ -21,9 +21,9 @@
 import { mapGetters, mapActions } from 'vuex'
 	export default {
 		props: {
-			mode: {
-				type: String,
-				default: ''
+			data: {
+				type: Object,
+				default: {}
 			},
 			pid: {
 				type: Number,
@@ -37,8 +37,6 @@ import { mapGetters, mapActions } from 'vuex'
 		},
 		computed: {
 			...mapGetters([
-				'loadedPosList',
-				'searchedPosList',
 				'userCollect'
 			]),
 			isCollect() {
@@ -60,17 +58,7 @@ import { mapGetters, mapActions } from 'vuex'
 			]),
 			handleCollect() {
 				if(!this.isCollect) {
-					if(this.mode === 'search') {
-						let _collect = this.searchedPosList.find((item) => {
-							return parseInt(item.positionId) === this.pid
-						})
-						this.setCollect(_collect)
-					} else if(this.mode === 'point') {
-						let _collect = this.loadedPosList.find((item) => {
-							return parseInt(item.positionId) === this.pid
-						})
-						this.setCollect(_collect)
-					}
+					this.setCollect(this.data)
 					uni.showToast({
 						title: '收藏成功'
 					})

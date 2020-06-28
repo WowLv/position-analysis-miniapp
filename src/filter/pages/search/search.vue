@@ -15,7 +15,8 @@
                 :posList="searchedPosList" 
                 mode="search" 
                 isScroll
-                :searchKey="sNowInput"></position-list>
+                :searchKey="sNowInput"
+                :filter="filter"></position-list>
             </view>
             <view v-if="isSearching">
                 <ul class="searchKeys_list" v-for="(item, index) in searchShowing" :key="index">
@@ -97,9 +98,9 @@ export default {
         return {
             userLocation: '',
             sNowInput: '',
+            filter: {},
             recommendList: ['前端', 'java', 'ui', '自动化测试'],
             campanyList: ['虎牙科技', '字节跳动', 'Bigo', '小鹏汽车', '唯品会'],
-            // resultList: [],
             noResult: false,
             isSearching: false,
             isComfirm: false
@@ -118,10 +119,15 @@ export default {
             this.sendRequest(data, 1)
             this.isComfirm = true
         })
+        uni.$on('filterRequest', (data) => {
+            // console.log(data)
+            this.filter = data
+            this.clearSearchList()
+            this.sendRequest(this.sNowInput, 1, 0, data)
+        })
     },
     onUnload() {
         uni.setStorageSync('searchHistory', this.searchHistory)
-        this.clearSearchList()
     },
     computed: {
         ...mapGetters([
@@ -159,11 +165,10 @@ export default {
             'clearSearchHistory',
             'setSearchHistory',
             'setSearchedPosList',
-			'clearSearchList'
+            'clearSearchList'
         ]),
-        async _searchPos(key, location, page) {
-            const res = await searchPos(key,location, page)
-            console.log(res.data)
+        async _searchPos(key, location, page, filter) {
+            const res = await searchPos(key,location, page, filter)
             this.setSearchedPosList(res.data)
             // this.resultList = res.data
             if(!res.data.length) {
@@ -177,17 +182,19 @@ export default {
             this.sNowInput = data.trim()
             this.clearSearchList()
             this.isComfirm = false
+            this.noResult = false
             if(!this.isSearching) {
                 this.isSearching = true
             }
         },
         //发送请求
-        sendRequest(key, page, delay = 800) {
+        //暂时为减轻服务器压力，只有确认搜索时才发送请求
+        sendRequest(key, page, delay = 800, filter) {
             this.isSearching = false
             timer && clearTimeout(timer)
             timer = setTimeout(() => {
                 if(key.trim()) {
-                    this._searchPos(key.trim(), this.userInfo.location, page)
+                    this._searchPos(key.trim(), this.userInfo.location, page, filter)
                 }
             }, delay)
         },

@@ -166,6 +166,7 @@
 	"tabBar": {
 		"color":"#515151",
 		"selectedColor":"#3a3cd7",
+		"borderStyle": "white",
 		"list": [
 			{
 				"pagePath":"pages/index/index",

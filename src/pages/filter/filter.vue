@@ -45,7 +45,7 @@
 			:end="end" 
 			bottom>
 		</cell>
-
+		<view class="clear" @click="clearFilter">清空</view>
 		<button class="filter_save" @click="saveFilter">保存</button>
 	</view>
 </template>
@@ -92,19 +92,6 @@
 			this.mode = option.mode
 			this.start = getNowDate()
 			this.end = getEndDate(1000 * 60 * 60 * 24 * 30 * 6)
-			if(uni.getStorageSync('hopeObj')) {
-				let firstHopeObj = uni.getStorageSync('hopeObj')
-				// { hopeSalary, hopeCity, hopeType, hopeDate, hopePos }
-				let keys = Object.keys(firstHopeObj)
-				Object.values(firstHopeObj).map((item, index) => {
-					if(item) {
-						this.setHopeData({type: keys[index], data: item})
-					}
-				})
-				console.log(this.hopeObj)
-				
-			}
-			
 		},
 		components: {
 			SalaryPicker,
@@ -139,7 +126,8 @@
 		methods: {
 			...mapActions([
 				'setHopeData',
-				'setReady'
+				'setReady',
+				'clearAll'
 			]),
 			handleCellValue(e) {
 				console.log(e)
@@ -149,6 +137,7 @@
 				//后期将数据保存到服务器并筛选首页数据
 				uni.setStorageSync('hopeObj', this.hopeObj)
 				this.setReady(this.hopeObj)
+				uni.$emit('indexRequest')
 				uni.showToast({
 					title: '保存成功'
 				}).then(() => {
@@ -158,8 +147,17 @@
 						});
 					},1000)
 				})
+			},
+			clearFilter() {
+				uni.showModal({
+					content: '确认清空吗？',
+					success: (res) => {
+						if (res.confirm) {
+							this.clearAll()
+						} 
+					}
+				});
 			}
-			
 			
 		}
 	}
@@ -169,8 +167,17 @@
 <style scoped lang="scss">
 	.container {
 		margin-top: 30rpx;
+		.clear {
+			margin-top: 100rpx;
+			height: 80rpx;
+			color: $shallow-color;
+			font-size: $middle-size;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
 		.filter_save {
-			margin-top: 150rpx;
+			margin-top: 50rpx;
 			width: 500rpx;
 			height: 80rpx;
 			color: $border-color;

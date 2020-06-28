@@ -23,7 +23,7 @@
 			</navigator>
 		</view> 
 		<view class="position_list">
-			<position-list :posList="loadedPosList" mode="point"></position-list>
+			<position-list :posList="loadedPosList" mode="point" :nomore="noMore"></position-list>
 		</view>
 	</view>
 </template>
@@ -31,7 +31,7 @@
 <script>
 	import PositionList from '@/components/positionList/positionList.vue'
 	import { mapActions,mapGetters } from 'vuex'
-	import { getPosDetailByPage } from '@/utils/api'
+	import { getPosList, searchPos } from '@/utils/api'
 	export default {
 		data() {
 			return {
@@ -40,29 +40,61 @@
 					"https://ae01.alicdn.com/kf/Hd9c5474314df4ea29bd809cf72c5256e9.jpg",
 					"https://ae01.alicdn.com/kf/H98cff1aebac4456eaa3d7887688130539.jpg"
 				],
-				currentPage: 1
+				currentPage: 1,
+				noMore: false,
+				noResult: false,
+				key: ''
 			}
 		},
 		onLoad() {
-			this._getPosDetailByPage(this.currentPage)
+			this.key = this.hopePos
+			if(this.hopePos || this.hopeCity || this.hopeType) {
+				this._searchPos(this.currentPage)
+			}else {
+				this._getPosList(this.currentPage)
+			}
+		},
+		onShow() {
+			uni.$once('indexRequest', () => {
+				this.key = this.hopePos
+				this.currentPage = 1
+				this.clearPosList()
+				if(this.hopePos || this.hopeCity || this.hopeType) {
+					this._searchPos(this.currentPage)
+				}else {
+					this._getPosList(this.currentPage)
+				}
+			})
 		},
 		onReachBottom() {
-			this._getPosDetailByPage(this.currentPage)
+			this.currentPage ++
+			if(this.noResult) {
+				this._getPosList(this.currentPage)
+			}else {
+				this._searchPos(this.currentPage)
+			}
 		},
 		onPullDownRefresh() {
 			this.currentPage = 1
 			this.clearPosList()
-			this._getPosDetailByPage(this.currentPage)
-		},
-		onUnload() {
-			this.clearPosList()
+			// this.noResult = false
+			if(this.hopePos || this.hopeCity || this.hopeType) {
+				this._searchPos(this.currentPage)
+			}else {
+				this._getPosList(this.currentPage)
+			}
 		},
 		components: {
 			PositionList
 		},
 		computed: {
 			...mapGetters([
-				'loadedPosList'
+				'loadedPosList',
+				'hopeSalary',
+				'hopeCity',
+				'hopeType',
+				'hopeDate',
+				'hopePos'
 			])
 		},
 		methods: {
@@ -71,20 +103,54 @@
 				'clearPosList'
 			]),
 			//分页获取信息，缓存到vuex中
-			async _getPosDetailByPage (page) {
-				this.currentPage ++
-				let data = await getPosDetailByPage(page)
-				let dataArr = data.data
-				console.log(dataArr)
+			async _getPosList (page) {
+				const res = await getPosList(page)
+				let dataArr = res.data
 				if(dataArr.length) {
 					this.setLoadedPosList(dataArr)
+					this.noMore = false
 				}else {
+					this.noMore = true
 					uni.showToast({
 						title: '已经到底了！',
 						icon: 'none'
 					});
 				}
-				
+			},
+			async _searchPos(page) {
+				let filter = {}
+				let city
+				let key = ''
+				if(this.hopePos !== '') key = this.key.split('-')[1]
+				if(this.hopeCity !== '') {
+					city = this.hopeCity
+				}
+				if(this.hopeType !== '') filter.jobNature = [this.hopeType]
+				const res = await searchPos(key, city, page, filter)
+				let dataArr = res.data
+				if(dataArr.length) {
+					this.setLoadedPosList(dataArr)
+					this.noMore = false
+				}else {
+					if(!this.loadedPosList.length) {
+						//没有结果的话暂时定为热门职位
+						this.key = '后端开发-Java'
+						const newRes = await searchPos(this.key.split('-')[1], city, page, filter)
+						let newArr = newRes.data
+						if(newArr.length) {
+							this.setLoadedPosList(newArr)
+						}else {
+							this._getPosList(page)
+							this.noResult = true
+						}
+					}else {
+						this.noMore = true
+						uni.showToast({
+							title: '已经到底了！',
+							icon: 'none'
+						});
+					}
+				}
 			}
 		}
 	}

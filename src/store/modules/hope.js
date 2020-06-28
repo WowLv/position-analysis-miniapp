@@ -50,6 +50,13 @@ const hope = {
 		},
 		SET_SALARYLIST: (state, salaryList) => {
 			state.salaryList = salaryList
+		},
+		CLEAR_ALL: (state) => {
+			state.hopeSalary = '',
+			state.hopeCity = '' 
+			state.hopeData = '' 
+			state.hopeType = '' 
+			state.hopePos = '' 
 		}
 	},
 	actions: {
@@ -125,6 +132,9 @@ const hope = {
 				commit('SET_SKILLRANK', TopFiveDate(skillRes.data.skill))
 			}
 			commit('SET_SALARYLIST', salaryRes.data)
+		},
+		clearAll({ commit }) {
+			commit('CLEAR_ALL')
 		}
 	}
 }
