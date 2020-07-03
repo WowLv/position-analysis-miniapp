@@ -6,6 +6,7 @@
         <cell cType="date" dateMode='year' :value="eduObj.eduStartDate" valueType="eduStartDate" @cellValue="handleCellValue" title="入学年份" start="1970" :end="end"></cell>
         <cell cType="date" dateMode='year' :value="eduObj.eduEndDate" valueType="eduEndDate" @cellValue="handleCellValue" title="毕业年份" start="1970" :end="end"></cell>
         <button class="save_btn" @click="saveInfo">保存</button>
+        <text class="delete_btn" v-if="mode === 'edit'" @click="deleteInfo">删除</text>
     </view>
 </template>
 
@@ -46,7 +47,8 @@ export default {
     },
     methods: {
         ...mapActions([
-            'setEduInfo'
+            'setEduInfo',
+            'deleteEduInfo'
         ]),
         handleCellValue(e) {
             this.$set(this.eduObj, e.type, e.data)
@@ -72,7 +74,7 @@ export default {
                 if(flag) {
                     if(this.mode === 'create') {
                         if(!this.eduInfo.length) {
-                            this.eduObj.eid = 0
+                            this.eduObj.eid = 1
                         }else {
                             this.eduObj.eid = this.eduInfo[this.eduInfo.length - 1].eid + 1
                         }
@@ -89,6 +91,25 @@ export default {
                     })
                 }
             }
+        },
+        deleteInfo() {
+            uni.showModal({
+				content: '确认删除此项？',
+				success: (res) => {
+					if (res.confirm) {
+						this.deleteEduInfo(this.eduObj.eid)
+						uni.showToast({
+							title: '删除成功',
+							icon: 'none'
+                        });
+                        setTimeout(() => {
+                             uni.navigateBack({
+                                delta: 1
+                            });
+                        },1000)
+					}
+				}
+			});
         }
     }
 }
@@ -97,7 +118,7 @@ export default {
 <style lang="scss" scoped>
 .conatiner {
     width: 100%;
-    .save_btn {
+    .save_btn, .delete_btn {
         margin: 120rpx auto;
         width: 500rpx;
         height: 80rpx;
@@ -106,7 +127,11 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
-
+    }
+    .delete_btn {
+        margin-top: 30rpx;
+        color: $middle-color;
+        background-color: white;
     }
 }
 </style>

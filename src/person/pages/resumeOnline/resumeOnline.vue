@@ -47,7 +47,6 @@
 					</view>
 					<view class="edu_option">
 						<text class="iconfont icon-tubiao09" @click="toExperience" :data-eid="item.eid"></text>
-						<text class="iconfont icon-ashbin" @click="deleteEdu" :data-eid="item.eid"></text>
 					</view>
 				</view>
 			</view>
@@ -56,13 +55,15 @@
 		<!-- 项目经验 -->
 		<view class="project">
 			<text class="title">项目经验</text>
-			<view class="project_box">
-				<text class="iconfont icon-tubiao09" @click="toProject"></text>
-				<text class="name item">就职分析平台</text>
-				<text class="position item">前端</text>
-				<text class="during item">2020.04-2020.05</text>
-				<text class="in_title item">项目内容</text>
-				<text class="content item">基于大数据的就业分析平台</text>
+			<view class="project_box" v-for="item in projList" :key="item.pid">
+				<text class="iconfont icon-tubiao09" @click="toProject" :data-pid="item.pid"></text>
+				<text class="name item">{{item.name}}</text>
+				<text class="position item">{{item.position}}</text>
+				<text class="during item">{{item.during}}</text>
+				<view v-if="item.introduce">
+					<text class="in_title item">项目内容</text>
+					<text class="content item">{{item.introduce}}</text>
+				</view>
 			</view>
 			<view class="add_project" @click="toProject"><text class="add">+</text>添加项目经验</view>
 		</view>
@@ -102,7 +103,7 @@ export default {
 			}else {
 				console.log(this.resumeInfo.sex)
 				if(this.resumeInfo && this.resumeInfo.sex === '男') {
-					this.avatarSrc = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1592381638798&di=8b1d118cbb97fe3a8b9cfb1aee86ca55&imgtype=0&src=http%3A%2F%2Fimage.biaobaiju.com%2Fuploads%2F20180919%2F20%2F1537361717-kVlwUMceKA.png'
+					this.avatarSrc = 'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2519824424,1132423651&fm=26&gp=0.jpg'
 				}else {
 					this.avatarSrc = 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1990878085,321872653&fm=26&gp=0.jpg'
 				}
@@ -112,6 +113,7 @@ export default {
 	computed: {
 		...mapGetters([
 			'eduInfo',
+			'projInfo',
 			'resumeInfo'
 		]),
 		eduList() {
@@ -125,12 +127,21 @@ export default {
 			}else {
 				return []
 			}
+		},
+		projList() {
+			if(this.projInfo.length) {
+				let list = []
+				this.projInfo.map((item, index) => {
+					let {pid, name, position, introduce} = item 
+					list.push({pid, name, position, introduce, during: `${item.startDate}-${item.endDate}`})
+				})
+				return list
+			}else {
+				return []
+			}
 		}
 	},
 	methods: {
-		...mapActions([
-			'deleteEduInfo'
-		]),
 		toEditInfo() {
 			uni.navigateTo({
 				 url: '../editInfo/editInfo'
@@ -153,24 +164,18 @@ export default {
 			}
 			
 		},
-		deleteEdu(e) {
-			uni.showModal({
-				content: '确认删除此项？',
-				success: (res) => {
-					if (res.confirm) {
-						this.deleteEduInfo(e.currentTarget.dataset.eid)
-						uni.showToast({
-							title: '删除成功',
-							icon: 'none'
-						});
-					}
-				}
-			});
-		},
 		toProject(e) {
-			uni.navigateTo({
-				 url: '../editProject/editProject'
-			});
+			console.log(e.currentTarget.dataset.pid)
+			if(e.currentTarget.dataset.pid) {
+				uni.navigateTo({
+					url: `../editProject/editProject?mode=edit&pid=${e.currentTarget.dataset.pid}`
+				});
+			}else {
+				uni.navigateTo({
+					url: '../editProject/editProject?mode=create'
+				});
+			}
+			
 		}
 	}
 }

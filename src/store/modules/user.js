@@ -4,6 +4,7 @@ const user = {
 		searchHistory: [],
 		userCollect: [],
 		eduInfo: [],
+		projInfo: [],
 		resumeInfo: {}
 	},
 	getters: {
@@ -20,7 +21,8 @@ const user = {
 		},
 		userCollect: state => state.userCollect,
 		resumeInfo: state => state.resumeInfo,
-		eduInfo: state => state.eduInfo
+		eduInfo: state => state.eduInfo,
+		projInfo: state => state.projInfo
 	},
 	mutations: {
 		SET_USERLOCATION: (state, userInfo) => {
@@ -102,6 +104,34 @@ const user = {
 				}
 			})
 			uni.setStorageSync('eduList', state.eduInfo)
+		},
+		SET_PROJ: (state, projInfo) => {
+			if(projInfo instanceof Array) {
+				state.projInfo = projInfo
+			}else {
+				var projFlag = 1
+				state.projInfo.forEach((item) => {
+					if(item.pid === projInfo.pid) {
+						item = projInfo
+						projFlag = 0
+					}
+				})
+				if(projFlag) {
+					state.projInfo.push(projInfo)
+				}
+				uni.setStorageSync('projList', state.projInfo)
+			}
+			// console.log(eduInfo)
+			console.log(state.projInfo)
+		},
+		DELETE_PROJ: (state, pid) => {
+			state.projInfo.forEach((item) => {
+				if(item.pid === pid) {
+					let index = state.projInfo.indexOf(item)
+					state.projInfo.splice(index, 1)
+				}
+			})
+			uni.setStorageSync('projList', state.projInfo)
 		}
 	},
 	actions: {
@@ -132,6 +162,12 @@ const user = {
 		},
 		deleteEduInfo({ commit }, eid) {
 			commit('DELETE_EDU', eid)
+		},
+		setProjInfo({ commit }, projInfo) {
+			commit('SET_PROJ', projInfo)
+		},
+		deleteProjInfo({ commit }, pid) {
+			commit('DELETE_PROJ', pid)
 		}
 	}
 }

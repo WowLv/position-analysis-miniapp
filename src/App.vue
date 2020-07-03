@@ -18,6 +18,11 @@ import { mapActions } from 'vuex'
 				this.setEduInfo(eduList)
 			}
 
+			let projList = uni.getStorageSync('projList')
+			if(projList && projList.length) {
+				this.setProjInfo(projList)
+			}
+
 			if(uni.getStorageSync('hopeObj')) {
 				let firstHopeObj = uni.getStorageSync('hopeObj')
 				let keys = Object.keys(firstHopeObj)
@@ -34,7 +39,8 @@ import { mapActions } from 'vuex'
 				'setCollect',
 				'setEduInfo',
 				'setResumeInfo',
-				'setHopeData'
+				'setHopeData',
+				'setProjInfo'
 			])
 		}
 	}

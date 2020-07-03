@@ -1,19 +1,11 @@
-let timer;
-export function debounce(fn, delay = 200,immediate = true, ctx) {
-	return function() {
-		let args = arguments
+
+export function debounce(fn, delay = 200) {
+	let timer;
+	return function(...args) {
 		timer && clearTimeout(timer);
-		if (immediate) {
-			var callNow = !timer;
-			timer = setTimeout(() => {
-				timer = null;
-			}, delay)
-			callNow && fn.apply(ctx, args)
-		} else {
-			timer = setTimeout(function(){
-				fn.apply(ctx, args)
-			}, delay);
-		}
+		timer = setTimeout(() => {
+			fn.apply(this, args)
+		}, delay);
 	}
 }
 
