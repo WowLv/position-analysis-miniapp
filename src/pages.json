@@ -166,6 +166,7 @@
 	"tabBar": {
 		"color":"#515151",
 		"selectedColor":"#3a3cd7",
+		"borderStyle": "white",
 		"list": [
 			{
 				"pagePath":"pages/index/index",
@@ -202,16 +203,6 @@
 				"query": "" 
 			},
 			{
-				"name": "index", 
-				"path":"pages/index/index", 
-				"query": "" 
-			},
-			{
-				"name": "posDetail", 
-				"path":"pages/posDetail/posDetail",
-				"query": ""
-			},
-			{
 				"name": "search", 
 				"path":"filter/pages/search/search",
 				"query": ""
@@ -234,6 +225,11 @@
 			{
 				"name": "editInfo", 
 				"path":"person/pages/editInfo/editInfo",
+				"query": ""
+			},
+			{
+				"name": "message", 
+				"path":"pages/message/message",
 				"query": ""
 			}
 		]
