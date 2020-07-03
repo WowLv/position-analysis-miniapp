@@ -1,27 +1,27 @@
 import request from './request.js'
 import analysisReq from './analysisReq'
 
-export function getPosDetailByPid(query) {
+export function getPosDetail(pid) {
 	return request({
-		url: '/getDetail',
+		url: '/getPosDetail',
 		method: 'GET',
-		data: { pid: query }
+		data: { pid }
 	})
 }
 
-export function getPosDetailByPage(page = 1) {
+export function getPosList(page = 1) {
 	return request({
-		url: '/getDetail',
+		url: '/getPosList',
 		method: 'GET',
 		data: { page }
 	})
 }
 
-export function searchPos(key, location, page) {
+export function searchPos(key, location, page, filter) {
 	return request({
 		url: '/searchPos',
 		method: 'GET',
-		data: { key, location, page }
+		data: { key, location, page, filter }
 	})
 }
 export function getProvinceRank() {

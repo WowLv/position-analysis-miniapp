@@ -1,5 +1,5 @@
 <template>
-	<view class="container">
+	<view class="container" v-if="!loading">
 		<!-- 职位信息 -->
 		<view class="pos_title">
 			<text class="in_pos_title">{{posObj.positionName}}</text>
@@ -70,39 +70,29 @@
 			<!-- <text class="in_location_descript">{{posObj.posLocation[1]}}</text> -->
 		</view>
 		<!-- 底部栏 -->
-		<Bottom class="pos_bottom" :mode="mode" :pid="pid"></Bottom>
+		<Bottom class="pos_bottom" :data="posObj" :pid="pid"></Bottom>
 	</view>
 	
 </template>
 
 <script>
 	import Bottom from '../../components/bottom/bottom.vue'
-	import posDetail from '../../mock/posDetail'
-	import { getPosDetailByPid } from '../../utils/api'
+	import { getPosDetail } from '../../utils/api'
 	import { mapGetters }from 'vuex'
 	export default {
 		data() {
 			return {
-				mode: '',
+				loading: true,
 				pid: 0,
 				posObj: {}
 			}
 		},
 		onLoad(option) {
-			this.mode = option.mode
 			this.pid = option.pid
-			if(option.mode === 'point') {
-				this._getLocalPosDetail(option.pid)
-			}else if(option.mode === 'search') {
-				this._getSearchedPosDeatil(option.pid)
-			}else {
-				this._getCollectPosDetail(option.pid)
-			}
+			this._getPosDetail(option.pid)
 		},
 		computed: {
 			...mapGetters([
-				'loadedPosList',
-				'searchedPosList',
 				'userCollect'
 			])
 		},
@@ -110,58 +100,21 @@
 			Bottom
 		},
 		methods: {
-			async _getCollectPosDetail(pid) {
-				this.userCollect.map((item, index) => {
-					if(item.positionId === pid) {
-						this.posObj = item
-						//暂时写死
-						this.posObj.posRequire = [
-							"职位描述:",
-							"1、熟悉HTML5/CSS3/JS，掌握Angular/React/Vue中一种或多种开发框架，熟悉React框架优先。",
-							"2、具备良好的沟通能力，对于用户体验、视觉及交互设计有一定的理解；",
-							"3、熟悉SVN、GIT 等常用管理工具优先；",
-							"4、具备良好的沟通能力，对于用户体验、视觉及交互设计有一定的理解。",
-							"职位要求:",
-							"1、二本以上计算机相关专业；",
-							"2、需要懂vue框架，需要精通，马上能上手的。"
-						]
-					}
-				})
-			},
-			_getLocalPosDetail(pid) {
-				this.loadedPosList.map((item, index) => {
-					if(item.positionId === pid) {
-						this.posObj = item
-						//暂时写死
-						this.posObj.posRequire = [
-							"职位描述:",
-							"1、熟悉HTML5/CSS3/JS，掌握Angular/React/Vue中一种或多种开发框架，熟悉React框架优先。",
-							"2、具备良好的沟通能力，对于用户体验、视觉及交互设计有一定的理解；",
-							"3、熟悉SVN、GIT 等常用管理工具优先；",
-							"4、具备良好的沟通能力，对于用户体验、视觉及交互设计有一定的理解。",
-							"职位要求:",
-							"1、二本以上计算机相关专业；",
-							"2、需要懂vue框架，需要精通，马上能上手的。"
-						]
-					}
-				})
-			},
-			_getSearchedPosDeatil(pid) {
-				this.searchedPosList.map((item, index) => {
-					if(item.positionId === pid) {
-						this.posObj = item
-						this.posObj.posRequire = [
-							"职位描述:",
-							"1、熟悉HTML5/CSS3/JS，掌握Angular/React/Vue中一种或多种开发框架，熟悉React框架优先。",
-							"2、具备良好的沟通能力，对于用户体验、视觉及交互设计有一定的理解；",
-							"3、熟悉SVN、GIT 等常用管理工具优先；",
-							"4、具备良好的沟通能力，对于用户体验、视觉及交互设计有一定的理解。",
-							"职位要求:",
-							"1、二本以上计算机相关专业；",
-							"2、需要懂vue框架，需要精通，马上能上手的。"
-						]
-					}
-				})
+			async _getPosDetail(pid) {
+				let _posObj = await getPosDetail(pid)
+				this.posObj = _posObj.data[0]
+				this.posObj.companyLogo = `//www.lgstatic.com/thumbnail_160x160/${this.posObj.companyLogo}`
+				this.posObj.posRequire = [
+					"职位描述:",
+					"1、熟悉HTML5/CSS3/JS，掌握Angular/React/Vue中一种或多种开发框架，熟悉React框架优先。",
+					"2、具备良好的沟通能力，对于用户体验、视觉及交互设计有一定的理解；",
+					"3、熟悉SVN、GIT 等常用管理工具优先；",
+					"4、具备良好的沟通能力，对于用户体验、视觉及交互设计有一定的理解。",
+					"职位要求:",
+					"1、二本以上计算机相关专业；",
+					"2、需要懂vue框架，需要精通，马上能上手的。"
+				]
+				this.loading = false
 			}
 		}
 	}

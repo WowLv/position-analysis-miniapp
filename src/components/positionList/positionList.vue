@@ -5,26 +5,26 @@
 		:scroll-y="isScroll" 
 		class="position_list" 
 		:class="[{position_scroll_list : isScroll}, {search_mode_list: mode === 'search'}]">
-			<view class="list_item" v-for="item in nowPosList" :key="item.pid">
+			<view class="list_item" v-for="item in nowPosList" :key="item.positionId">
 				<mp-slideview 
 				:buttons="slideButtons" 
 				icon="true" 
 				@buttontap="handleTap"
 				:disable="mode !== 'collect'"
-				:data-id="item.pid">
-					<view class="item_box" @click="toPosDetail" :data-pid="item.pid">
-						<image :src="item.imageUrl" mode="widthFix"></image>	
+				:data-id="item.positionId">
+					<view class="item_box" @click="toPosDetail" :data-pid="item.positionId">
+						<image :src="item.companyLogo" mode="widthFix"></image>	
 						<view class="item_detail">
 							<view class="head">
-								<text class="head_left">{{item.pos}}</text>
+								<text class="head_left">{{item.positionName}}</text>
 								<text class="head_right">{{item.salary}}</text>
 							</view>
 							<view class="middle">
-								<text class="company">{{item.company}}</text>
+								<text class="company">{{item.companyShortName}}</text>
 							</view>
 							<view class="bottom">
-								<text>{{item.location}}</text>
-								<text>{{item.experience}}</text>
+								<text>{{item.city}}</text>
+								<text>{{item.workYear}}</text>
 								<text>{{item.education}}</text>
 							</view>
 						</view>
@@ -53,9 +53,18 @@ import { searchPos } from '../../utils/api'
 				type: Boolean,
 				default: false
 			},
+			//搜索列表属性
 			searchKey: {
 				type: String,
 				default: ''
+			},
+			filter: {
+				type: Object,
+				default: {}
+			},
+			nomore: {
+				type: Boolean,
+				default: false
 			}
 		},
 		data() {
@@ -69,6 +78,7 @@ import { searchPos } from '../../utils/api'
 				'userInfo'
 			]),
 			nowPosList() {
+				this.noMore = this.nomore
 				let curList = []
 				this.posList.map((item, index) => {
 					let posName = ''
@@ -78,13 +88,13 @@ import { searchPos } from '../../utils/api'
 						posName = item.positionName
 					}
 					let obj = {
-						pid: item.positionId,
-						imageUrl: item.companyLogo,
-						pos: posName,
+						positionId: item.positionId,
+						companyLogo: item.companyLogo,
+						positionName: posName,
 						salary: item.salary,
-						company: item.companyShortName,
-						location: item.city,
-						experience: item.workYear,
+						companyShortName: item.companyShortName,
+						city: item.city,
+						workYear: item.workYear,
 						education: item.education
 					}
 					curList.push(obj)
@@ -109,22 +119,19 @@ import { searchPos } from '../../utils/api'
 			toPosDetail(e) {
 				let pid = e.currentTarget.dataset.pid
 				console.log(pid)
-				if(this.mode === 'point') {
-					uni.navigateTo({
-						url: `../../pages/posDetail/posDetail?pid=${pid}&mode=point`
-					})
-				}else if(this.mode === 'search'){
-					uni.navigateTo({
-						url: `../../../pages/posDetail/posDetail?pid=${pid}&mode=search`
-					})
-				}else {
+				if(this.mode === 'search') {
 					uni.navigateTo({
 						url: `../../../pages/posDetail/posDetail?pid=${pid}`
 					})
+				}else {
+					uni.navigateTo({
+						url: `../../pages/posDetail/posDetail?pid=${pid}`
+					})
 				}
+				
 			},
-			async _searchPos(key, location, page) {
-				const res = await searchPos(key,location, page)
+			async _searchPos(key, location, page, filter) {
+				const res = await searchPos(key,location, page, filter)
 				console.log(res.data)
 				this.setSearchedPosList(res.data)
 				// this.resultList = res.data
@@ -140,8 +147,7 @@ import { searchPos } from '../../utils/api'
 				if(!this.noMore) {
 					if(this.isScroll) {
 						this.searchCurrentPage ++
-						console.log(this.searchKey)
-						this._searchPos(this.searchKey, this.userInfo.location, this.searchCurrentPage)
+						this._searchPos(this.searchKey, this.userInfo.location, this.searchCurrentPage, this.filter)
 					}
 				}
 			},

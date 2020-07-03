@@ -17,12 +17,24 @@ import { mapActions } from 'vuex'
 			if(eduList && eduList.length) {
 				this.setEduInfo(eduList)
 			}
+
+			if(uni.getStorageSync('hopeObj')) {
+				let firstHopeObj = uni.getStorageSync('hopeObj')
+				let keys = Object.keys(firstHopeObj)
+				Object.values(firstHopeObj).map((item, index) => {
+					if(item) {
+						this.setHopeData({type: keys[index], data: item})
+					}
+				})
+				console.log(this.hopeObj)
+			}
 		},
 		methods: {
 			...mapActions([
 				'setCollect',
 				'setEduInfo',
-				'setResumeInfo'
+				'setResumeInfo',
+				'setHopeData'
 			])
 		}
 	}
