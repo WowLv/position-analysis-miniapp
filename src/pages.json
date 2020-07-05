@@ -198,8 +198,8 @@
 		"current": 0, 
 		"list": [
 			{
-				"name": "my", 
-				"path":"pages/my/my", 
+				"name": "index", 
+				"path":"pages/index/index", 
 				"query": "" 
 			},
 			{

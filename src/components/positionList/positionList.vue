@@ -20,7 +20,7 @@
 								<text class="head_right">{{item.salary}}</text>
 							</view>
 							<view class="middle">
-								<text class="company">{{item.companyShortName}}</text>
+								<text class="company">{{item.companyName}}</text>
 							</view>
 							<view class="bottom">
 								<text>{{item.city}}</text>
@@ -82,19 +82,26 @@ import { searchPos } from '../../utils/api'
 				let curList = []
 				this.posList.map((item, index) => {
 					let posName = ''
+					let workYear = ''
 					if(item.positionName.length > 11) {
 						posName = item.positionName.substr(0,11).concat('...')
 					}else {
 						posName = item.positionName
 					}
+
+					if(/[-应届以]/.test(item.workYear)) {
+						workYear = item.workYear.replace('经验',"")
+					}else {
+						workYear = item.workYear
+					}
 					let obj = {
 						positionId: item.positionId,
 						companyLogo: item.companyLogo,
 						positionName: posName,
-						salary: item.salary,
-						companyShortName: item.companyShortName,
+						salary: item.salary.split('·')[0],
+						companyName: item.companyName,
 						city: item.city,
-						workYear: item.workYear,
+						workYear,
 						education: item.education
 					}
 					curList.push(obj)
@@ -119,7 +126,7 @@ import { searchPos } from '../../utils/api'
 			toPosDetail(e) {
 				let pid = e.currentTarget.dataset.pid
 				console.log(pid)
-				if(this.mode === 'search') {
+				if(this.mode === 'search' || this.mode === 'collect') {
 					uni.navigateTo({
 						url: `../../../pages/posDetail/posDetail?pid=${pid}`
 					})

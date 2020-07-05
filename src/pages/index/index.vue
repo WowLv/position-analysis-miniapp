@@ -144,11 +144,11 @@
 							this.noResult = true
 						}
 					}else {
-						this.noMore = true
-						uni.showToast({
-							title: '已经到底了！',
-							icon: 'none'
-						});
+						//瀑布流，没有相应的结果时添加其他内容
+						console.log('瀑布流')
+						this.currentPage = 1
+						this._getPosList(this.currentPage)
+						this.noResult = true
 					}
 				}
 			}
