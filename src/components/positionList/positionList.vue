@@ -119,7 +119,7 @@ import { searchPos } from '../../utils/api'
 			toPosDetail(e) {
 				let pid = e.currentTarget.dataset.pid
 				console.log(pid)
-				if(this.mode === 'search') {
+				if(this.mode === 'search' || this.mode === 'collect') {
 					uni.navigateTo({
 						url: `../../../pages/posDetail/posDetail?pid=${pid}`
 					})

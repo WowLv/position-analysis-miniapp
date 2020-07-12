@@ -198,19 +198,9 @@
 		"current": 0, 
 		"list": [
 			{
-				"name": "my", 
-				"path":"pages/my/my", 
-				"query": "" 
-			},
-			{
 				"name": "index", 
 				"path":"pages/index/index", 
 				"query": "" 
-			},
-			{
-				"name": "posDetail", 
-				"path":"pages/posDetail/posDetail",
-				"query": ""
 			},
 			{
 				"name": "search", 
@@ -235,6 +225,11 @@
 			{
 				"name": "editInfo", 
 				"path":"person/pages/editInfo/editInfo",
+				"query": ""
+			},
+			{
+				"name": "message", 
+				"path":"pages/message/message",
 				"query": ""
 			}
 		]

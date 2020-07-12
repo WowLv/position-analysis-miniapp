@@ -115,11 +115,11 @@
 				qqmapsdk.reverseGeocoder({
 					location: location,
 					success: (res) => {
-						// console.log(res.result.address_component.city)
+						console.log(res.result)
 						let city = res.result.address_component.city.replace("市", "")
 						this.currentCity = city
 					},
-					fail: (error) => {
+					fail: (err) => {
 						console.log(err)
 					},
 				})
@@ -132,6 +132,7 @@
 							uni.getLocation({
 								type: 'wgs84',
 								success: (res) => {
+									console.log(res)
 									const data = { latitude: res.latitude, longitude: res.longitude }
 									this.formatLoction(data)
 								}

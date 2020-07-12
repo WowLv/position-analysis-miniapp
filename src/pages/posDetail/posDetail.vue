@@ -18,7 +18,7 @@
 				<text class="benefit_title">职位诱惑:</text>
 				<view class="in_benefit" v-for="(item, index) in posObj.companyLabelList" :key="index">
 					<text v-if="index !== 0">、</text>
-					<text>{{item}}</text>
+					<text>{{item.replace(/'/g,"")}}</text>
 				</view>
 			</view>
 		</view>
@@ -42,33 +42,35 @@
 			<view class="posLabel">
 				<text class="in_title">职位相关</text>
 				<view class="posLabel_list" v-for="(item, index) in posObj.positionLables" :key="index">
-					<text class="posLabel_item">{{item}}</text>
+					<text class="posLabel_item">{{item.replace(/'/g,"")}}</text>
 				</view>
 			</view>
 			<!-- 任职要求 -->
 			<view class="require">
 				<!-- 基本要求 未改-->
 				<text class="in_title">任职要求</text>
-				<view class="require_list" v-for="(item, index) in posObj.posRequire" :key="index">
+				<view class="require_list" v-for="(item, index) in posObj.positionDesc" :key="index">
 					<text>{{item}}</text>
 				</view>
 			</view>
 		</view>
-		<!-- 发布者 -->
-		<!-- <text class="in_title publisher_title">职位发布者</text>
-		<view class="pos_publisher">
-			<view class="avatar"><image src="https://www.lgstatic.com/thumbnail_100x100/common/image/pc/default_boy_headpic2.png" mode="widthFix" /></view>
-			<view class="publisher_des">
-				<text class="name">{{posObj.publisher[1]}}</text>
-				<text class="pos">{{posObj.publisher[2]}}</text>
-			</view>
-		</view> -->
 		<!-- 工作地点 -->
 		<view class="pos_location">
 			<text class="in_title">工作地址</text>
-			<text class="in_location iconfont icon-icon_GPS">{{posObj.city}}-{{posObj.district}}</text>
-			<!-- <text class="in_location_descript">{{posObj.posLocation[1]}}</text> -->
+			<view class="location_box">
+				<text class="in_location iconfont icon-icon_GPS">{{posObj.city}}-{{posObj.district}}</text>
+				<text class="map_toggle" @click="toggleMap">显示地图</text>
+			</view>
+			<map 
+				class="map" 
+				scale="13"
+				:longitude="posObj.longitude"
+				:latitude="posObj.latitude"
+				:markers="markers"
+				v-if="showMap">
+			</map>
 		</view>
+
 		<!-- 底部栏 -->
 		<Bottom class="pos_bottom" :data="posObj" :pid="pid"></Bottom>
 	</view>
@@ -79,11 +81,36 @@
 	import Bottom from '../../components/bottom/bottom.vue'
 	import { getPosDetail } from '../../utils/api'
 	import { mapGetters }from 'vuex'
+	var QQMapWX = require('../../utils/qqmap-wx-jssdk')
+	var qqmapsdk = new QQMapWX({
+		key: 'GPJBZ-PLHWG-KAKQS-IJN24-AHFYH-2SBOB'
+	});  
 	export default {
 		data() {
 			return {
 				loading: true,
+				showMap: false,
 				pid: 0,
+				markers: [
+					{	
+						id: 0,
+						longitude: 0,
+						latitude: 0,
+						width: 30,
+						height: 30,
+						callout: { 
+							display: 'ALWAYS',
+							textAlign: 'center',
+							content: '',
+							fontSize: 12,
+							padding: 8,
+							borderRadius: 4,
+							//背景颜色不设置ios不显示文本
+							bgColor: '#ffffff'
+						},
+						iconPath: '../../static/position.png'
+					}
+				],
 				posObj: {}
 			}
 		},
@@ -103,8 +130,9 @@
 			async _getPosDetail(pid) {
 				let _posObj = await getPosDetail(pid)
 				this.posObj = _posObj.data[0]
+				console.log(this.posObj)
 				this.posObj.companyLogo = `//www.lgstatic.com/thumbnail_160x160/${this.posObj.companyLogo}`
-				this.posObj.posRequire = [
+				this.posObj.positionDesc = [
 					"职位描述:",
 					"1、熟悉HTML5/CSS3/JS，掌握Angular/React/Vue中一种或多种开发框架，熟悉React框架优先。",
 					"2、具备良好的沟通能力，对于用户体验、视觉及交互设计有一定的理解；",
@@ -114,7 +142,26 @@
 					"1、二本以上计算机相关专业；",
 					"2、需要懂vue框架，需要精通，马上能上手的。"
 				]
+				this.posObj.longitude = parseFloat(this.posObj.longitude)
+				this.posObj.latitude = parseFloat(this.posObj.latitude)
+				this.markers[0].longitude = parseFloat(this.posObj.longitude)
+				this.markers[0].latitude = parseFloat(this.posObj.latitude)
+				this.formatLoction({ latitude: this.posObj.latitude, longitude: this.posObj.longitude })
 				this.loading = false
+			},
+			formatLoction(location) {
+				qqmapsdk.reverseGeocoder({
+					location: location,
+					success: (res) => {
+						this.markers[0].callout.content = res.result.address
+					},
+					fail: (err) => {
+						console.log(err)
+					},
+				})
+			},
+			toggleMap() {
+				this.showMap = !this.showMap
 			}
 		}
 	}
@@ -262,22 +309,23 @@
 			display: flex;
 			flex-direction: column;
 			margin: 30rpx 0 10rpx 0;
-			.in_location_title {
-				color: $main-color;
-				font-size: $main-size;
-				font-weight: 500;
-				margin: 10rpx 0;
-			}
-			.in_location {
+			.location_box {
+				display: flex;
+				justify-content: space-between;
+				margin: 0 0 15rpx 0;
 				font-size: $middle-size;
-				color: $middle-color;
-				font-weight: 360;
+				.in_location {
+					color: $middle-color;
+					font-weight: 360;
+				}
+				.map_toggle {
+					color: $actived-color;
+					font-weight: 520;
+				}
 			}
-			.in_location_descript {
-				font-size: $middle-size;
-				color: $middle-color;
-				font-weight: 340;
-				padding: 0 26rpx;
+			.map {
+				width: 100%;
+				height: 350rpx;
 			}
 		}
 	}
