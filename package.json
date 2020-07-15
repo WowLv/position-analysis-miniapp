@@ -50,7 +50,6 @@
     "@dcloudio/uni-quickapp-webview": "^2.0.0-27820200527001",
     "@dcloudio/uni-stat": "^2.0.0-27820200527001",
     "core-js": "^3.6.5",
-    "flyio": "^0.6.2",
     "regenerator-runtime": "^0.12.1",
     "sass": "^1.26.7",
     "sass-loader": "^8.0.2",

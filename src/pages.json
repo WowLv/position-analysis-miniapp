@@ -33,10 +33,7 @@
 			"path": "pages/analysis/analysis",
 			"style": {
 				"navigationBarTitleText": "职位分析",
-				"navigationBarTextStyle": "white",
-				"usingComponents": {
-					"f2": "/wxcomponents/f2/index"
-				}
+				"navigationBarTextStyle": "white"
 			}
 		},
 		{
@@ -160,7 +157,8 @@
 	"globalStyle": {
 		"navigationBarBackgroundColor": "#3a3cd7",
 		"usingComponents": {
-			"mp-slideview":"/wxcomponents/slideview/slideview"
+			"mp-slideview":"/wxcomponents/slideview/slideview",
+			"f2": "/wxcomponents/f2/index"
 		}
 	},
 	"tabBar": {
@@ -218,9 +216,9 @@
 				"query": ""
 			},
 			{
-				"name": "resume", 
-				"path":"person/pages/resumeOnline/resumeOnline",
-				"query": ""
+				"name": "posDetail", 
+				"path":"pages/posDetail/posDetail",
+				"query": "pid=6778599"
 			},
 			{
 				"name": "editInfo", 

@@ -28,6 +28,9 @@
 								<text>{{item.education}}</text>
 							</view>
 						</view>
+						<view class="label_box" v-if="item.famousCompany === 'True'">
+							<view class="label">名企</view>
+						</view>
 					</view>
 				</mp-slideview>
 			</view>
@@ -95,7 +98,8 @@ import { searchPos } from '../../utils/api'
 						companyShortName: item.companyShortName,
 						city: item.city,
 						workYear: item.workYear,
-						education: item.education
+						education: item.education,
+						famousCompany: item.famousCompany
 					}
 					curList.push(obj)
 				})
@@ -179,6 +183,7 @@ import { searchPos } from '../../utils/api'
 				display: flex;
 				align-items: center;
 				border-top: 2rpx solid $border-color;
+				position: relative;
 				image {
 					width: 120rpx;
 					margin: 0 20rpx;
@@ -219,6 +224,44 @@ import { searchPos } from '../../utils/api'
 							&:nth-of-type(2) {
 								border-right: 2rpx solid $border-color;
 							}
+						}
+					}
+				}
+				.label_box {
+					width: 85rpx;
+					height: 85rpx;
+					overflow: hidden;
+					position: absolute;
+					bottom: -2rpx;
+					right: -2rpx;
+					.label {
+						font: bold 20rpx Sans-Serif;
+						color: #333;
+						text-align: center;
+						text-shadow: rgba(255,255,255,0.5) 0 1rpx 0;
+						transform: rotate(-45deg);
+						position: relative;
+						padding: 7rpx;
+						left: -5rpx;
+						bottom: -38rpx;
+						width: 120rpx;
+						background-color: #BFDC7A;
+						background-image: linear-gradient(top, #BFDC7A, #8EBF45);
+						color: #6a6340;
+						box-shadow: 0 0 3rpx rgba(0,0,0,0.3);
+						&::before, &::after {
+							content: "";
+							border-top: 3rpx solid #6e8900;
+							border-left: 3rpx solid transparent;
+							border-right: 3rpx solid transparent;
+							position: absolute;
+							bottom: -3rpx;
+						}
+						&::before {
+							left: 0;
+						}
+						&::after {
+							right: 0;
 						}
 					}
 				}

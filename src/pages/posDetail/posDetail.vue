@@ -1,5 +1,8 @@
 <template>
 	<view class="container" v-if="!loading">
+		<view class="label_box" v-if="posObj.famousCompany === 'True'">
+			<view class="label">名企</view>
+		</view>
 		<!-- 职位信息 -->
 		<view class="pos_title">
 			<text class="in_pos_title">{{posObj.positionName}}</text>
@@ -7,18 +10,19 @@
 			<view class="require">
 				<text class="salary">{{posObj.salary}}</text>
 				<view class="require_list">
-					<text>/{{posObj.city}}</text>
-					<text>/{{posObj.workYear}}</text>
-					<text>/{{posObj.education}}</text>
-					<text>/{{posObj.jobNature}}</text>
+					<text class="split">|</text><text>{{posObj.workYear}}</text>
+					<text class="split">|</text><text>{{posObj.city}}</text>
+					<text class="split">|</text><text>{{posObj.education}}</text>
+					<text class="split">|</text><text>{{posObj.jobNature}}</text>
 				</view>
 			</view>
 			<!-- 职位诱惑 -->
 			<view class="benefit">
-				<text class="benefit_title">职位诱惑:</text>
-				<view class="in_benefit" v-for="(item, index) in posObj.companyLabelList" :key="index">
-					<text v-if="index !== 0">、</text>
-					<text>{{item.replace(/'/g,"")}}</text>
+				<text class="in_title">职位诱惑</text>
+				<view class="benefit_list" v-for="(item, index) in posObj.companyLabelList" :key="index">
+					<!-- <text v-if="index !== 0">、</text> -->
+					<text class="benefit_item" v-if="!item">暂无数据</text>
+					<text class="benefit_item" v-else>{{item.replace(/'/g,"")}}</text>
 				</view>
 			</view>
 		</view>
@@ -27,8 +31,8 @@
 			<view class="left">
 				<text class="in_left_title">{{posObj.companyShortName}}</text>
 				<view class="in_company_descript">
-					<text>{{posObj.industryField}}/</text>
-					<text>{{posObj.financeStage}}/</text>
+					<text>{{posObj.industryField}}</text><text class="split">|</text>
+					<text>{{posObj.financeStage}}</text><text class="split">|</text>
 					<text>{{posObj.companySize}}</text>
 				</view>
 			</view>
@@ -42,17 +46,23 @@
 			<view class="posLabel">
 				<text class="in_title">职位相关</text>
 				<view class="posLabel_list" v-for="(item, index) in posObj.positionLables" :key="index">
-					<text class="posLabel_item">{{item.replace(/'/g,"")}}</text>
+					<text class="posLabel_item" v-if="!item">暂无数据</text>
+					<text class="posLabel_item" v-else>{{item.replace(/'/g,"")}}</text>
 				</view>
 			</view>
+			
 			<!-- 任职要求 -->
-			<view class="require">
-				<!-- 基本要求 未改-->
-				<text class="in_title">任职要求</text>
+			<!-- <view class="require"> -->
+				<!-- 基本要求 未改 -->
+				<!-- <text class="in_title">任职要求</text>
 				<view class="require_list" v-for="(item, index) in posObj.positionDesc" :key="index">
-					<text>{{item}}</text>
+					<text>{{item}}</text> 
 				</view>
-			</view>
+			</view>  -->
+		</view>
+		<!-- 数据分析 -->
+		<view class="chart_box">
+			<radarChart class="chart"></radarChart>
 		</view>
 		<!-- 工作地点 -->
 		<view class="pos_location">
@@ -78,10 +88,11 @@
 </template>
 
 <script>
-	import Bottom from '../../components/bottom/bottom.vue'
-	import { getPosDetail } from '../../utils/api'
+	import Bottom from '@/components/bottom/bottom.vue'
+	import radarChart from '@/components/charts/radarChart.vue'
+	import { getPosDetail } from '@/utils/api'
 	import { mapGetters }from 'vuex'
-	var QQMapWX = require('../../utils/qqmap-wx-jssdk')
+	var QQMapWX = require('@/utils/qqmap-wx-jssdk')
 	var qqmapsdk = new QQMapWX({
 		key: 'GPJBZ-PLHWG-KAKQS-IJN24-AHFYH-2SBOB'
 	});  
@@ -124,7 +135,8 @@
 			])
 		},
 		components: {
-			Bottom
+			Bottom,
+			radarChart
 		},
 		methods: {
 			async _getPosDetail(pid) {
@@ -132,16 +144,16 @@
 				this.posObj = _posObj.data[0]
 				console.log(this.posObj)
 				this.posObj.companyLogo = `//www.lgstatic.com/thumbnail_160x160/${this.posObj.companyLogo}`
-				this.posObj.positionDesc = [
-					"职位描述:",
-					"1、熟悉HTML5/CSS3/JS，掌握Angular/React/Vue中一种或多种开发框架，熟悉React框架优先。",
-					"2、具备良好的沟通能力，对于用户体验、视觉及交互设计有一定的理解；",
-					"3、熟悉SVN、GIT 等常用管理工具优先；",
-					"4、具备良好的沟通能力，对于用户体验、视觉及交互设计有一定的理解。",
-					"职位要求:",
-					"1、二本以上计算机相关专业；",
-					"2、需要懂vue框架，需要精通，马上能上手的。"
-				]
+				// this.posObj.positionDesc = [
+				// 	"职位描述:",
+				// 	"1、熟悉HTML5/CSS3/JS，掌握Angular/React/Vue中一种或多种开发框架，熟悉React框架优先。",
+				// 	"2、具备良好的沟通能力，对于用户体验、视觉及交互设计有一定的理解；",
+				// 	"3、熟悉SVN、GIT 等常用管理工具优先；",
+				// 	"4、具备良好的沟通能力，对于用户体验、视觉及交互设计有一定的理解。",
+				// 	"职位要求:",
+				// 	"1、二本以上计算机相关专业；",
+				// 	"2、需要懂vue框架，需要精通，马上能上手的。"
+				// ]
 				this.posObj.longitude = parseFloat(this.posObj.longitude)
 				this.posObj.latitude = parseFloat(this.posObj.latitude)
 				this.markers[0].longitude = parseFloat(this.posObj.longitude)
@@ -173,6 +185,7 @@
 		flex-direction: column;
 		margin: 0 30rpx;
 		padding-bottom: 120rpx;
+		overflow-x: hidden;
 		.in_title {
 			font-size: $title-size;
 			color: $main-color;
@@ -184,7 +197,7 @@
 			display: flex;
 			flex-direction: column;
 			justify-content: space-around;
-			height: 200rpx;
+			height: 100%;
 			.in_pos_title {
 				color: $main-color;
 				font-size: 50rpx;
@@ -195,23 +208,38 @@
 				white-space: nowrap
 			}
 			.require {
-				display: inline-flex;
-				font-size: $middle-size;
-				font-weight: 400;
+				font-size: $main-size;
+				font-weight: 380;
+				display: flex;
 				text {
-					color: $main-color;
+					color: $middle-color;
 				}
 				.salary {
 					color: $salary-color;
 				}
+				.split {
+					margin: 0 10rpx;
+					color: $shallow-color
+				}
 			}
 			.benefit {
-				display: inline-flex;
-				font-size: $middle-size;
-				color: $shallow-color;
-				font-weight: 340;
 				.benefit_title {
 					margin-right: 10rpx;
+				}
+				.benefit_list {
+					font-size: $main-size;
+					color: $middle-color;
+					display: inline-flex;
+					font-size: $middle-size;
+					font-weight: 320;
+					.benefit_item {
+						display: flex;
+						justify-content: center;
+						padding: 8rpx 20rpx;
+						margin: 10rpx;
+						border: 2rpx solid $circle-border-color;
+						border-radius: 40rpx;
+					}
 				}
 			}
 		}
@@ -231,9 +259,11 @@
 				.in_company_descript {
 					font-size: $middle-size;
 					color: $shallow-color;
-					font-weight: 340;
-					display: inline-flex;
-
+					font-weight: 380;
+				}
+				.split {
+					margin: 0 10rpx;
+					color: $shallow-color
 				}
 			}
 			.right {
@@ -259,17 +289,6 @@
 						border: 2rpx solid $circle-border-color;
 						border-radius: 40rpx;
 					}
-				}
-			}
-			.require {
-				margin-top: 30rpx;
-				display: flex;
-				flex-direction: column;
-				color: $main-color;
-				font-size: $middle-size;
-				font-weight: 340;
-				.require_list {
-					margin-top: 10rpx;
 				}
 			}
 		}
@@ -305,6 +324,11 @@
 				}
 			}
 		}
+		.chart_box {
+			width: 100%;
+			height: 100%;	
+			margin-top: 40rpx;
+		}
 		.pos_location {
 			display: flex;
 			flex-direction: column;
@@ -326,6 +350,44 @@
 			.map {
 				width: 100%;
 				height: 350rpx;
+			}
+		}
+		.label_box {
+			width: 160rpx;
+			height: 160rpx;
+			overflow: hidden;
+			position: absolute;
+			top: 0;
+			right: 0;
+			.label {
+				font: bold 24rpx Sans-Serif;
+				color: #333;
+				text-align: center;
+				text-shadow: rgba(255,255,255,0.5) 0 1rpx 0;
+				transform: rotate(45deg);
+				position: relative;
+				padding: 12rpx;
+				right: -28rpx;
+				bottom: -10rpx;
+				width: 180rpx;
+				background-color: #BFDC7A;
+				background-image: linear-gradient(top, #BFDC7A, #8EBF45);
+				color: #6a6340;
+				box-shadow: 0 0 3rpx rgba(0,0,0,0.3);
+				&::before, &::after {
+					content: "";
+					border-top: 3rpx solid #6e8900;
+					border-left: 3rpx solid transparent;
+					border-right: 3rpx solid transparent;
+					position: absolute;
+					bottom: -3rpx;
+				}
+				&::before {
+					left: 0;
+				}
+				&::after {
+					right: 0;
+				}
 			}
 		}
 	}
