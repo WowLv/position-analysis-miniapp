@@ -157,7 +157,6 @@ export default {
         },
         grid: function grid(text) {
           //最外层实线
-          //百分比机制
           if (text === "100") {
             return {
               lineDash: null
