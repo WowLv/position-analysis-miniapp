@@ -50,8 +50,10 @@
 			this.key = this.hopePos
 			if(this.hopePos || this.hopeCity || this.hopeType) {
 				this._searchPos(this.currentPage)
+				console.log(111)
 			}else {
 				this._getPosList(this.currentPage)
+				console.log(222)
 			}
 		},
 		onShow() {
@@ -83,6 +85,7 @@
 			}else {
 				this._getPosList(this.currentPage)
 			}
+			uni.stopPullDownRefresh()
 		},
 		components: {
 			PositionList
@@ -121,7 +124,7 @@
 				let filter = {}
 				let city
 				let key = ''
-				if(this.hopePos !== '') key = this.key.split('-')[1]
+				if(this.hopePos !== '' && this.key) key = this.key.split('-')[1]
 				if(this.hopeCity !== '') {
 					city = this.hopeCity
 				}
@@ -134,21 +137,21 @@
 				}else {
 					if(!this.loadedPosList.length) {
 						//没有结果的话暂时定为热门职位
-						this.key = '后端开发-Java'
-						const newRes = await searchPos(this.key.split('-')[1], city, page, filter)
+						this.key = undefined
+						const newRes = await searchPos(this.key, city, page, filter)
 						let newArr = newRes.data
 						if(newArr.length) {
 							this.setLoadedPosList(newArr)
 						}else {
-							this._getPosList(page)
 							this.noResult = true
+							this._getPosList(page)
 						}
 					}else {
 						//瀑布流，没有相应的结果时添加其他内容
 						console.log('瀑布流')
 						this.currentPage = 1
-						this._getPosList(this.currentPage)
 						this.noResult = true
+						this._getPosList(this.currentPage)
 					}
 				}
 			}

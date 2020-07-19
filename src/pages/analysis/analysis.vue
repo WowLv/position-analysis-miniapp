@@ -20,10 +20,6 @@
         <f2 :onInit="onInitColumnChart" v-if="showSkill" />
       </view>
     </view>
-
-    <view class="chart_box radar_chart">
-      <f2 :onInit="onInitRadarChart" />
-    </view>
   </view>
 </template>
 
@@ -170,159 +166,6 @@ export default {
         }
       });
     },
-    onInitRadarChart(F2, config) {
-      F2.Global.fontFamily = "sans-serif";
-      const chart = new F2.Chart(config);
-      const data = [
-        {
-          item: "Design",
-          user: "用户 A",
-          score: 70
-        },
-        {
-          item: "Design",
-          user: "用户 B",
-          score: 30
-        },
-        {
-          item: "Development",
-          user: "用户 A",
-          score: 60
-        },
-        {
-          item: "Development",
-          user: "用户 B",
-          score: 70
-        },
-        {
-          item: "Marketing",
-          user: "用户 A",
-          score: 50
-        },
-        {
-          item: "Marketing",
-          user: "用户 B",
-          score: 60
-        },
-        {
-          item: "Users",
-          user: "用户 A",
-          score: 40
-        },
-        {
-          item: "Users",
-          user: "用户 B",
-          score: 50
-        },
-        {
-          item: "Test",
-          user: "用户 A",
-          score: 60
-        },
-        {
-          item: "Test",
-          user: "用户 B",
-          score: 70
-        },
-        {
-          item: "Language",
-          user: "用户 A",
-          score: 70
-        },
-        {
-          item: "Language",
-          user: "用户 B",
-          score: 50
-        },
-        {
-          item: "Technology",
-          user: "用户 A",
-          score: 70
-        },
-        {
-          item: "Technology",
-          user: "用户 B",
-          score: 40
-        },
-        {
-          item: "Support",
-          user: "用户 A",
-          score: 60
-        },
-        {
-          item: "Support",
-          user: "用户 B",
-          score: 40
-        }
-      ];
-
-      chart.coord("polar");
-      chart.source(data, {
-        score: {
-          min: 0,
-          max: 120,
-          nice: false,
-          tickCount: 4
-        }
-      });
-      chart.tooltip({
-        custom: true, // 自定义 tooltip 内容框
-        onChange: function onChange(obj) {
-          const legend = chart.get("legendController").legends.top[0];
-          const tooltipItems = obj.items;
-          const legendItems = legend.items;
-          const map = {};
-          legendItems.forEach(function(item) {
-            map[item.name] = _.clone(item);
-          });
-          tooltipItems.forEach(function(item) {
-            const name = item.name;
-            const value = item.value;
-            if (map[name]) {
-              map[name].value = value;
-            }
-          });
-          legend.setItems(_.values(map));
-        },
-        onHide: function onHide() {
-          const legend = chart.get("legendController").legends.top[0];
-          legend.setItems(chart.getLegendItems().country);
-        }
-      });
-      chart.axis("score", {
-        label: function label(text, index, total) {
-          if (index === total - 1) {
-            return null;
-          }
-          return {
-            top: true
-          };
-        },
-        grid: {
-          lineDash: null,
-          type: "arc" // 弧线网格
-        }
-      });
-      chart.axis("item", {
-        grid: {
-          lineDash: null
-        }
-      });
-      chart
-        .line()
-        .position("item*score")
-        .color("user");
-      chart
-        .point()
-        .position("item*score")
-        .color("user")
-        .style({
-          stroke: "#fff",
-          lineWidth: 1
-        });
-      chart.render();
-      return chart;
-    },
     onInitCircleChart(F2, config) {
       F2.Global.fontFamily = "sans-serif";
       const chart = new F2.Chart(config);
@@ -377,14 +220,9 @@ export default {
         }
       };
       chart.source(getCurrentPages()[0].data.skillRank, rules);
-      chart
-        .interval()
-        .position("name*total")
-        .color("l(90) 0:#1890ff 1:#70cdd0");
       chart.axis("total", {
         grid: false
       });
-
       chart.tooltip({
         showItemMarker: false,
         background: {
@@ -402,6 +240,11 @@ export default {
           items[0].value = items[0].value + "条";
         }
       });
+      chart.tooltip(false)
+      chart
+        .interval()
+        .position("name*total")
+        .color("l(90) 0:#1890ff 1:#70cdd0");
       // Step 4: 渲染图表
       chart.render();
       return chart;

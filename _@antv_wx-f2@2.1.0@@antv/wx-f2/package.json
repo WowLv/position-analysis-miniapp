@@ -1,0 +1,33 @@
+{
+  "name": "@antv/wx-f2",
+  "version": "2.1.0",
+  "description": "F2 for weixin mini-program",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "npm run clean && rollup -c && npm run cp",
+    "cp": "node ./scripts/cp.js",
+    "clean": "rm -rf dist",
+    "lint": "eslint ./src --ext .js"
+  },
+  "miniprogram": "dist",
+  "dependencies": {
+    "@antv/f2": "~3.6.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^11.0.1",
+    "@rollup/plugin-node-resolve": "^6.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-egg": "^8.0.0",
+    "fs-extra": "^8.1.0",
+    "rollup": "^1.28.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/antvis/wx-f2"
+  },
+  "author": "sima.zhang1990@gmail.com",
+  "license": "MIT",
+  "__npminstall_done": "Fri May 29 2020 14:08:49 GMT+0800 (GMT+08:00)",
+  "_from": "@antv/wx-f2@2.1.0",
+  "_resolved": "https://registry.npm.taobao.org/@antv/wx-f2/download/@antv/wx-f2-2.1.0.tgz"
+}

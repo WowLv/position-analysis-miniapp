@@ -95,6 +95,7 @@ export default {
         filterSelect(e) {
             let type = e.currentTarget.dataset.type
             let item = e.currentTarget.dataset.item 
+            //判断是否已经选择，分别加入两个数组
             if(this.activedList.indexOf(item) === -1){
                 this.activedList.push(item)
                 if(Object.keys(this.filter).indexOf(type) === -1) {
@@ -109,6 +110,11 @@ export default {
         comfirm(e) {
             let type = e.currentTarget.dataset.type
             this.$refs[type].close()
+            if(this.filter['workYear'] && this.filter['workYear'].includes('经验不限')) {
+                const index = this.filter['workYear'].indexOf('经验不限')
+                this.filter['workYear'][index] = "不限"
+            }
+            console.log(this.filter['workYear'])
             uni.$emit('filterRequest',this.filter)
         }
     }

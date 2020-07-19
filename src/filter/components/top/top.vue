@@ -20,7 +20,7 @@
 			<text class="iconfont icon-close" v-if="inputData" @click="clearInput"></text>
 		</view>
 		<view v-if="!nowComfirm">
-			<view v-if="!inputData" class="top_cancel" @click="handleCancel">取消</view>
+			<view v-if="!inputData.trim()" class="top_cancel" @click="handleCancel">取消</view>
 			<view v-else class="top_cancel" @click="handleOk">完成</view>
 		</view>
 		

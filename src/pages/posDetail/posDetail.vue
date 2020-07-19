@@ -62,7 +62,7 @@
 		</view>
 		<!-- 数据分析 -->
 		<view class="chart_box">
-			<radarChart class="chart"></radarChart>
+			<radarChart class="chart" :radarData="radarData"></radarChart>
 		</view>
 		<!-- 工作地点 -->
 		<view class="pos_location">
@@ -88,6 +88,55 @@
 </template>
 
 <script>
+	//  let salaryList = [
+	// 	"30k-60k",
+	// 	"25k-50k",
+	// 	"30k-50k",
+	// 	"20k-35k",
+	// 	"15k-25k",
+	// 	"30k-55k"
+	// ]
+	// let workYearList = [
+	// 	"5-10年",
+	// 	"3-5年",
+	// 	"应届毕业生",
+	// 	"不限",
+	// 	"1-3年",
+	// 	"10年以上",
+	// 	"1年以下"
+	// ]
+	// let educationList = [
+	// 	"本科",
+	// 	"硕士",
+	// 	"不限",
+	// 	"大专",
+	// 	"博士"
+	// ]
+	// let financeStageList = [
+	// 	"上市公司",
+	// 	"天使轮",
+	// 	"D轮及以上",
+	// 	"不需要融资",
+	// 	"B轮",
+	// 	"C轮",
+	// 	"未融资",
+	// 	"A轮"
+	// ]
+	// let companySizeList = [
+	// 	"2000人以上",
+	// 	"15-50人",
+	// 	"50-150人",
+	// 	"150-500人",
+	// 	"500-2000人",
+	// 	"少于15人"
+	// ]
+	// let jobNatureList = [
+	// 	"全职",
+	// 	"实习",
+	// 	"兼职"
+	// ]
+
+
 	import Bottom from '@/components/bottom/bottom.vue'
 	import radarChart from '@/components/charts/radarChart.vue'
 	import { getPosDetail } from '@/utils/api'
@@ -122,17 +171,113 @@
 						iconPath: '../../static/position.png'
 					}
 				],
-				posObj: {}
+				posObj: {},
+				radarData: [
+					//value值计算：data/国内max*100 or data/当地max*100
+					//再修改legend的映射
+					{
+					name: "薪资水平",
+					type: "相比当地",
+					value: 30
+					},
+					{
+					name: "薪资水平",
+					type: "相比国内",
+					value: 50
+					},
+					{
+					name: "工作经验",
+					type: "相比当地",
+					value: 40
+					},
+					{
+					name: "工作经验",
+					type: "相比国内",
+					value: 40
+					},
+					{
+					name: "学历水平",
+					type: "相比当地",
+					value: 60
+					},
+					{
+					name: "学历水平",
+					type: "相比国内",
+					value: 50
+					},
+					{
+					name: "工作性质",
+					type: "相比当地",
+					value: 75
+					},
+					{
+					name: "工作性质",
+					type: "相比国内",
+					value: 65
+					},
+					{
+					name: "公司规模",
+					type: "相比当地",
+					value: 20
+					},
+					{
+					name: "公司规模",
+					type: "相比国内",
+					value: 55
+					},
+					{
+					name: "融资情况",
+					type: "相比当地",
+					value: 45
+					},
+					{
+					name: "融资情况",
+					type: "相比国内",
+					value: 60
+					}
+				]
 			}
 		},
 		onLoad(option) {
 			this.pid = option.pid
 			this._getPosDetail(option.pid)
+			// console.log(this.dataDevide)
 		},
 		computed: {
 			...mapGetters([
 				'userCollect'
-			])
+			]),
+			// dataDevide() {
+			// 	let radarObj = {}
+			// 	let _salaryList = []
+			// 	let sStep = Math.floor(salaryList.length/5) //薪资分组
+			// 	let sMore = salaryList.length%5 //计算得出那几组需要多出一个数据
+			// 	salaryList.sort((a, b) => {
+			// 		return b.split('-')[1].replace('k','') - a.split('-')[1].replace('k','')
+			// 	})
+			// 	for(var i = 0; i < 5; i++) {
+			// 		if(i === sMore-1) {
+			// 			_salaryList.push(salaryList.splice(0,sStep+1))
+			// 		}else {
+			// 			_salaryList.push(salaryList.splice(0,sStep))
+			// 		}
+			// 	}
+			// 	radarObj._salaryList = _salaryList.map(list => {
+			// 		let sum = 0
+			// 		if(list.length > 1) {
+			// 			list.map((item) => {
+			// 				sum += Math.ceil(parseInt(item.split('-')[1].replace('k',''))/list.length)
+			// 			})
+			// 		}else {
+			// 			list[0].split('-').map((item) => {
+			// 				sum += parseInt(item.replace('k',''))/2
+			// 			})
+			// 		}
+			// 		return sum
+			// 	})
+
+			// 	return radarObj
+			// }
 		},
 		components: {
 			Bottom,

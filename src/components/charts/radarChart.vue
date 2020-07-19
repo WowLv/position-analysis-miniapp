@@ -10,80 +10,23 @@
 var data = [];
 var chart = {}
 export default {
+  props: {
+    radarData: {
+      type: Array,
+      default: []
+    }
+  },
   data() {
     return {
-      radarData: [
-        //value值计算：data/国内max*100 or data/当地max*100
-        //再修改legend的映射
-        {
-          name: "薪资水平",
-          type: "相比当地",
-          value: 50
-        },
-        {
-          name: "薪资水平",
-          type: "相比国内",
-          value: 60
-        },
-        {
-          name: "工作经验",
-          type: "相比当地",
-          value: 40
-        },
-        {
-          name: "工作经验",
-          type: "相比国内",
-          value: 50
-        },
-        {
-          name: "学历水平",
-          type: "相比当地",
-          value: 60
-        },
-        {
-          name: "学历水平",
-          type: "相比国内",
-          value: 70
-        },
-        {
-          name: "工作性质",
-          type: "相比当地",
-          value: 70
-        },
-        {
-          name: "工作性质",
-          type: "相比国内",
-          value: 50
-        },
-        {
-          name: "公司规模",
-          type: "相比当地",
-          value: 70
-        },
-        {
-          name: "公司规模",
-          type: "相比国内",
-          value: 40
-        },
-        {
-          name: "融资情况",
-          type: "相比当地",
-          value: 60
-        },
-        {
-          name: "融资情况",
-          type: "相比国内",
-          value: 40
-        }
-      ]
+       
     };
   },
   created() {
     data = this.radarData;
   },
-//   beforeDestroy() {
-//       chart.clear()
-//   },
+  // beforeDestroy() {
+  //     chart.clear()
+  // },
   methods: {
     onInitChart(F2, config) {
       F2.Global.fontFamily = "sans-serif";
@@ -96,7 +39,7 @@ export default {
           min: 0,
           max: 100,
           nice: false,
-          tickCount: 5
+          tickCount: 6
         }
       });
       chart.legend({
@@ -116,30 +59,42 @@ export default {
           fontWeight: "bold" // 图例项 value 值文本样式
         }
       });
-      chart.tooltip({
-        custom: true, // 自定义 tooltip 内容框
-        onChange: function onChange(obj) {
-          const legend = chart.get("legendController").legends.top[0];
-          const tooltipItems = obj.items;
-          const legendItems = legend.items;
-          const map = {};
-          legendItems.forEach(function(item) {
-            map[item.name] = item;
-          });
-          tooltipItems.forEach(function(item) {
-            const name = item.name;
-            const value = item.value;
-            if (map[name]) {
-              map[name].value = value;
-            }
-          });
-          legend.setItems(Object.values(map));
-        },
-        onHide: function onHide() {
-          const legend = chart.get("legendController").legends.top[0];
-          legend.setItems(chart.getLegendItems().country);
-        }
-      });
+      // chart.tooltip({
+        // custom: true, // 自定义 tooltip 内容框
+        // onShow: function onShow(obj) {
+        //   const legend = chart.get("legendController").legends.top[0];
+        //   const tooltipItems = obj.items;
+        //   const legendItems = legend.items;
+        //   const map = {};
+        //   legendItems.forEach(function(item) {
+        //     map[item.name] = item;
+        //   });
+        //   tooltipItems.forEach(function(item) {
+        //     const name = item.name;
+        //     let value = ''
+        //     if(item.value <= 20) {
+        //       value = '低'
+        //     }else if(item.value > 20 && item.value <= 40) {
+        //       value = '较低'
+        //     }else if(item.value > 40 && item.value <= 60) {
+        //       value = '一般'
+        //     }else if(item.value > 60 && item.value <= 80) {
+        //       value = '较高'
+        //     }else {
+        //       value = '高'
+        //     }
+        //     if (map[name]) {
+        //       map[name].value = value;
+        //     }
+        //   });
+        //   legend.setItems(Object.values(map));
+        // },
+        // onHide: function onHide() {
+        //   const legend = chart.get("legendController").legends.top[0];
+        //   legend.setItems(chart.getLegendItems().country);
+        // }
+      // });
+      chart.tooltip(false)
       chart.axis("name", {
           label: {
               fontSize: 14,
