@@ -5,7 +5,8 @@ const user = {
 		userCollect: [],
 		eduInfo: [],
 		projInfo: [],
-		resumeInfo: {}
+		resumeInfo: {},
+		userHabit: {}
 	},
 	getters: {
 		userInfo: state => state.userInfo,
@@ -22,7 +23,8 @@ const user = {
 		userCollect: state => state.userCollect,
 		resumeInfo: state => state.resumeInfo,
 		eduInfo: state => state.eduInfo,
-		projInfo: state => state.projInfo
+		projInfo: state => state.projInfo,
+		userHabit: state => state.userHabit
 	},
 	mutations: {
 		SET_USERLOCATION: (state, userInfo) => {
@@ -132,6 +134,62 @@ const user = {
 				}
 			})
 			uni.setStorageSync('projList', state.projInfo)
+		},
+		SET_HABIT: (state, habit) => {
+			// 统计浏览记录前三
+			let { secondType, city, positionLables } = habit
+			if(!Object.keys(state.userHabit).length) {
+				state.userHabit.secondType = [secondType]
+				state.userHabit.city = [city]
+				state.userHabit.positionLables = [...positionLables]
+			}else {
+				console.log('执行SET_HABIT')
+				state.userHabit.secondType.push(secondType)
+				state.userHabit.city.push(city)
+				state.userHabit.positionLables.push(...positionLables)
+			}
+
+			let cityList = {}
+			let typeList = {}
+			let skillList = {}
+			state.userHabit.city.map((item) => {
+				console.log('执行了筛选')
+				if(!Object.keys(cityList).includes(item)) {
+					cityList[item] = 1
+				}else {
+					cityList[item] ++
+				}
+			})
+			state.userHabit.secondType.map((item) => {
+				if(!Object.keys(typeList).includes(item)) {
+					typeList[item] = 1
+				}else {
+					typeList[item] ++
+				}
+			})
+			state.userHabit.positionLables.map((item) => {
+				if(!Object.keys(skillList).includes(item)) {
+					skillList[item] = 1
+				}else {
+					skillList[item] ++
+				}
+			})
+
+			cityList = Object.entries(cityList).sort((a,b) => {
+				return b[1] - a[1]
+			})
+			typeList = Object.entries(typeList).sort((a,b) => {
+				return b[1] - a[1]
+			})
+			skillList = Object.entries(skillList).sort((a,b) => {
+				return b[1] - a[1]
+			})
+
+			state.userHabit.cityList = cityList.slice(0,3)
+			state.userHabit.typeList = typeList.slice(0,3)
+			state.userHabit.skillList = skillList.slice(0,3)
+			// console.log(state.userHabit)
+			
 		}
 	},
 	actions: {
@@ -168,6 +226,9 @@ const user = {
 		},
 		deleteProjInfo({ commit }, pid) {
 			commit('DELETE_PROJ', pid)
+		},
+		setUserHabit({ commit }, habit) {
+			commit('SET_HABIT', habit)
 		}
 	}
 }

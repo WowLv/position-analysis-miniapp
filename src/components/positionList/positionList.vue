@@ -1,6 +1,8 @@
 <template>
 	<view class="container">
 		<scroll-view 
+		enable-back-to-top
+		lower-threshold=200
 		@scrolltolower="refreshPage"
 		:scroll-y="isScroll" 
 		class="position_list" 

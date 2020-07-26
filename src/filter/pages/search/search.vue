@@ -53,13 +53,11 @@
                     <view class="recommend_title">猜你喜欢</view>
                     <view class="recommend_list" >
                         <text class="recommend_item" 
-                        v-for="(item ,index) in recommendList"
+                        v-for="(item ,index) in habitList"
                         :key="index"
                         @click="handleSelect"
                         :data-index="index"
-                        data-type="recommendList">
-                        <text 
-                        class="iconfont icon-fire"></text>
+                        data-type="habitList">
                         {{item}}
                         </text>
                     </view>
@@ -74,6 +72,7 @@
                         @click="handleSelect"
                         :data-index="index"
                         data-type="campanyList">
+                        <text class="iconfont icon-fire"></text>
                         {{item}}
                         </text>
                     </view>
@@ -133,8 +132,15 @@ export default {
         ...mapGetters([
             'userInfo',
             'searchHistory',
-            'searchedPosList'
+            'searchedPosList',
+            'userHabit'
         ]),
+        habitList() {
+            // console.log([...this.userHabit.skillList, ...this.userHabit.typeList])
+            return [...this.userHabit.skillList, ...this.userHabit.typeList].map((item) => {
+                return item[0]
+            })
+        },
          //搜索提示词
          searchShowing() {
              let list = []

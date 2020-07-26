@@ -33,7 +33,6 @@ export default {
       chart = new F2.Chart(config);
 
       chart.coord("polar");
-      console.log(data);
       chart.source(data, {
         value: {
           min: 0,
@@ -59,42 +58,42 @@ export default {
           fontWeight: "bold" // 图例项 value 值文本样式
         }
       });
-      // chart.tooltip({
-        // custom: true, // 自定义 tooltip 内容框
-        // onShow: function onShow(obj) {
-        //   const legend = chart.get("legendController").legends.top[0];
-        //   const tooltipItems = obj.items;
-        //   const legendItems = legend.items;
-        //   const map = {};
-        //   legendItems.forEach(function(item) {
-        //     map[item.name] = item;
-        //   });
-        //   tooltipItems.forEach(function(item) {
-        //     const name = item.name;
-        //     let value = ''
-        //     if(item.value <= 20) {
-        //       value = '低'
-        //     }else if(item.value > 20 && item.value <= 40) {
-        //       value = '较低'
-        //     }else if(item.value > 40 && item.value <= 60) {
-        //       value = '一般'
-        //     }else if(item.value > 60 && item.value <= 80) {
-        //       value = '较高'
-        //     }else {
-        //       value = '高'
-        //     }
-        //     if (map[name]) {
-        //       map[name].value = value;
-        //     }
-        //   });
-        //   legend.setItems(Object.values(map));
-        // },
-        // onHide: function onHide() {
-        //   const legend = chart.get("legendController").legends.top[0];
-        //   legend.setItems(chart.getLegendItems().country);
-        // }
-      // });
-      chart.tooltip(false)
+      chart.tooltip({
+        custom: true, // 自定义 tooltip 内容框
+        onShow: function onShow(obj) {
+          const legend = chart.get("legendController").legends.top[0];
+          const tooltipItems = obj.items;
+          const legendItems = legend.items;
+          const map = {};
+          legendItems.forEach(function(item) {
+            map[item.name] = item;
+          });
+          tooltipItems.forEach(function(item) {
+            const name = item.name;
+            let value = ''
+            if(item.value <= 20) {
+              value = '低'
+            }else if(item.value > 20 && item.value <= 40) {
+              value = '较低'
+            }else if(item.value > 40 && item.value <= 60) {
+              value = '一般'
+            }else if(item.value > 60 && item.value <= 80) {
+              value = '较高'
+            }else {
+              value = '高'
+            }
+            if (map[name]) {
+              map[name].value = value;
+            }
+          });
+          legend.setItems(Object.values(map));
+        },
+        onHide: function onHide() {
+          const legend = chart.get("legendController").legends.top[0];
+          legend.setItems(chart.getLegendItems().country);
+        }
+      });
+      // chart.tooltip(false)
       chart.axis("name", {
           label: {
               fontSize: 14,

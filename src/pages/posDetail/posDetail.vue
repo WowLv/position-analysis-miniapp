@@ -47,7 +47,7 @@
 				<text class="in_title">职位相关</text>
 				<view class="posLabel_list" v-for="(item, index) in posObj.positionLables" :key="index">
 					<text class="posLabel_item" v-if="!item">暂无数据</text>
-					<text class="posLabel_item" v-else>{{item.replace(/'/g,"")}}</text>
+					<text class="posLabel_item" v-else>{{item}}</text>
 				</view>
 			</view>
 			
@@ -140,7 +140,7 @@
 	import Bottom from '@/components/bottom/bottom.vue'
 	import radarChart from '@/components/charts/radarChart.vue'
 	import { getPosDetail } from '@/utils/api'
-	import { mapGetters }from 'vuex'
+	import { mapGetters, mapActions }from 'vuex'
 	var QQMapWX = require('@/utils/qqmap-wx-jssdk')
 	var qqmapsdk = new QQMapWX({
 		key: 'GPJBZ-PLHWG-KAKQS-IJN24-AHFYH-2SBOB'
@@ -241,52 +241,34 @@
 		onLoad(option) {
 			this.pid = option.pid
 			this._getPosDetail(option.pid)
-			// console.log(this.dataDevide)
+			.then(() => {
+				this.setUserHabit({
+					secondType: this.posObj['secondType'],
+					city: this.posObj['city'],
+					positionLables: this.posObj['positionLables']
+				})
+				console.log(this.userHabit)
+			})
+			
+			
 		},
 		computed: {
 			...mapGetters([
-				'userCollect'
+				'userCollect',
+				'userHabit'
 			]),
-			// dataDevide() {
-			// 	let radarObj = {}
-			// 	let _salaryList = []
-			// 	let sStep = Math.floor(salaryList.length/5) //薪资分组
-			// 	let sMore = salaryList.length%5 //计算得出那几组需要多出一个数据
-			// 	salaryList.sort((a, b) => {
-			// 		return b.split('-')[1].replace('k','') - a.split('-')[1].replace('k','')
-			// 	})
-			// 	for(var i = 0; i < 5; i++) {
-			// 		if(i === sMore-1) {
-			// 			_salaryList.push(salaryList.splice(0,sStep+1))
-			// 		}else {
-			// 			_salaryList.push(salaryList.splice(0,sStep))
-			// 		}
-			// 	}
-			// 	radarObj._salaryList = _salaryList.map(list => {
-			// 		let sum = 0
-			// 		if(list.length > 1) {
-			// 			list.map((item) => {
-			// 				sum += Math.ceil(parseInt(item.split('-')[1].replace('k',''))/list.length)
-			// 			})
-			// 		}else {
-			// 			list[0].split('-').map((item) => {
-			// 				sum += parseInt(item.replace('k',''))/2
-			// 			})
-			// 		}
-			// 		return sum
-			// 	})
-
-			// 	return radarObj
-			// }
 		},
 		components: {
 			Bottom,
 			radarChart
 		},
 		methods: {
+			...mapActions([
+				'setUserHabit'
+			]),
 			async _getPosDetail(pid) {
 				let _posObj = await getPosDetail(pid)
-				this.posObj = _posObj.data[0]
+				this.posObj = _posObj.data[0] 
 				console.log(this.posObj)
 				this.posObj.companyLogo = `//www.lgstatic.com/thumbnail_160x160/${this.posObj.companyLogo}`
 				// this.posObj.positionDesc = [
@@ -299,6 +281,10 @@
 				// 	"1、二本以上计算机相关专业；",
 				// 	"2、需要懂vue框架，需要精通，马上能上手的。"
 				// ]
+				this.posObj.positionLables = this.posObj.positionLables.map((item) => {
+					return item.replace(/'/g,"")
+				}) //后期需要将数据清洗好
+
 				this.posObj.longitude = parseFloat(this.posObj.longitude)
 				this.posObj.latitude = parseFloat(this.posObj.latitude)
 				this.markers[0].longitude = parseFloat(this.posObj.longitude)

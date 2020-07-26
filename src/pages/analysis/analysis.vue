@@ -181,11 +181,24 @@ export default {
       chart.axis("name", {
         grid: false,
         line: null,
-        label: {
-          fontSize: 12,
-          fontWeight: "bold",
-          fill: "#7b7b7e"
+        label: (text, index, total) => {
+          let fontSize = ''
+          if(total === 5) {
+            fontSize = '9'
+          }else {
+            fontSize = '11'
+          }
+          const cfg = {
+            fontSize,
+            fontWeight: "bold"
+          }
+          return cfg
         }
+        // label: {
+        //   // fontSize: 12,
+        //   // fontWeight: "bold",
+        //   fill: "#7b7b7e"
+        // }
       });
       chart.axis("value", false);
       chart.tooltip({
@@ -240,7 +253,7 @@ export default {
           items[0].value = items[0].value + "条";
         }
       });
-      chart.tooltip(false)
+      // chart.tooltip(false)
       chart
         .interval()
         .position("name*total")
@@ -273,12 +286,12 @@ export default {
     display: flex;
     .circle_chart,
     .column_chart {
-      flex: 4;
+      flex: 4.5;
       width: 100%;
       height: 400rpx;
     }
     .column_chart {
-      flex: 6;
+      flex: 5.5;
     }
   }
 }

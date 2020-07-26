@@ -136,7 +136,7 @@
 					this.noMore = false
 				}else {
 					if(!this.loadedPosList.length) {
-						//没有结果的话暂时定为热门职位
+						//没有结果的话设置为undefined
 						this.key = undefined
 						const newRes = await searchPos(this.key, city, page, filter)
 						let newArr = newRes.data
