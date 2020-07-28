@@ -159,7 +159,8 @@
 		"usingComponents": {
 			"mp-slideview":"/wxcomponents/slideview/slideview",
 			"f2": "/wxcomponents/f2/index"
-		}
+		},
+		"onReachBottomDistance": 200
 	},
 	"tabBar": {
 		"color":"#515151",

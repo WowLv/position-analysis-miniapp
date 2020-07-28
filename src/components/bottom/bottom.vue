@@ -12,7 +12,7 @@
 				<text class="iconfont icon-collection-fill" v-else></text>
 				<text class="in_text">收藏</text>
 			</view>
-			<view class="submit">投递简历</view>
+			<view class="submit" @click="handleSubmit">投递简历</view>
 		</view>
 	</view>
 </template>
@@ -69,6 +69,22 @@ import { mapGetters, mapActions } from 'vuex'
 					})
 				}
 				
+			},
+			handleSubmit() {
+				uni.showActionSheet({
+					itemList: ['在线简历','附件简历'],
+					success: (res) => {
+						if(res.tapIndex === 0) {
+							uni.navigateTo({
+								 url: '../../person/pages/resumeOnline/resumeOnline?mode=submit'
+							});
+						}else {
+							uni.navigateTo({
+								 url: '../../person/pages/resumeAttachment/resumeAttachment?mode=submit'
+							});
+						}
+					}
+				});
 			}
 		}
 	}

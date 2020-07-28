@@ -49,7 +49,7 @@
                     </view>
                 </view>
                 <!-- 热门职位 -->
-                <view class="recommend">
+                <view class="recommend" v-if="habitList.length">
                     <view class="recommend_title">猜你喜欢</view>
                     <view class="recommend_list" >
                         <text class="recommend_item" 
@@ -98,7 +98,7 @@ export default {
             userLocation: '',
             sNowInput: '',
             filter: {},
-            recommendList: ['前端', 'java', 'ui', '自动化测试'],
+            // recommendList: ['前端', 'java', 'ui', '自动化测试'],
             campanyList: ['虎牙科技', '字节跳动', 'Bigo', '小鹏汽车', '唯品会'],
             noResult: false,
             isSearching: false,
@@ -137,7 +137,7 @@ export default {
         ]),
         habitList() {
             // console.log([...this.userHabit.skillList, ...this.userHabit.typeList])
-            return [...this.userHabit.skillList, ...this.userHabit.typeList].map((item) => {
+            return [...this.userHabit.skillList].map((item) => {
                 return item[0]
             })
         },

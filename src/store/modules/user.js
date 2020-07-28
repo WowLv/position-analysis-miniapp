@@ -138,9 +138,21 @@ const user = {
 		SET_HABIT: (state, habit) => {
 			// 统计浏览记录前三
 			let { secondType, city, positionLables } = habit
+			console.log(state.userHabit)
 			if(!Object.keys(state.userHabit).length) {
-				state.userHabit.secondType = [secondType]
-				state.userHabit.city = [city]
+				if(Array.isArray(city)) {
+					console.log('city is array')
+					state.userHabit.city = city
+				}else {
+					state.userHabit.city = [city]
+				}
+				if(Array.isArray(secondType)) {
+					state.userHabit.secondType = secondType
+				}else {
+					state.userHabit.secondType = [secondType]
+				}
+				// state.userHabit.city = [city]
+				// state.userHabit.secondType = [secondType]
 				state.userHabit.positionLables = [...positionLables]
 			}else {
 				console.log('执行SET_HABIT')
@@ -175,21 +187,17 @@ const user = {
 				}
 			})
 
-			cityList = Object.entries(cityList).sort((a,b) => {
+			state.userHabit.cityList = Object.entries(cityList).sort((a,b) => {
 				return b[1] - a[1]
-			})
-			typeList = Object.entries(typeList).sort((a,b) => {
+			}).slice(0, 3)
+			state.userHabit.typeList = Object.entries(typeList).sort((a,b) => {
 				return b[1] - a[1]
-			})
-			skillList = Object.entries(skillList).sort((a,b) => {
+			}).slice(0, 3)
+			state.userHabit.skillList = Object.entries(skillList).sort((a,b) => {
 				return b[1] - a[1]
-			})
-
-			state.userHabit.cityList = cityList.slice(0,3)
-			state.userHabit.typeList = typeList.slice(0,3)
-			state.userHabit.skillList = skillList.slice(0,3)
-			// console.log(state.userHabit)
-			
+			}).slice(0, 3)
+			//模拟存到用户数据库
+			uni.setStorageSync('userHabit', state.userHabit)
 		}
 	},
 	actions: {

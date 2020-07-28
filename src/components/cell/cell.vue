@@ -44,6 +44,18 @@
             </view>
             <view :class="{ border_bottom : !bottom }"></view>
         </view>
+		
+		<!-- 反馈按钮 -->
+		<view v-if="cType === 'button'">
+		    <view class="cell_box">
+		        <slot class="cell_title" v-if="isSlot"></slot>
+		        <view class="cell_title" v-else>{{title}}</view>
+		        <text class="cell_content">{{value}}</text>
+		        <text class="iconfont icon-arrow-right"></text>
+		    </view>
+		    <view :class="{ border_bottom : !bottom }"></view>
+		</view>
+		
         <view v-if="cType === 'salary'">
             <salary-picker 
                 :pName="title" 

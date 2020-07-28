@@ -15,9 +15,29 @@
 		<swiper :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish" class="tab_swiper">
 			<swiper-item class="tab_items" v-for="(item, index) in tabs" :key="index">
 				<scroll-view scroll-y class="scroll_box" v-if="item.type === 1">
-					<view class="item" v-for="item in tabs[0].content" :key="item.type">
-						<text class="title">{{item.title}}</text>
-						<text class="value">{{item.value}}</text>
+					<view class="item" v-for="item in recommondList" :key="item.pid">
+						<text class="title">为你匹配一条招聘信息</text>
+						<view class="value">
+							<view class="left">
+								<image :src="item.companyLogo" mode="widthFix" />
+							</view>
+							<view class="right">
+								<view class="r_top">
+									<text>{{item.positionName}}</text>
+									<text class="salary">{{item.salary}}</text>
+								</view>
+								<view class="r_middle">
+									<text>{{item.companyName}}</text>
+									<text class="point">·</text>
+									<text>{{item.city}}</text>
+									<text>{{item.workYear}}</text>
+									<text>{{item.jobNature}}</text>
+								</view>
+								<view class="r_bottom">
+									<text v-for="(el, index) in item.industryField" :key="index">{{el}}</text>
+								</view>
+							</view>
+						</view>
 					</view>
 				</scroll-view>
 				<scroll-view scroll-y class="scroll_box" v-if="item.type === 2">
@@ -45,8 +65,7 @@ import TabsSwiper from '@/components/tabs-swiper/tabs-swiper'
 						type: 1,
 						name: '消息',
 					 	content: [
-							{ title: '消息一', value: 1111},
-							{ title: '消息二', value: 2222}
+							{ pid: 1716541, city: "广州", companyLogo:"//www.lgstatic.com/thumbnail_160x160/image1/M00/37/D4/CgYXBlWjz7aAav4uAAAamQKHn4M680.png?cc=0.40202441322617233", positionName: "Java WEB程序员", companyName: "金科汇智", salary: "3K-6K", workYear: "应届毕业生", jobNature: "实习", industryField: "移动互联网,金融"},
 						 ] 
 					},
 					{ 
@@ -61,6 +80,15 @@ import TabsSwiper from '@/components/tabs-swiper/tabs-swiper'
 		},
 		components: {
 			TabsSwiper
+		},
+		computed: {
+			recommondList() {
+				let currList = this.tabs[0].content.map((item) => {
+					item.industryField = item.industryField.split(',')
+					return item
+				})
+				return currList
+			}
 		},
 		methods: {
 			// tabs通知swiper切换
@@ -107,12 +135,75 @@ import TabsSwiper from '@/components/tabs-swiper/tabs-swiper'
 					.item {
 						margin: 20rpx 0;
 						width: 100%;
-						height: 150rpx;
+						height: 240rpx;
 						border: 2rpx solid $border-color;
 						box-shadow: 1rpx 2rpx 15rpx $circle-border-color;
 						border-radius: 10rpx;
+						display: flex;
+						flex-direction: column;
 						&:first-of-type {
 							margin: 0;
+						}
+						.title {
+							flex: 2;
+							display: flex;
+							justify-content: center;
+							align-items: center;
+							font-size: $middle-size;
+							color: $actived-color
+						}
+						.value {
+							flex: 7;
+							display: flex;
+							.left {
+								flex: 3;
+								display: flex;
+								justify-content: center;
+								align-items: center;
+								image {
+									width: 60%;
+								}
+							}
+							.right {
+								flex: 7;
+								display: flex;
+								flex-direction: column;
+								.r_top {
+									display: flex;
+									justify-content: space-between;
+									padding: 10rpx 10rpx 0 10rpx;
+									color: $main-color;
+									font-size: $title-size;
+									.salary {
+										color: $salary-color;
+									}
+								}
+								.r_middle {
+									color: $middle-color;
+									font-size: $middle-size;
+									.point {
+										font-weight: 500;
+									}
+									text {
+										padding: 0 10rpx;
+										&:nth-of-type(4), &:nth-of-type(5){
+											border-left: 4rpx solid $border-color;
+										}
+									}
+								}
+								.r_bottom {
+									margin-top: 10rpx;
+									text {
+										display: inline-block;
+										font-size: $middle-size;
+										color: $shallow-color;
+										background-color: $back-color;
+										padding: 0 10rpx;
+										margin-right: 15rpx;
+										border-radius: 8rpx;
+									}
+								}
+							}
 						}
 					}
 				}

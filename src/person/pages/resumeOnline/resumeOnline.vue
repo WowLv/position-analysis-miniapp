@@ -67,6 +67,9 @@
 			</view>
 			<view class="add_project" @click="toProject"><text class="add">+</text>添加项目经验</view>
 		</view>
+		<view class="submit_box" v-if="mode === 'submit'">
+			<button class="submit" @click="handleSubmit">提交简历</button>
+		</view>
 	</view>
 </template>
 
@@ -75,10 +78,13 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
 	data() {
 		return {
-			avatarSrc: ''
+			avatarSrc: '',
+			mode: ''
 		}
 	},
-	created() {
+	onLoad(options) {
+		this.mode = options.mode
+
 		// 监听从裁剪页发布的事件，获得裁剪结果
 		uni.$on('uAvatarCropper', path => {
 			this.avatarSrc = path;
@@ -176,6 +182,18 @@ export default {
 				});
 			}
 			
+		},
+		handleSubmit() {
+			uni.showToast({
+				title: '假装提交成功',
+				duration: 1500
+			}).then(() => {
+					setTimeout(() => {
+						uni.navigateBack({
+							delta: 1
+						});
+					},1500)
+				});
 		}
 	}
 }
@@ -419,6 +437,19 @@ export default {
 				font-weight: 500;
 				color: $actived-color;
 			}
+		}
+	}
+	.submit_box {
+		background-color: white;
+		.submit {
+			margin: 120rpx auto;
+			width: 500rpx;
+			height: 80rpx;
+			color: $border-color;
+			background-color: $theme-color;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 		}
 	}
 }

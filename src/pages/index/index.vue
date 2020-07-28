@@ -17,11 +17,20 @@
 				</swiper-item>
 			</swiper>
 		</view>
+		
+		<view class="index_navigator">
+			<view class="navigator_box">
+				<text class="nav_title">今日数据</text>
+			</view>
+		</view>
+		<view class="statistics">
+			<statistics></statistics>
+		</view> 
 		<view class="index_navigator">
 			<navigator url="../filter/filter?mode=index" open-type="navigate">
 				<text class="nav_title">为你匹配</text><text class="iconfont icon-arrow-right"></text>
 			</navigator>
-		</view> 
+		</view>
 		<view class="position_list">
 			<position-list :posList="loadedPosList" mode="point" :nomore="noMore"></position-list>
 		</view>
@@ -30,6 +39,7 @@
 
 <script>
 	import PositionList from '@/components/positionList/positionList.vue'
+	import Statistics from '@/components/statistics/statistics.vue'
 	import { mapActions,mapGetters } from 'vuex'
 	import { getPosList, searchPos } from '@/utils/api'
 	export default {
@@ -50,10 +60,25 @@
 			this.key = this.hopePos
 			if(this.hopePos || this.hopeCity || this.hopeType) {
 				this._searchPos(this.currentPage)
-				console.log(111)
 			}else {
 				this._getPosList(this.currentPage)
-				console.log(222)
+			}
+
+			//首次加载询问地址
+			if(!this.userInfo.location) {
+				uni.showModal({
+					title: '请您确认当前位置~',
+					cancelColor: '#888888',
+					cancelText: '暂不',
+					confirmText: '好的',
+					success: (res) => {
+						if(res.confirm) {
+							uni.navigateTo({
+								url: '../selectRegion/selectRegion?mode=search'
+							})
+						}
+					}
+				})
 			}
 		},
 		onShow() {
@@ -61,7 +86,7 @@
 				this.key = this.hopePos
 				this.currentPage = 1
 				this.clearPosList()
-				if(this.hopePos || this.hopeCity || this.hopeType) {
+				if(this.hopePos || this.hopeCity || this.hopeType || this.userInfo.location) {
 					this._searchPos(this.currentPage)
 				}else {
 					this._getPosList(this.currentPage)
@@ -80,7 +105,7 @@
 			this.currentPage = 1
 			this.clearPosList()
 			// this.noResult = false
-			if(this.hopePos || this.hopeCity || this.hopeType) {
+			if(this.hopePos || this.hopeCity || this.hopeType || this.userInfo.location) {
 				this._searchPos(this.currentPage)
 			}else {
 				this._getPosList(this.currentPage)
@@ -88,7 +113,8 @@
 			uni.stopPullDownRefresh()
 		},
 		components: {
-			PositionList
+			PositionList,
+			Statistics
 		},
 		computed: {
 			...mapGetters([
@@ -97,7 +123,8 @@
 				'hopeCity',
 				'hopeType',
 				'hopeDate',
-				'hopePos'
+				'hopePos',
+				'userInfo'
 			])
 		},
 		methods: {
@@ -127,6 +154,8 @@
 				if(this.hopePos !== '' && this.key) key = this.key.split('-')[1]
 				if(this.hopeCity !== '') {
 					city = this.hopeCity
+				}else if(this.userInfo.location !== '') {
+					city = this.userInfo.location
 				}
 				if(this.hopeType !== '') filter.jobNature = [this.hopeType]
 				const res = await searchPos(key, city, page, filter)
@@ -199,11 +228,11 @@
 		
 	}
 	.index_swiper {
+		// background-color: $back-color;
 		height: 340rpx;
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		background-color: $back-color;
 		swiper {
 			height: 280rpx;
 			width: 90%;
@@ -216,9 +245,12 @@
 	}
 	.index_navigator {
 		height: 100rpx;
-		border-top-left-radius: 20rpx;
-		border-top-right-radius: 20rpx;
-		navigator {
+		// background-color: $back-color;
+		// border-top: 4rpx solid $back-color;
+		border-bottom: 2rpx solid $back-color;
+		.navigator_box, navigator {
+			background-image: linear-gradient(to bottom right, #e5ccff3f, #ffffff);
+			background-color: white;
 			width: 100%;
 			height: 100%;
 			display: flex;
@@ -226,9 +258,17 @@
 			.nav_title {
 				font-size: 36rpx;
 				color: $main-color;
-				margin: 0 10rpx 0 30rpx;
+				margin: 0 10rpx 0 60rpx;
 			}
 		}
+		.navigator_box {
+			border-top-left-radius: 30rpx;
+			border-top-right-radius: 30rpx;
+		}
+	}
+	.statistics {
+		width: 100%;
+		height: 100%;
 	}
 	
 }

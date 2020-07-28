@@ -236,6 +236,13 @@ export default {
       chart.axis("total", {
         grid: false
       });
+      chart.axis("name", {
+        label: {
+          rotate: 120
+        },
+        labelOffset: 15,
+        position: "bottom"
+      })
       chart.tooltip({
         showItemMarker: false,
         background: {

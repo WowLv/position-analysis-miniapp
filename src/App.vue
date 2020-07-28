@@ -2,6 +2,7 @@
 import { mapActions } from 'vuex'
 	export default {
 		onLaunch() {
+			//模拟首页加载时从用户服务器拉取用户数据
 			let collectList = uni.getStorageSync('collectList')
 			if(collectList && collectList.length) {
 				console.log('ok')
@@ -31,7 +32,10 @@ import { mapActions } from 'vuex'
 						this.setHopeData({type: keys[index], data: item})
 					}
 				})
-				console.log(this.hopeObj)
+			}
+			if(uni.getStorageSync('userHabit')) {
+				let userHabit = uni.getStorageSync('userHabit')
+				this.setUserHabit(userHabit)
 			}
 		},
 		methods: {
@@ -40,7 +44,8 @@ import { mapActions } from 'vuex'
 				'setEduInfo',
 				'setResumeInfo',
 				'setHopeData',
-				'setProjInfo'
+				'setProjInfo',
+				'setUserHabit'
 			])
 		}
 	}
