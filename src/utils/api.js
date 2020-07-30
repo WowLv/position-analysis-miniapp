@@ -56,9 +56,10 @@ export function getPosSalary(obj) {
 }
 
 
-// export function test() {
-// 	return request({
-// 		url: '/test',
-// 		method: 'GET'
-// 	})
-// }
+export function matchPos(filter) {
+	return request({
+		url: '/matchPos',
+		method: 'GET',
+		data: filter
+	})
+}

@@ -15,7 +15,7 @@
 		<swiper :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish" class="tab_swiper">
 			<swiper-item class="tab_items" v-for="(item, index) in tabs" :key="index">
 				<scroll-view scroll-y class="scroll_box" v-if="item.type === 1">
-					<view class="item" v-for="item in recommondList" :key="item.pid">
+					<view class="item" v-for="item in recommondList" :key="item.positionId" @click="toPosDetail" :data-pid="item.positionId">
 						<text class="title">为你匹配一条招聘信息</text>
 						<view class="value">
 							<view class="left">
@@ -27,7 +27,7 @@
 									<text class="salary">{{item.salary}}</text>
 								</view>
 								<view class="r_middle">
-									<text>{{item.companyName}}</text>
+									<text>{{item.companyShortName}}</text>
 									<text class="point">·</text>
 									<text>{{item.city}}</text>
 									<text>{{item.workYear}}</text>
@@ -42,7 +42,10 @@
 				</scroll-view>
 				<scroll-view scroll-y class="scroll_box" v-if="item.type === 2">
 					<view class="item">
-						联系客服
+						<button class="contact" open-type="contact" @contact="handleContact">
+							<view class="iconfont icon-kefu"></view>
+							<text>联系客服</text>
+						</button>
 					</view>
 				</scroll-view>
 			</swiper-item>
@@ -51,7 +54,9 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import TabsSwiper from '@/components/tabs-swiper/tabs-swiper'
+import { matchPos } from '@/utils/api'
 	export default {
 		data() {
 			return {
@@ -64,9 +69,7 @@ import TabsSwiper from '@/components/tabs-swiper/tabs-swiper'
 					{	
 						type: 1,
 						name: '消息',
-					 	content: [
-							{ pid: 1716541, city: "广州", companyLogo:"//www.lgstatic.com/thumbnail_160x160/image1/M00/37/D4/CgYXBlWjz7aAav4uAAAamQKHn4M680.png?cc=0.40202441322617233", positionName: "Java WEB程序员", companyName: "金科汇智", salary: "3K-6K", workYear: "应届毕业生", jobNature: "实习", industryField: "移动互联网,金融"},
-						 ] 
+					 	content: [] 
 					},
 					{ 
 						type: 2,
@@ -78,10 +81,38 @@ import TabsSwiper from '@/components/tabs-swiper/tabs-swiper'
 				swiperCurrent: 0, // swiper组件的current值，表示当前那个swiper-item是活动的
 			};
 		},
+		onLoad() {
+			let userLocation = ''
+			if(this.userInfo.location) {
+				userLocation = this.userInfo.location
+			}
+			let extraId = ''
+			if(this.userCollect.length) {
+				extraId = this.userCollect.map((item) => item.positionId)
+			}
+			this._matchPos({
+					salary: this.hopeSalary,
+					city: this.hopeCity || userLocation || this.userHabit.cityList.map(item => item[0]),
+					pos: this.hopePos || this.userHabit.typeList.map(item => item[0]),
+					jobNature: this.hopeType,
+					positionLables: this.userHabit.skillList.map(item => item[0]),
+					extraId
+				})
+			
+		},
 		components: {
 			TabsSwiper
 		},
 		computed: {
+			...mapGetters([
+				'hopeSalary',
+				'hopeCity',
+				'hopeType',
+				'hopePos',
+				'userInfo',
+				'userHabit',
+				'userCollect'
+			]),
 			recommondList() {
 				let currList = this.tabs[0].content.map((item) => {
 					item.industryField = item.industryField.split(',')
@@ -108,6 +139,28 @@ import TabsSwiper from '@/components/tabs-swiper/tabs-swiper'
 				this.swiperCurrent = current;
 				this.current = current;
 			},
+			handleContact(e) {
+				console.log(e)
+			},
+			async _matchPos(filter) {
+				let res = await matchPos(filter)
+				console.log(filter)
+				console.log(res.data)
+				this.tabs[0].content = res.data.map((item) => {
+					item.companyLogo = `//www.lgstatic.com/thumbnail_160x160/${item.companyLogo}`
+					console.log(item.positionName.length)
+					if(item.positionName.length > 11) {
+						item.positionName = item.positionName.substr(0,11).concat('...')
+					}
+					return item
+				})
+				
+			},
+			toPosDetail(e) {
+				uni.navigateTo({
+					 url: `../posDetail/posDetail?pid=${e.currentTarget.dataset.pid}`
+				})
+			}
 		}
 	}
 </script>
@@ -141,6 +194,7 @@ import TabsSwiper from '@/components/tabs-swiper/tabs-swiper'
 						border-radius: 10rpx;
 						display: flex;
 						flex-direction: column;
+						position: relative;
 						&:first-of-type {
 							margin: 0;
 						}
@@ -203,6 +257,26 @@ import TabsSwiper from '@/components/tabs-swiper/tabs-swiper'
 										border-radius: 8rpx;
 									}
 								}
+							}
+						}
+						.contact {
+							background-color: white;
+							position: absolute;
+							top: 0;
+							left: 0;
+							width: 100%;
+							height: 100%;
+							display: flex;
+							justify-content: center;
+							align-items: center;
+							text, .icon-kefu {
+								color: $actived-color;
+								font-weight: 450;
+								font-size: 48rpx;
+							}
+							.icon-kefu {
+								font-size: 55rpx;
+								margin-right: 30rpx;
 							}
 						}
 					}
