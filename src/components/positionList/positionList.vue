@@ -104,6 +104,7 @@ import { searchPos } from '../../utils/api'
 						famousCompany: item.famousCompany
 					}
 					curList.push(obj)
+					this.setUserInfo({ type: 'viewHistory', data: curList})
 				})
 				return curList
 			},
@@ -120,7 +121,8 @@ import { searchPos } from '../../utils/api'
 		methods: {
 			...mapActions([
 				'setSearchedPosList',
-				'deleteCollect'
+				'deleteCollect',
+				'setUserInfo'
 			]),
 			toPosDetail(e) {
 				let pid = e.currentTarget.dataset.pid

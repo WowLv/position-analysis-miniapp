@@ -14,8 +14,13 @@
 		</view>
 		<swiper :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish" class="tab_swiper">
 			<swiper-item class="tab_items" v-for="(item, index) in tabs" :key="index">
-				<scroll-view scroll-y class="scroll_box" v-if="item.type === 1">
-					<view class="item" v-for="item in recommondList" :key="item.positionId" @click="toPosDetail" :data-pid="item.positionId">
+				<view class="no_result" v-if="!recommondList.length">暂无匹配到职位</view>
+				<scroll-view scroll-y class="scroll_box" v-if="item.type === 1 && recommondList.length">
+					<view class="item" 
+					v-for="item in recommondList" 
+					:key="item.positionId" 
+					@click="toPosDetail" 
+					:data-pid="item.positionId">
 						<text class="title">为你匹配一条招聘信息</text>
 						<view class="value">
 							<view class="left">
@@ -87,15 +92,13 @@ import { matchPos } from '@/utils/api'
 				userLocation = this.userInfo.location
 			}
 			let extraId = ''
-			if(this.userCollect.length) {
-				extraId = this.userCollect.map((item) => item.positionId)
-			}
+			if(this.userInfo.viewHistory) { extraId = this.userInfo.viewHistory }
 			this._matchPos({
 					salary: this.hopeSalary,
-					city: this.hopeCity || userLocation || this.userHabit.cityList.map(item => item[0]),
-					pos: this.hopePos || this.userHabit.typeList.map(item => item[0]),
+					city: this.hopeCity || userLocation || (this.userHabit.cityList && this.userHabit.cityList.map(item => item[0])) || '',
+					pos: this.hopePos || ( this.userHabit.typeList && this.userHabit.typeList.map(item => item[0])) || '',
 					jobNature: this.hopeType,
-					positionLables: this.userHabit.skillList.map(item => item[0]),
+					positionLables: this.userHabit.skillList && this.userHabit.skillList.map(item => item[0]) || '',
 					extraId
 				})
 			
@@ -110,8 +113,7 @@ import { matchPos } from '@/utils/api'
 				'hopeType',
 				'hopePos',
 				'userInfo',
-				'userHabit',
-				'userCollect'
+				'userHabit'
 			]),
 			recommondList() {
 				let currList = this.tabs[0].content.map((item) => {
@@ -149,8 +151,11 @@ import { matchPos } from '@/utils/api'
 				this.tabs[0].content = res.data.map((item) => {
 					item.companyLogo = `//www.lgstatic.com/thumbnail_160x160/${item.companyLogo}`
 					console.log(item.positionName.length)
-					if(item.positionName.length > 11) {
-						item.positionName = item.positionName.substr(0,11).concat('...')
+					if(item.positionName.length > 9) {
+						item.positionName = item.positionName.substr(0,9).concat('...')
+					}
+					if(item.companyShortName.length > 6) {
+						item.companyShortName = item.companyShortName.substr(0,6).concat('...')
 					}
 					return item
 				})
@@ -181,6 +186,13 @@ import { matchPos } from '@/utils/api'
 			width: 95%;
 			height: 93vh;
 			.tab_items {
+				.no_result {
+					display: flex;
+					justify-content: center;
+					font-size: $middle-size;
+					margin-top: 200rpx;
+					color: $middle-color;
+				}
 				.scroll_box {
 					height: 100%;
 					display: flex;

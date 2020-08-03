@@ -1,4 +1,4 @@
-import { getRegionRank, getProvinceRank } from '@/utils/api'
+import { getRegionRank, getProvinceRank, getPosRank } from '@/utils/api'
 import { TopFiveDate } from '@/utils/utils'
 const hope = {
 	state: {

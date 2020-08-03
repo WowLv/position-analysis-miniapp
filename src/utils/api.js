@@ -47,15 +47,6 @@ export function getPosRank() {
 	})
 }
 
-export function getPosSalary(obj) {
-	return analysisReq({
-		url: '/Exp_Scalary_Servlet',
-		method: 'GET',
-		data: obj
-	})
-}
-
-
 export function matchPos(filter) {
 	return request({
 		url: '/matchPos',

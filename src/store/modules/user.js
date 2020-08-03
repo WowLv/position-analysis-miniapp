@@ -1,3 +1,4 @@
+
 const user = {
 	state: {
 		userInfo: {},
@@ -27,8 +28,30 @@ const user = {
 		userHabit: state => state.userHabit
 	},
 	mutations: {
-		SET_USERLOCATION: (state, userInfo) => {
-			state.userInfo.location = userInfo
+		SET_USERLOCATION: (state, location) => {
+			state.userInfo.location = location
+			uni.setStorageSync('userViewInfo', state.userInfo)
+		},
+		SET_VIEWHISTORYL: (state, viewHistory) => {
+			if(typeof(viewHistory[0]) === 'object') {
+				if(!state.userInfo.viewHistory) {
+					viewHistory.map((item, index) => {
+						if(index === 0) { state.userInfo.viewHistory = [] }
+						state.userInfo.viewHistory.push(item.positionId)
+					})
+					state.userInfo.viewHistory = [...new Set(state.userInfo.viewHistory)]
+				}else {
+					viewHistory.map(item => {
+						state.userInfo.viewHistory.push(item.positionId)
+					})
+					state.userInfo.viewHistory = [...new Set(state.userInfo.viewHistory)]
+				}
+			}else {
+				console.log('no obj')
+				state.userInfo.viewHistory = viewHistory
+			}
+	
+			uni.setStorageSync('userViewInfo', state.userInfo)
 		},
 		SET_SEARCHHISTORY: (state, searchHistory) => {
 			// 首次加载从本地获取数组数据(模拟从服务器获取)
@@ -205,6 +228,9 @@ const user = {
 			switch(userInfo.type) {
 				case 'location':
 					commit('SET_USERLOCATION', userInfo.data)
+					break
+				case 'viewHistory':
+					commit('SET_VIEWHISTORYL', userInfo.data)
 					break
 			}
 		},
