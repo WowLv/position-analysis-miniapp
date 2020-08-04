@@ -14,43 +14,15 @@
 		</view>
 		<swiper :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish" class="tab_swiper">
 			<swiper-item class="tab_items" v-for="(item, index) in tabs" :key="index">
-				<view class="no_result" v-if="!recommondList.length">暂无匹配到职位</view>
-				<scroll-view scroll-y class="scroll_box" v-if="item.type === 1 && recommondList.length">
-					<view class="item" 
-					v-for="item in recommondList" 
-					:key="item.positionId" 
-					@click="toPosDetail" 
-					:data-pid="item.positionId">
-						<text class="title">为你匹配一条招聘信息</text>
-						<view class="value">
-							<view class="left">
-								<image :src="item.companyLogo" mode="widthFix" />
-							</view>
-							<view class="right">
-								<view class="r_top">
-									<text>{{item.positionName}}</text>
-									<text class="salary">{{item.salary}}</text>
-								</view>
-								<view class="r_middle">
-									<text>{{item.companyShortName}}</text>
-									<text class="point">·</text>
-									<text>{{item.city}}</text>
-									<text>{{item.workYear}}</text>
-									<text>{{item.jobNature}}</text>
-								</view>
-								<view class="r_bottom">
-									<text v-for="(el, index) in item.industryField" :key="index">{{el}}</text>
-								</view>
-							</view>
-						</view>
+				<scroll-view scroll-y class="scroll_box" v-if="item.type === 1">
+					<view class="item" v-for="item in tabs[0].content" :key="item.type">
+						<text class="title">{{item.title}}</text>
+						<text class="value">{{item.value}}</text>
 					</view>
 				</scroll-view>
 				<scroll-view scroll-y class="scroll_box" v-if="item.type === 2">
 					<view class="item">
-						<button class="contact" open-type="contact" @contact="handleContact">
-							<view class="iconfont icon-kefu"></view>
-							<text>联系客服</text>
-						</button>
+						<button class="button" open-type="contact">联系客服</button>
 					</view>
 				</scroll-view>
 			</swiper-item>
@@ -59,9 +31,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import TabsSwiper from '@/components/tabs-swiper/tabs-swiper'
-import { matchPos } from '@/utils/api'
 	export default {
 		data() {
 			return {
@@ -74,7 +44,10 @@ import { matchPos } from '@/utils/api'
 					{	
 						type: 1,
 						name: '消息',
-					 	content: [] 
+					 	content: [
+							{ title: '消息一', value: 1111},
+							{ title: '消息二', value: 2222}
+						 ] 
 					},
 					{ 
 						type: 2,
@@ -86,42 +59,8 @@ import { matchPos } from '@/utils/api'
 				swiperCurrent: 0, // swiper组件的current值，表示当前那个swiper-item是活动的
 			};
 		},
-		onLoad() {
-			let userLocation = ''
-			if(this.userInfo.location) {
-				userLocation = this.userInfo.location
-			}
-			let extraId = ''
-			if(this.userInfo.viewHistory) { extraId = this.userInfo.viewHistory }
-			this._matchPos({
-					salary: this.hopeSalary,
-					city: this.hopeCity || userLocation || (this.userHabit.cityList && this.userHabit.cityList.map(item => item[0])) || '',
-					pos: this.hopePos || ( this.userHabit.typeList && this.userHabit.typeList.map(item => item[0])) || '',
-					jobNature: this.hopeType,
-					positionLables: this.userHabit.skillList && this.userHabit.skillList.map(item => item[0]) || '',
-					extraId
-				})
-			
-		},
 		components: {
 			TabsSwiper
-		},
-		computed: {
-			...mapGetters([
-				'hopeSalary',
-				'hopeCity',
-				'hopeType',
-				'hopePos',
-				'userInfo',
-				'userHabit'
-			]),
-			recommondList() {
-				let currList = this.tabs[0].content.map((item) => {
-					item.industryField = item.industryField.split(',')
-					return item
-				})
-				return currList
-			}
 		},
 		methods: {
 			// tabs通知swiper切换
@@ -141,31 +80,6 @@ import { matchPos } from '@/utils/api'
 				this.swiperCurrent = current;
 				this.current = current;
 			},
-			handleContact(e) {
-				console.log(e)
-			},
-			async _matchPos(filter) {
-				let res = await matchPos(filter)
-				console.log(filter)
-				console.log(res.data)
-				this.tabs[0].content = res.data.map((item) => {
-					item.companyLogo = `//www.lgstatic.com/thumbnail_160x160/${item.companyLogo}`
-					console.log(item.positionName.length)
-					if(item.positionName.length > 9) {
-						item.positionName = item.positionName.substr(0,9).concat('...')
-					}
-					if(item.companyShortName.length > 6) {
-						item.companyShortName = item.companyShortName.substr(0,6).concat('...')
-					}
-					return item
-				})
-				
-			},
-			toPosDetail(e) {
-				uni.navigateTo({
-					 url: `../posDetail/posDetail?pid=${e.currentTarget.dataset.pid}`
-				})
-			}
 		}
 	}
 </script>
@@ -186,13 +100,6 @@ import { matchPos } from '@/utils/api'
 			width: 95%;
 			height: 93vh;
 			.tab_items {
-				.no_result {
-					display: flex;
-					justify-content: center;
-					font-size: $middle-size;
-					margin-top: 200rpx;
-					color: $middle-color;
-				}
 				.scroll_box {
 					height: 100%;
 					display: flex;
@@ -200,96 +107,23 @@ import { matchPos } from '@/utils/api'
 					.item {
 						margin: 20rpx 0;
 						width: 100%;
-						height: 240rpx;
+						height: 150rpx;
 						border: 2rpx solid $border-color;
 						box-shadow: 1rpx 2rpx 15rpx $circle-border-color;
 						border-radius: 10rpx;
-						display: flex;
-						flex-direction: column;
-						position: relative;
 						&:first-of-type {
 							margin: 0;
 						}
-						.title {
-							flex: 2;
-							display: flex;
-							justify-content: center;
-							align-items: center;
-							font-size: $middle-size;
-							color: $actived-color
-						}
-						.value {
-							flex: 7;
-							display: flex;
-							.left {
-								flex: 3;
-								display: flex;
-								justify-content: center;
-								align-items: center;
-								image {
-									width: 60%;
-								}
-							}
-							.right {
-								flex: 7;
-								display: flex;
-								flex-direction: column;
-								.r_top {
-									display: flex;
-									justify-content: space-between;
-									padding: 10rpx 10rpx 0 10rpx;
-									color: $main-color;
-									font-size: $title-size;
-									.salary {
-										color: $salary-color;
-									}
-								}
-								.r_middle {
-									color: $middle-color;
-									font-size: $middle-size;
-									.point {
-										font-weight: 500;
-									}
-									text {
-										padding: 0 10rpx;
-										&:nth-of-type(4), &:nth-of-type(5){
-											border-left: 4rpx solid $border-color;
-										}
-									}
-								}
-								.r_bottom {
-									margin-top: 10rpx;
-									text {
-										display: inline-block;
-										font-size: $middle-size;
-										color: $shallow-color;
-										background-color: $back-color;
-										padding: 0 10rpx;
-										margin-right: 15rpx;
-										border-radius: 8rpx;
-									}
-								}
-							}
-						}
-						.contact {
+						.button{
 							background-color: white;
-							position: absolute;
-							top: 0;
-							left: 0;
-							width: 100%;
 							height: 100%;
 							display: flex;
-							justify-content: center;
 							align-items: center;
-							text, .icon-kefu {
-								color: $actived-color;
-								font-weight: 450;
-								font-size: 48rpx;
-							}
-							.icon-kefu {
-								font-size: 55rpx;
-								margin-right: 30rpx;
-							}
+							justify-content: center;
+						}
+						.button::after{
+							border: none;
+							border-radius: 0;
 						}
 					}
 				}
