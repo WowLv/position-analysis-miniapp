@@ -12,9 +12,16 @@
 		</view>
 		<view class="my_setting" >
 			<view v-for="(item, index) in settingList" :key="index">
-				<cell cType="navigator" :cUrl="item.url" isSlot :bottom="index === settingList.length-1">
+				<cell v-if="index===4" cType="button" isSlot :bottom="index === settingList.length-1">
+					 <button class="button" open-type="feedback"> 
+						<text class="iconfont" :class="item.class">
+							<text class="title">{{item.name}}</text>
+						</text>
+					 </button> 
+				</cell>
+				<cell v-else cType="navigator" @click="hangle" :cUrl="item.url" isSlot :bottom="index === settingList.length-1">
 					<text class="iconfont" :class="item.class">
-						<text class="title">{{item.name}}</text>
+						<text class="title button_title">{{item.name}}</text>
 					</text>
 				</cell>
 			</view>
@@ -40,6 +47,7 @@ import cell from '@/components/cell/cell'
 					{ name: '附件简历', class: 'icon-folder', url: '../../person/pages/resumeAttachment/resumeAttachment'},
 					{ name: '投递记录', class: 'icon-history', url: '../../person/pages/history/history'},
 					{ name: '我的收藏', class: 'icon-collection', url: '../../person/pages/collect/collect'},
+					{ name: '意见反馈', class: 'icon-feeds'},
 					{ name: '设置', class: 'icon-zhanghucaozuo', url: '../../person/pages/setting/setting'}
 				],
 				userInfo: null
@@ -93,7 +101,7 @@ import cell from '@/components/cell/cell'
 					}
 				})
 			}
-		}
+		},
 	}
 </script>
 
@@ -150,6 +158,18 @@ import cell from '@/components/cell/cell'
 					margin-left: 30rpx;
 					font-size: 34rpx;
 				}
+			}
+			.button {
+				 width: 100%;
+				 background: white;
+				 text-align: left;
+				 padding: 7rpx 10rpx 7rpx 0;
+				 margin: 0rpx;
+				 line-height: 1.6
+			}
+			.button::after {
+				border: none;
+				border-radius: 0;
 			}
 			.my_logout {
 				margin-top: 50rpx;
