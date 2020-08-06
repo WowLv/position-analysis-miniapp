@@ -12,7 +12,8 @@
 				<text class="iconfont icon-collection-fill" v-else></text>
 				<text class="in_text">收藏</text>
 			</view>
-			<view class="submit" @click="handleSubmit">投递简历</view>
+			<view class="submit" v-if="!isDelivery" @click="handleDelivery">投递简历</view>
+			<view class="submitSuccess" v-else>半年内不能重复投递</view>
 		</view>
 	</view>
 </template>
@@ -37,7 +38,8 @@ import { mapGetters, mapActions } from 'vuex'
 		},
 		computed: {
 			...mapGetters([
-				'userCollect'
+				'userCollect',
+				'userDelivery'
 			]),
 			isCollect() {
 				let flag = false
@@ -49,12 +51,25 @@ import { mapGetters, mapActions } from 'vuex'
 					})
 				}
 				return flag
-			}
+			},
+			isDelivery() {
+				let flag = false
+				if(this.userDelivery.length) {
+					this.userDelivery.map((item) => {
+						if(parseInt(item.positionId) === this.pid) {
+							flag = true
+						}
+					})
+				}
+				return flag
+			},
 		},
 		methods: {
 			...mapActions([
 				'setCollect',
-				'deleteCollect'
+				'deleteCollect',
+				'setDelivery',
+				'deleteDelivery'
 			]),
 			handleCollect() {
 				if(!this.isCollect) {
@@ -68,23 +83,14 @@ import { mapGetters, mapActions } from 'vuex'
 						title: '已取消'
 					})
 				}
-				
 			},
-			handleSubmit() {
-				uni.showActionSheet({
-					itemList: ['在线简历','附件简历'],
-					success: (res) => {
-						if(res.tapIndex === 0) {
-							uni.navigateTo({
-								 url: '../../person/pages/resumeOnline/resumeOnline?mode=submit'
-							});
-						}else {
-							uni.navigateTo({
-								 url: '../../person/pages/resumeAttachment/resumeAttachment?mode=submit'
-							});
-						}
-					}
-				});
+			handleDelivery() {
+				if(!this.isDelivery) {
+					this.setDelivery(this.data)
+					uni.showToast({
+						title: '投递成功'
+					})
+				}
 			}
 		}
 	}
@@ -141,8 +147,7 @@ import { mapGetters, mapActions } from 'vuex'
 					opacity: 0;
 				}
 			}
-			.submit {
-				background-color: #309263;
+			.submit , .submitSuccess {
 				flex: 6;
 				color: $border-color;
 				font-size: $main-size;
@@ -150,6 +155,13 @@ import { mapGetters, mapActions } from 'vuex'
 				display: flex;
 				justify-content: center;
 				align-items: center;
+				
+			}
+			.submit {
+				background-color: #309263;
+			}
+			.submitSuccess {
+				background-color:$shallow-color;
 			}
 		}
 		
