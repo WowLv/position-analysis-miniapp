@@ -95,6 +95,7 @@ import { matchPos } from '@/utils/api'
 			if(this.userInfo.viewHistory) { extraId = this.userInfo.viewHistory }
 			this._matchPos({
 					salary: this.hopeSalary,
+					//调试时都为数组
 					city: this.hopeCity || userLocation || (this.userHabit.cityList && this.userHabit.cityList.map(item => item[0])) || '',
 					pos: this.hopePos || ( this.userHabit.typeList && this.userHabit.typeList.map(item => item[0])) || '',
 					jobNature: this.hopeType,

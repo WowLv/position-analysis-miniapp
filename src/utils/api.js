@@ -54,3 +54,17 @@ export function matchPos(filter) {
 		data: filter
 	})
 }
+
+export function getCompare() {
+	return request({
+		url: '/getCompare',
+		method: 'GET'
+	})
+}
+
+export function posTrend() {
+	return request({
+		url: '/posTrend',
+		method: 'GET'
+	})
+}

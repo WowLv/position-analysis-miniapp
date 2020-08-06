@@ -3,39 +3,90 @@
       <view class="data_box add">
           <text class="box box_top">较昨日<text class="top_add add">+3088</text></text>
           <text class="box box_middle add">133888</text>
+          <!-- <text class="box box_top">
+              较昨日
+              <text class="top_add add" v-if="dataObj.recruitmentTotal.today - dataObj.recruitmentTotal.yesterday >= 0">+{{dataObj.recruitmentTotal.today - dataObj.recruitmentTotal}}</text>
+              <text class="top_add minus" v-else>{{dataObj.recruitmentTotal.today - dataObj.recruitmentTotal}}</text>
+            </text> -->
+          <!-- <text class="box box_middle add">{{dataObj.recruitmentTotal.today}}</text> -->
           <text class="box box_bottom">招聘数量</text>
       </view>
       <view class="data_box minus">
           <text class="box box_top">较昨日<text class="top_add minus">-108</text></text>
           <text class="box box_middle minus">2888</text>
+          <!-- <text class="box box_top">
+              较昨日
+              <text class="top_add add" v-if="dataObj.positionTotal.today - dataObj.positionTotal.yesterday >= 0">+{{dataObj.positionTotal.today - dataObj.positionTotal.yesterday}}</text>
+              <text class="top_add minus" v-else>{{dataObj.positionTotal.today - dataObj.positionTotal.yesterday}}</text>
+            </text> -->
+          <!-- <text class="box box_middle add">{{dataObj.positionTotal.today}}</text> -->
           <text class="box box_bottom">岗位数量</text>
       </view>
       <view class="data_box add">
           <text class="box box_top">较昨日<text class="add">+98</text></text>
           <text class="box box_middle add">4888</text>
+          <!-- <text class="box box_top">
+              较昨日
+              <text class="top_add add" v-if="dataObj.companyTotal.today - dataObj.companyTotal.yesterday >= 0">+{{dataObj.companyTotal.today - dataObj.companyTotal.yesterday}}</text>
+              <text class="top_add minus" v-else>{{dataObj.companyTotal.today - dataObj.companyTotal.yesterday}}</text>
+            </text> -->
+          <!-- <text class="box box_middle add">{{dataObj.companyTotal.today}}</text> -->
           <text class="box box_bottom">企业数量</text>
       </view>
       <view class="data_box add">
           <text class="box box_top">较昨日<text class="top_add add">+6</text></text>
           <text class="box box_middle add">108</text>
+          <!-- <text class="box box_top">
+              较昨日
+              <text class="top_add add" v-if="dataObj.cityTotal.today - dataObj.cityTotal.yesterday >= 0">+{{dataObj.cityTotal.today - dataObj.cityTotal.yesterday}}</text>
+              <text class="top_add minus" v-else>{{dataObj.cityTotal.today - dataObj.cityTotal.yesterday}}</text>
+            </text> -->
+          <!-- <text class="box box_middle add">{{dataObj.cityTotal.today}}</text> -->
           <text class="box box_bottom">城市数量</text>
       </view>
       <view class="data_box add">
           <text class="box box_top">较昨日<text class="top_add add">+15</text></text>
           <text class="box box_middle add">988</text>
+          <!-- <text class="box box_top">
+              较昨日
+              <text class="top_add add" v-if="dataObj.practiceTotal.today - dataObj.practiceTotal.yesterday >= 0">+{{dataObj.practiceTotal.today - dataObj.practiceTotal.yesterday}}</text>
+              <text class="top_add minus" v-else>{{dataObj.practiceTotal.today - dataObj.practiceTotal.yesterday}}</text>
+            </text> -->
+          <!-- <text class="box box_middle add">{{dataObj.practiceTotal.today}}</text> -->
           <text class="box box_bottom">实习岗位</text>
       </view>
       <view class="data_box minus">
           <text class="box box_top">较昨日<text class="top_add minus">-56</text></text>
           <text class="box box_middle minus">886</text>
+          <!-- <text class="box box_top">
+              较昨日
+              <text class="top_add add" v-if="dataObj.firstCityTotal.today - dataObj.firstCityTotal.yesterday >= 0">+{{dataObj.firstCityTotal.today - dataObj.firstCityTotal.yesterday}}</text>
+              <text class="top_add minus" v-else>{{dataObj.firstCityTotal.today - dataObj.firstCityTotal.yesterday}}</text>
+            </text> -->
+          <!-- <text class="box box_middle add">{{dataObj.firstCityTotal.today}}</text> -->
           <text class="box box_bottom">一线城市</text>
       </view>
   </view>
 </template>
 
 <script>
+// import { getCompare } from '@/utils/api'
 export default {
-
+    data() {
+        return {
+            dataObj: {}
+        }
+    },
+    created() {
+        // this._getCompare()
+    },
+    methods: {
+        // async _getCompare() {
+        //     let res = await getCompare()
+        //     this.dataObj = res.data[0]
+        //     console.log(res.data)
+        // }
+    }
 }
 </script>
 
@@ -82,21 +133,6 @@ export default {
         .minus {
             color: #ff99cc;
         }
-        // &:nth-of-type(2) {
-        //     background-color: #e5f2ff2f;
-        // }
-        // &:nth-of-type(3) {
-        //     background-color: #ffffe52f;
-        // }
-        // &:nth-of-type(4) {
-        //     background-color: #f2e5ff2f;
-        // }
-        // &:nth-of-type(5) {
-        //     background-color: #e5ffe53f;
-        // }
-        // &:nth-of-type(6) {
-        //     background-color: #ffece52f;
-        // }
     }
 }
 </style>

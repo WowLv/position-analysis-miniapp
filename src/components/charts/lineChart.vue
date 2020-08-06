@@ -85,7 +85,7 @@ export default {
                     .color("type");
                 chart.render();
                 return chart
-            }
+        }
     }
 }
 </script>

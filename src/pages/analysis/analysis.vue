@@ -1,24 +1,23 @@
 <template>
   <view class="container">
+    <!-- 曲线对比图 -->
     <view class="line">
       <line-chart :cData="lineData"></line-chart>
+      <!-- <line-chart :cData="lineData" v-if="showTrend"></line-chart> -->
     </view>
-    <!-- <text v-if="hopeCity" class="chart_title">{{hopeCity}}市职业技能数据</text>
-    <text v-else class="chart_title">职业技能数据</text>
-    <view class="chart_box">
-      <f2 :onInit="onInitColumnChart" v-if="showSkill" />
-    </view>-->
 
     <text v-if="hopeCity" class="chart_title">{{hopeCity}}市招聘数据分析</text>
     <text v-else class="chart_title">招聘数据分析</text>
     <view class="middle_box">
+      <!-- 地区排行图 -->
       <view class="chart_box circle_chart">
         <circle-chart :cData="regionRank" v-if="showRegion"></circle-chart>
-        <!-- <f2 :onInit="onInitCircleChart" v-if="showRegion" /> -->
+        <f2 :onInit="onInitCircleChart" v-if="showRegion" />
       </view>
+      <!-- 当前技术栈排行 -->
       <view class="chart_box column_chart">
         <column-chart :cData="skillRank" v-if="showSkill"></column-chart>
-        <!-- <f2 :onInit="onInitColumnChart" v-if="showSkill" /> -->
+        <f2 :onInit="onInitColumnChart" v-if="showSkill" />
       </view>
     </view>
   </view>
@@ -31,12 +30,12 @@ import ColumnChart from '@/components/charts/columnChart'
 import CircleChart from '@/components/charts/circleChart'
 
 export default {
+// import { posTrend } from '@/utils/api'
   data() {
     return {
-      lineData: [],
       showSkill: false,
       showRegion: false,
-      showSalary: false,
+      showTrend: false,
       mySalary: [
         "3k及以下",
         "4k",
@@ -87,6 +86,8 @@ export default {
     };
   },
   onLoad() {
+    // this._posTrend()
+    // .then(() => { this.showTrend = true })
     if (uni.getStorageSync("hopeObj")) {
       let firstHopeObj = uni.getStorageSync("hopeObj");
       this.setReady(firstHopeObj).then(() => {
@@ -118,6 +119,11 @@ export default {
   },
   methods: {
     ...mapActions(["setHopeData", "setReady"]),
+    // async _posTrend() {
+        //     let res = await posTrend()
+        //     this.lineData = res.data
+        //     console.log(res.data)
+        // }
     
   }
 };

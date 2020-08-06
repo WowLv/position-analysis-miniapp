@@ -62,7 +62,7 @@
 		</view>
 		<!-- 数据分析 -->
 		<view class="chart_box">
-			<radarChart class="chart" :radarData="radarData"></radarChart>
+			<radarChart class="chart" :radarData="radarData" v-if="isShowRadar"></radarChart>
 		</view>
 		<!-- 工作地点 -->
 		<view class="pos_location">
@@ -88,53 +88,90 @@
 </template>
 
 <script>
-	//  let salaryList = [
-	// 	"30k-60k",
-	// 	"25k-50k",
-	// 	"30k-50k",
-	// 	"20k-35k",
-	// 	"15k-25k",
-	// 	"30k-55k"
-	// ]
-	// let workYearList = [
-	// 	"5-10年",
-	// 	"3-5年",
-	// 	"应届毕业生",
-	// 	"不限",
-	// 	"1-3年",
-	// 	"10年以上",
-	// 	"1年以下"
-	// ]
-	// let educationList = [
-	// 	"本科",
-	// 	"硕士",
-	// 	"不限",
-	// 	"大专",
-	// 	"博士"
-	// ]
-	// let financeStageList = [
-	// 	"上市公司",
-	// 	"天使轮",
-	// 	"D轮及以上",
-	// 	"不需要融资",
-	// 	"B轮",
-	// 	"C轮",
-	// 	"未融资",
-	// 	"A轮"
-	// ]
-	// let companySizeList = [
-	// 	"2000人以上",
-	// 	"15-50人",
-	// 	"50-150人",
-	// 	"150-500人",
-	// 	"500-2000人",
-	// 	"少于15人"
-	// ]
-	// let jobNatureList = [
-	// 	"全职",
-	// 	"实习",
-	// 	"兼职"
-	// ]
+	let salaryList = [
+		"5k", "13k", "18k", "25k", "60k"
+	]
+	let workYearList = [
+		"不限",	
+		"应届毕业生",
+		"1年以下",
+		"1-3年",
+		"3-5年", 
+		"5-10年",
+		"10年以上"
+	]
+	let educationList = [
+		"不限",
+		"大专",
+		"本科",
+		"硕士",
+		"博士"
+	]
+	let financeStageList = [
+		"未融资",
+		"不需要融资",
+		"天使轮", 
+		"A轮",	
+		"B轮",
+		"C轮",	
+		"D轮及以上",
+		"上市公司"
+	]
+	let companySizeList = [
+		"少于15人",
+		"15-50人",
+		"50-150人",
+		"150-500人", 
+		"500-2000人",
+		"2000人以上"
+		
+	]
+	let jobNatureList = [
+		"兼职", 
+		"实习",
+		"全职" 
+	]
+
+	let _salaryList = [
+		"3k", "8k", "15k", "20k", "60k"
+	]
+	let _workYearList = [
+		"不限",	
+		"应届毕业生",
+		"1年以下",
+		"1-3年",
+		"3-5年", 
+		"5-10年"
+	]
+	let _educationList = [
+		"不限",
+		"大专",
+		"本科",
+		"硕士",
+		"博士"
+	]
+	let _financeStageList = [
+		"未融资",
+		"不需要融资",
+		"A轮",
+		"C轮",	
+		"D轮及以上",
+		"上市公司"
+	]
+	let _companySizeList = [
+		"少于15人",
+		"15-50人",
+		"50-150人",
+		"150-500人", 
+		"500-2000人",
+		"2000人以上"
+		
+	]
+	let _jobNatureList = [
+		"兼职", 
+		"实习",
+		"全职" 
+	]
 
 
 	import Bottom from '@/components/bottom/bottom.vue'
@@ -172,68 +209,72 @@
 					}
 				],
 				posObj: {},
+				order: [],
+				subOrder: [],
+				isShowRadar: false,
 				radarData: [
 					//value值计算：data/国内max*100 or data/当地max*100
 					//再修改legend的映射
 					{
-					name: "薪资水平",
-					type: "相比当地",
-					value: 30
+						name: "薪资水平",
+						type: "相比当地",
+						value: 0
 					},
 					{
-					name: "薪资水平",
-					type: "相比国内",
-					value: 50
+						name: "工作经验",
+						type: "相比当地",
+						value: 0
 					},
 					{
-					name: "工作经验",
-					type: "相比当地",
-					value: 40
+						name: "学历水平",
+						type: "相比当地",
+						value: 0
 					},
 					{
-					name: "工作经验",
-					type: "相比国内",
-					value: 40
+						name: "融资情况",
+						type: "相比当地",
+						value: 0
 					},
 					{
-					name: "学历水平",
-					type: "相比当地",
-					value: 60
+						name: "公司规模",
+						type: "相比当地",
+						value: 0
 					},
 					{
-					name: "学历水平",
-					type: "相比国内",
-					value: 50
+						name: "工作性质",
+						type: "相比当地",
+						value: 0
+					},
+
+					{
+						name: "薪资水平",
+						type: "相比国内",
+						value: 0
 					},
 					{
-					name: "工作性质",
-					type: "相比当地",
-					value: 75
+						name: "工作经验",
+						type: "相比国内",
+						value: 0
 					},
 					{
-					name: "工作性质",
-					type: "相比国内",
-					value: 65
+						name: "学历水平",
+						type: "相比国内",
+						value: 0
 					},
 					{
-					name: "公司规模",
-					type: "相比当地",
-					value: 20
+						name: "融资情况",
+						type: "相比国内",
+						value: 0
 					},
 					{
-					name: "公司规模",
-					type: "相比国内",
-					value: 55
+						name: "公司规模",
+						type: "相比国内",
+						value: 0
 					},
 					{
-					name: "融资情况",
-					type: "相比当地",
-					value: 45
-					},
-					{
-					name: "融资情况",
-					type: "相比国内",
-					value: 60
+						name: "工作性质",
+						type: "相比国内",
+						value: 0
 					}
 				]
 			}
@@ -247,10 +288,27 @@
 					city: this.posObj['city'],
 					positionLables: this.posObj['positionLables']
 				})
-				console.log(this.userHabit)
+				console.time('start')
+				this.getGrade({ 
+					workYear: workYearList,
+					education: educationList,
+					financeStage: financeStageList,
+					companySize: companySizeList,
+					jobNature: jobNatureList,
+					subworkYear: _workYearList,
+					subeducation: _educationList,
+					subfinanceStage: _financeStageList,
+					subcompanySize: _companySizeList,
+					subjobNature: _jobNatureList,
+				})
+				this.analyzeSalary(salaryList, _salaryList)
+				let totalList = this.subOrder.concat(this.order)
+				this.radarData.forEach((item, index) => {
+					item.value = ( totalList[index] + 1 ) * 20
+				})
+				this.isShowRadar = true
+				console.timeEnd('start')
 			})
-			
-			
 		},
 		computed: {
 			...mapGetters([
@@ -305,6 +363,94 @@
 			},
 			toggleMap() {
 				this.showMap = !this.showMap
+			},
+			getGrade(list) {
+				let valueList = Object.values(list)
+				let keyList = Object.keys(list)
+				for(let i = 0; i< keyList.length; i++) {
+					if(keyList[i].includes('sub')) {
+						valueList[i].map((item, index) => {
+							if(this.posObj[keyList[i].replace('sub','')] === item) {
+								if(valueList[i].length < 5) {
+									if(index === valueList[i].length-1) {
+										this.subOrder.push(4)
+									}else if(index === 0) {
+										this.subOrder.push(index)
+									}else {
+										this.subOrder.push(2)
+									}
+								}else if(valueList[i].length >= 5 && valueList[i].length < 7) {
+									if(index >= 4) {
+										this.subOrder.push(4)
+									}else {
+										this.subOrder.push(index)
+									}
+								}else {
+									if(index <= 1) {
+										this.subOrder.push(0)
+									}else if(index > 1 && index <3){
+										this.subOrder.push(1)
+									}else if(index >= 3 && index <5) {
+										this.subOrder.push(2)
+									}else if(index >= 5 && index <6) {
+										this.subOrder.push(3)
+									}else {
+										this.subOrder.push(4)
+									}
+								}
+							}
+						})
+					}else {
+						valueList[i].map((item, index) => {
+							if(this.posObj[keyList[i]] === item) {
+								if(valueList[i].length < 5) {
+									if(index === valueList[i].length-1) {
+										this.order.push(4)
+									}else if(index === 0) {
+										this.order.push(index)
+									}else {
+										this.order.push(2)
+									}
+								}else if(valueList[i].length >= 5 && valueList[i].length < 7) {
+									if(index >= 4) {
+										this.order.push(4)
+									}else {
+										this.order.push(index)
+									}
+								}else {
+									if(index <= 1) {
+										this.order.push(0)
+									}else if(index > 1 && index <3){
+										this.order.push(1)
+									}else if(index >= 3 && index <5) {
+										this.order.push(2)
+									}else if(index >= 5 && index <6) {
+										this.order.push(3)
+									}else {
+										this.order.push(4)
+									}
+								}
+							}
+						})
+					}
+				}
+			},
+			analyzeSalary(list, subList) {
+				let _salary = this.posObj.salary.split('-').reduce((total, val) => {
+					return ( parseInt(total.replace('k', '') ) + parseInt( val.replace('k', '') ) ) / 2
+				})
+				list.some((item, index) => {
+					if(parseInt(item.replace('k', '')) >= _salary ) {
+						this.order.unshift(index)
+						return true
+					} 
+				})
+				subList.some((item, index) => {
+					if(parseInt(item.replace('k', '')) >= _salary ) {
+						this.subOrder.unshift(index)
+						return true
+					} 
+				})
 			}
 		}
 	}

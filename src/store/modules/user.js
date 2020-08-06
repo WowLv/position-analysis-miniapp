@@ -161,7 +161,6 @@ const user = {
 		SET_HABIT: (state, habit) => {
 			// 统计浏览记录前三
 			let { secondType, city, positionLables } = habit
-			console.log(state.userHabit)
 			if(!Object.keys(state.userHabit).length) {
 				if(Array.isArray(city)) {
 					console.log('city is array')
