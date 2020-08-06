@@ -1,51 +1,40 @@
 <template>
 	<view class="container">
-		<view v-for="item in list" :key="item.id">
-			<mp-slideview :buttons="slideButtons" icon="true" @buttontap="handleTap">
-				<view class="weui">
-					{{item.top}}
-					<view>{{item.bottom}}</view>
-				</view>
-			</mp-slideview>
-		</view>
+		<view class="none" v-if="!userDelivery.length">暂无投递记录</view>
+		<position-list :posList="userDelivery" mode="history" v-else></position-list>
 	</view>
 </template>
 
 <script>
+import PositionList from '@/components/positionList/positionList'
+import { mapGetters } from 'vuex'
 export default {
 	data() {
 		return {
-			list: [
-				{ id: 1, top: '左滑可以删除(1)', bottom: '1'},
-				{ id: 2, top: '左滑可以删除(2)', bottom: '2'},
-			],
-			 slideButtons: [{
-				text: "收藏",
-				  src: "/static/shoucang.svg"
-				  //需要绝对路径
-            }]
+
 		}
 	},
-	methods: {
-		handleTap(e) {
-			console.log(e)
-		}
+	components: {
+		PositionList
+	},
+	computed: {
+		...mapGetters([
+			'userDelivery'
+		])
 	}
 }
 </script>
 
 <style lang="scss" scoped>
-
 .container {
-	height: 100%;
+	height: 100vh;
 	background-color: $back-color;
-	.weui {
-		height: 170rpx;
-		display: flex;
-		flex-direction: column;
-		background-color: white;
+	position: relative;
+	.none {
+		position: absolute;
+		top: 300rpx;
+		left: 38%;
+		color: $middle-color;
 	}
-	
-	
 }
 </style>
