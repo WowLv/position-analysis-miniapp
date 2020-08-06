@@ -1,13 +1,12 @@
-
 const user = {
 	state: {
 		userInfo: {},
 		searchHistory: [],
 		userCollect: [],
+		userDelivery:[],
 		eduInfo: [],
 		projInfo: [],
-		resumeInfo: {},
-		userHabit: {}
+		resumeInfo: {}
 	},
 	getters: {
 		userInfo: state => state.userInfo,
@@ -22,36 +21,14 @@ const user = {
 			}
 		},
 		userCollect: state => state.userCollect,
+		userDelivery: state => state.userDelivery,
 		resumeInfo: state => state.resumeInfo,
 		eduInfo: state => state.eduInfo,
-		projInfo: state => state.projInfo,
-		userHabit: state => state.userHabit
+		projInfo: state => state.projInfo
 	},
 	mutations: {
-		SET_USERLOCATION: (state, location) => {
-			state.userInfo.location = location
-			uni.setStorageSync('userViewInfo', state.userInfo)
-		},
-		SET_VIEWHISTORYL: (state, viewHistory) => {
-			if(typeof(viewHistory[0]) === 'object') {
-				if(!state.userInfo.viewHistory) {
-					viewHistory.map((item, index) => {
-						if(index === 0) { state.userInfo.viewHistory = [] }
-						state.userInfo.viewHistory.push(item.positionId)
-					})
-					state.userInfo.viewHistory = [...new Set(state.userInfo.viewHistory)]
-				}else {
-					viewHistory.map(item => {
-						state.userInfo.viewHistory.push(item.positionId)
-					})
-					state.userInfo.viewHistory = [...new Set(state.userInfo.viewHistory)]
-				}
-			}else {
-				console.log('no obj')
-				state.userInfo.viewHistory = viewHistory
-			}
-	
-			uni.setStorageSync('userViewInfo', state.userInfo)
+		SET_USERLOCATION: (state, userInfo) => {
+			state.userInfo.location = userInfo
 		},
 		SET_SEARCHHISTORY: (state, searchHistory) => {
 			// 首次加载从本地获取数组数据(模拟从服务器获取)
@@ -76,6 +53,8 @@ const user = {
 			state.searchHistory = []
 			uni.clearStorage('searchHistory');
 		},
+		
+		//存储用户收藏
 		SET_COLLECT: (state, userCollect) => {
 			if(userCollect instanceof Array) {
 				state.userCollect = userCollect
@@ -98,6 +77,31 @@ const user = {
 			console.log(state.userCollect)
 			uni.setStorageSync('collectList', state.userCollect)
 		},
+		
+		//存储用户投递
+		SET_DELIVERY: (state, userDelivery) => {
+			if(userDelivery instanceof Array) {
+				state.userDelivery = userDelivery
+			}else {
+				// if(userDelivery.companyLogo.indexOf('www.') > -1) {
+				// 	userDelivery.companyLogo = `//www.lgstatic.com/thumbnail_160x160/${userDelivery.companyLogo}`
+				// }
+				state.userDelivery.unshift(userDelivery)
+				uni.setStorageSync('deliveryList', state.userDelivery)
+			}
+			
+		},
+		DELETE_DELIVERY: (state, pid) => {
+			state.userDelivery.map((item) => {
+				if(parseInt(item.positionId) === pid) {
+					let index = state.userDelivery.indexOf(item)
+					state.userDelivery.splice(index,1)
+				}
+			})
+			console.log(state.userDelivery)
+			uni.setStorageSync('deliveryList', state.userDelivery)
+		},
+		
 		SET_RESUMEINFO: (state, resumeInfo) => {
 			state.resumeInfo = resumeInfo
 			uni.setStorageSync('infoObj', resumeInfo)
@@ -157,70 +161,6 @@ const user = {
 				}
 			})
 			uni.setStorageSync('projList', state.projInfo)
-		},
-		SET_HABIT: (state, habit) => {
-			// 统计浏览记录前三
-			let { secondType, city, positionLables } = habit
-			console.log(state.userHabit)
-			if(!Object.keys(state.userHabit).length) {
-				if(Array.isArray(city)) {
-					console.log('city is array')
-					state.userHabit.city = city
-				}else {
-					state.userHabit.city = [city]
-				}
-				if(Array.isArray(secondType)) {
-					state.userHabit.secondType = secondType
-				}else {
-					state.userHabit.secondType = [secondType]
-				}
-				// state.userHabit.city = [city]
-				// state.userHabit.secondType = [secondType]
-				state.userHabit.positionLables = [...positionLables]
-			}else {
-				console.log('执行SET_HABIT')
-				state.userHabit.secondType.push(secondType)
-				state.userHabit.city.push(city)
-				state.userHabit.positionLables.push(...positionLables)
-			}
-
-			let cityList = {}
-			let typeList = {}
-			let skillList = {}
-			state.userHabit.city.map((item) => {
-				console.log('执行了筛选')
-				if(!Object.keys(cityList).includes(item)) {
-					cityList[item] = 1
-				}else {
-					cityList[item] ++
-				}
-			})
-			state.userHabit.secondType.map((item) => {
-				if(!Object.keys(typeList).includes(item)) {
-					typeList[item] = 1
-				}else {
-					typeList[item] ++
-				}
-			})
-			state.userHabit.positionLables.map((item) => {
-				if(!Object.keys(skillList).includes(item)) {
-					skillList[item] = 1
-				}else {
-					skillList[item] ++
-				}
-			})
-
-			state.userHabit.cityList = Object.entries(cityList).sort((a,b) => {
-				return b[1] - a[1]
-			}).slice(0, 3)
-			state.userHabit.typeList = Object.entries(typeList).sort((a,b) => {
-				return b[1] - a[1]
-			}).slice(0, 3)
-			state.userHabit.skillList = Object.entries(skillList).sort((a,b) => {
-				return b[1] - a[1]
-			}).slice(0, 3)
-			//模拟存到用户数据库
-			uni.setStorageSync('userHabit', state.userHabit)
 		}
 	},
 	actions: {
@@ -228,9 +168,6 @@ const user = {
 			switch(userInfo.type) {
 				case 'location':
 					commit('SET_USERLOCATION', userInfo.data)
-					break
-				case 'viewHistory':
-					commit('SET_VIEWHISTORYL', userInfo.data)
 					break
 			}
 		},
@@ -246,6 +183,12 @@ const user = {
 		deleteCollect({ commit }, pid) {
 			commit('DELETE_COLLECT', pid)
 		},
+		setDelivery({ commit }, userDelivery) {
+			commit('SET_DELIVERY', userDelivery)
+		},
+		deleteDelivery({ commit }, pid) {
+			commit('DELETE_DELIVERY', pid)
+		},
 		setResumeInfo({ commit }, resumeInfo) {
 			commit('SET_RESUMEINFO', resumeInfo)
 		},
@@ -260,9 +203,6 @@ const user = {
 		},
 		deleteProjInfo({ commit }, pid) {
 			commit('DELETE_PROJ', pid)
-		},
-		setUserHabit({ commit }, habit) {
-			commit('SET_HABIT', habit)
 		}
 	}
 }
