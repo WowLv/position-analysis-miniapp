@@ -1,8 +1,6 @@
 <template>
 	<view class="container">
 		<scroll-view 
-		enable-back-to-top
-		lower-threshold=200
 		@scrolltolower="refreshPage"
 		:scroll-y="isScroll" 
 		class="position_list" 
@@ -10,9 +8,9 @@
 			<view class="list_item" v-for="item in nowPosList" :key="item.positionId">
 				<mp-slideview 
 				:buttons="slideButtons" 
-				icon="true" 
+				icon="true"
 				@buttontap="handleTap"
-				:disable="mode !== 'collect'"
+				:disable="(mode !== 'history') && (mode !== 'collect') "
 				:data-id="item.positionId">
 					<view class="item_box" @click="toPosDetail" :data-pid="item.positionId">
 						<image :src="item.companyLogo" mode="widthFix"></image>	
@@ -104,7 +102,6 @@ import { searchPos } from '../../utils/api'
 						famousCompany: item.famousCompany
 					}
 					curList.push(obj)
-					this.setUserInfo({ type: 'viewHistory', data: curList})
 				})
 				return curList
 			},
@@ -122,12 +119,12 @@ import { searchPos } from '../../utils/api'
 			...mapActions([
 				'setSearchedPosList',
 				'deleteCollect',
-				'setUserInfo'
+				'deleteDelivery'
 			]),
 			toPosDetail(e) {
 				let pid = e.currentTarget.dataset.pid
 				console.log(pid)
-				if(this.mode === 'search' || this.mode === 'collect') {
+				if(this.mode === 'search' || this.mode === 'collect' || this.mode === 'history') {
 					uni.navigateTo({
 						url: `../../../pages/posDetail/posDetail?pid=${pid}`
 					})
@@ -165,6 +162,11 @@ import { searchPos } from '../../utils/api'
 					this.deleteCollect(pid)
 					uni.showToast({
 						title: '已取消'
+					})
+				}else if(this.mode === 'history') {
+					this.deleteDelivery(pid)
+					uni.showToast({
+						title: '已删除'
 					})
 				}
 			}
