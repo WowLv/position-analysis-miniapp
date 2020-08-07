@@ -68,3 +68,10 @@ export function posTrend() {
 		method: 'GET'
 	})
 }
+export function getPosSalary(obj) {
+	return analysisReq({
+		url: '/Exp_Scalary_Servlet',
+		method: 'GET',
+		data: obj
+	})
+}
