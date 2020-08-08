@@ -62,10 +62,11 @@ export function getCompare() {
 	})
 }
 
-export function posTrend() {
+export function posTrend(city) {
 	return request({
 		url: '/posTrend',
-		method: 'GET'
+		method: 'GET',
+		data: city
 	})
 }
 export function getPosSalary(obj) {

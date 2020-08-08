@@ -2,8 +2,8 @@
   <view class="container">
     <!-- 热门职位曲线对比图 -->
     <view class="chart_box line_chart">
-      <line-chart :cData="lineData" cTitle="热门职位对比"></line-chart>
-      <!-- <line-chart :cData="lineData" v-if="showTrend"></line-chart> -->
+      <!-- <line-chart :cData="lineData" cTitle="热门职位对比"></line-chart> -->
+      <line-chart :cData="trendList" cTitle="热门职位对比" v-if="showTrend"></line-chart>
     </view>
 
     <text v-if="hopeCity" class="chart_title">{{hopeCity}}市招聘数据分析</text>
@@ -37,9 +37,9 @@ import ColumnChart from "@/components/charts/columnChart";
 import CircleChart from "@/components/charts/circleChart";
 import PieChart from "@/components/charts/pieChart";
 import HeatChart from "@/components/charts/heatChart";
+// import { posTrend } from '@/utils/api'
 
 export default {
-  // import { posTrend } from '@/utils/api'
   data() {
     return {
       showSkill: false,
@@ -60,39 +60,39 @@ export default {
         "28k",
         "30K及以上",
       ],
-      lineData: [
-        { date: "2010-01-10", type: "能源", value: 99.9 },
-        { date: "2010-01-10", type: "金属", value: 96.6 },
-        { date: "2010-01-10", type: "农副产品", value: 96.2 },
-        { date: "2010-02-10", type: "能源", value: 96.7 },
-        { date: "2010-02-10", type: "金属", value: 91.1 },
-        { date: "2010-02-10", type: "农副产品", value: 93.4 },
-        { date: "2010-03-10", type: "能源", value: 100.2 },
-        { date: "2010-03-10", type: "金属", value: 99.4 },
-        { date: "2010-03-10", type: "农副产品", value: 91.7 },
-        { date: "2010-04-10", type: "能源", value: 104.7 },
-        { date: "2010-04-10", type: "金属", value: 108.1 },
-        { date: "2010-04-10", type: "农副产品", value: 93.1 },
-        { date: "2010-05-10", type: "能源", value: 95.6 },
-        { date: "2010-05-10", type: "金属", value: 96 },
-        { date: "2010-05-10", type: "农副产品", value: 92.3 },
-        { date: "2010-06-10", type: "能源", value: 95.6 },
-        { date: "2010-06-10", type: "金属", value: 89.1 },
-        { date: "2010-06-10", type: "农副产品", value: 92.5 },
-        { date: "2010-07-10", type: "能源", value: 95.3 },
-        { date: "2010-07-10", type: "金属", value: 89.2 },
-        { date: "2010-07-10", type: "农副产品", value: 95.7 },
-        { date: "2010-08-10", type: "能源", value: 96.1 },
-        { date: "2010-08-10", type: "金属", value: 97.6 },
-        { date: "2010-08-10", type: "农副产品", value: 99.9 },
-        { date: "2010-09-10", type: "能源", value: 96.1 },
-        { date: "2010-09-10", type: "金属", value: 100.6 },
-        { date: "2010-09-10", type: "农副产品", value: 103.8 },
-        { date: "2010-10-10", type: "能源", value: 101.6 },
-        { date: "2010-10-10", type: "金属", value: 108.3 },
-        { date: "2010-10-10", type: "农副产品", value: 108.9 },
-        { date: "2010-11-10", type: "能源", value: 105.6 },
-      ],
+      lineData: [],
+      // lineData: [
+      //   { date: "1-10", type: "能源", value: 98 },
+      //   { date: "1-10", type: "金属", value: 96 },
+      //   { date: "1-10", type: "农副产品", value: 68 },
+      //   { date: "2-10", type: "能源", value: 101 },
+      //   { date: "2-10", type: "金属", value: 112 },
+      //   { date: "2-10", type: "农副产品", value: 78 },
+      //   { date: "3-10", type: "能源", value: 100 },
+      //   { date: "3-10", type: "金属", value: 99 },
+      //   { date: "3-10", type: "农副产品", value: 91 },
+      //   { date: "4-10", type: "能源", value: 104 },
+      //   { date: "4-10", type: "金属", value: 108 },
+      //   { date: "4-10", type: "农副产品", value: 93 },
+      //   { date: "5-10", type: "能源", value: 95 },
+      //   { date: "5-10", type: "金属", value: 96 },
+      //   { date: "5-10", type: "农副产品", value: 92 },
+      //   { date: "6-10", type: "能源", value: 95 },
+      //   { date: "6-10", type: "金属", value: 89 },
+      //   { date: "6-10", type: "农副产品", value: 92 },
+      //   { date: "7-10", type: "能源", value: 140 },
+      //   { date: "7-10", type: "金属", value: 120 },
+      //   { date: "7-10", type: "农副产品", value: 107 },
+      //   { date: "8-10", type: "能源", value: 100 },
+      //   { date: "8-10", type: "金属", value: 122 },
+      //   { date: "8-10", type: "农副产品", value: 99 },
+      //   { date: "9-10", type: "能源", value: 96 },
+      //   { date: "9-10", type: "金属", value: 100 },
+      //   { date: "9-10", type: "农副产品", value: 103 },
+      //   { date: "10-10", type: "能源", value: 101 },
+      //   { date: "10-10", type: "金属", value: 108 },
+      //   { date: "10-10", type: "农副产品", value: 108 }
+      // ],
       // heatData: [
       //   { name: "不限", value: [3, 1, 5, 9, 4, 1, 1, 7, 2, 0, 1, 0] },
       //   { name: "应届毕业生", value: [5, 2, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0] },
@@ -127,8 +127,6 @@ export default {
     };
   },
   onLoad() {
-    // this._posTrend()
-    // .then(() => { this.showTrend = true })
     if (uni.getStorageSync("hopeObj")) {
       let firstHopeObj = uni.getStorageSync("hopeObj");
       this.setReady(firstHopeObj).then(() => {
@@ -141,7 +139,10 @@ export default {
         if (this.salaryList.length) {
           this.showSalary = true;
         }
-      });
+        if(this.trendList.length) {
+          this.showTrend = true
+        }
+      })
     } else {
       this.setHopeData({ type: "noHope" }).then(() => {
         if (this.skillRank.length) {
@@ -153,7 +154,10 @@ export default {
         if (this.salaryList.length) {
           this.showSalary = true;
         }
-      });
+        if(this.trendList.length) {
+          this.showTrend = true
+        }
+      })
     }
   },
   components: {
@@ -164,12 +168,12 @@ export default {
     HeatChart,
   },
   computed: {
-    ...mapGetters(["hopeCity", "regionRank", "skillRank", "salaryList"]),
+    ...mapGetters(["hopeCity", "regionRank", "skillRank", "salaryList", "trendList"]),
   },
   methods: {
     ...mapActions(["setHopeData", "setReady"]),
-    // async _posTrend() {
-    //     let res = await posTrend()
+    // async _posTrend(city) {
+    //     let res = await posTrend(city)
     //     this.lineData = res.data
     //     console.log(res.data)
     // }

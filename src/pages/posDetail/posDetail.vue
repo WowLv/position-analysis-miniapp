@@ -132,48 +132,6 @@
 		"全职" 
 	]
 
-	let _salaryList = [
-		"3k", "8k", "15k", "20k", "60k"
-	]
-	let _workYearList = [
-		"不限",	
-		"应届毕业生",
-		"1年以下",
-		"1-3年",
-		"3-5年", 
-		"5-10年"
-	]
-	let _educationList = [
-		"不限",
-		"大专",
-		"本科",
-		"硕士",
-		"博士"
-	]
-	let _financeStageList = [
-		"未融资",
-		"不需要融资",
-		"A轮",
-		"C轮",	
-		"D轮及以上",
-		"上市公司"
-	]
-	let _companySizeList = [
-		"少于15人",
-		"15-50人",
-		"50-150人",
-		"150-500人", 
-		"500-2000人",
-		"2000人以上"
-		
-	]
-	let _jobNatureList = [
-		"兼职", 
-		"实习",
-		"全职" 
-	]
-
-
 	import Bottom from '@/components/bottom/bottom.vue'
 	import radarChart from '@/components/charts/radarChart.vue'
 	import { getPosDetail } from '@/utils/api'
@@ -285,23 +243,25 @@
 			.then(() => {
 				this.setUserHabit({
 					secondType: this.posObj['secondType'],
+					thirdType: this.posObj['thirdType'],
 					city: this.posObj['city'],
 					positionLables: this.posObj['positionLables']
 				})
 				console.time('start')
+				console.log(this.posObj.workYearList)
 				this.getGrade({ 
 					workYear: workYearList,
 					education: educationList,
 					financeStage: financeStageList,
 					companySize: companySizeList,
 					jobNature: jobNatureList,
-					subworkYear: _workYearList,
-					subeducation: _educationList,
-					subfinanceStage: _financeStageList,
-					subcompanySize: _companySizeList,
-					subjobNature: _jobNatureList,
+					subworkYear: this.posObj.workYearList,
+					subeducation: this.posObj.educationList,
+					subfinanceStage: this.posObj.financeStageList,
+					subcompanySize: this.posObj.companySizeList,
+					subjobNature: this.posObj.jobNatureList,
 				})
-				this.analyzeSalary(salaryList, _salaryList)
+				this.analyzeSalary(salaryList, this.posObj.salaryList)
 				let totalList = this.subOrder.concat(this.order)
 				this.radarData.forEach((item, index) => {
 					item.value = ( totalList[index] + 1 ) * 20
@@ -326,7 +286,7 @@
 			]),
 			async _getPosDetail(pid) {
 				let _posObj = await getPosDetail(pid)
-				this.posObj = _posObj.data[0] 
+				this.posObj = _posObj.data
 				console.log(this.posObj)
 				this.posObj.companyLogo = `//www.lgstatic.com/thumbnail_160x160/${this.posObj.companyLogo}`
 				// this.posObj.positionDesc = [
@@ -339,9 +299,6 @@
 				// 	"1、二本以上计算机相关专业；",
 				// 	"2、需要懂vue框架，需要精通，马上能上手的。"
 				// ]
-				this.posObj.positionLables = this.posObj.positionLables.map((item) => {
-					return item.replace(/'/g,"")
-				}) //后期需要将数据清洗好
 
 				this.posObj.longitude = parseFloat(this.posObj.longitude)
 				this.posObj.latitude = parseFloat(this.posObj.latitude)

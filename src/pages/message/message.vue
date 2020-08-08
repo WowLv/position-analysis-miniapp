@@ -14,7 +14,7 @@
 		</view>
 		<swiper :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish" class="tab_swiper">
 			<swiper-item class="tab_items" v-for="(item, index) in tabs" :key="index">
-				<view class="no_result" v-if="!recommondList.length">暂无匹配到职位</view>
+				<view class="no_result" v-if="item.type === 1 && !recommondList.length">暂无匹配到职位</view>
 				<scroll-view scroll-y class="scroll_box" v-if="item.type === 1 && recommondList.length">
 					<view class="item" 
 					v-for="item in recommondList" 
@@ -89,17 +89,22 @@ import { matchPos } from '@/utils/api'
 		onLoad() {
 			let userLocation = ''
 			if(this.userInfo.location) {
-				userLocation = this.userInfo.location
+				userLocation = [this.userInfo.location]
 			}
 			let extraId = ''
+			let hopeCity = ''
+			let hopePos = ''
 			if(this.userInfo.viewHistory) { extraId = this.userInfo.viewHistory }
+			if(this.hopeCity) { hopeCity = [this.hopeCity] }
+			if(this.hopePos ) { hopePos = [this.hopePos] }
+			console.log(this.hopePos)
 			this._matchPos({
 					salary: this.hopeSalary,
 					//调试时都为数组
-					city: this.hopeCity || userLocation || (this.userHabit.cityList && this.userHabit.cityList.map(item => item[0])) || '',
-					pos: this.hopePos || ( this.userHabit.typeList && this.userHabit.typeList.map(item => item[0])) || '',
+					city: hopeCity || userLocation || (this.userHabit.cityList && this.userHabit.cityList.map(item => item[0])) || [],
+					pos: hopePos || ( this.userHabit.typeList && this.userHabit.typeList.map(item => item[0])) || [],
 					jobNature: this.hopeType,
-					positionLables: this.userHabit.skillList && this.userHabit.skillList.map(item => item[0]) || '',
+					positionLables: this.userHabit.skillList && this.userHabit.skillList.map(item => item[0]) || [],
 					extraId
 				})
 			
@@ -117,10 +122,13 @@ import { matchPos } from '@/utils/api'
 				'userHabit'
 			]),
 			recommondList() {
-				let currList = this.tabs[0].content.map((item) => {
-					item.industryField = item.industryField.split(',')
-					return item
-				})
+				let currList = []
+				if(this.tabs[0].content.length) {
+					currList = this.tabs[0].content.map((item) => {
+						item.industryField = item.industryField.split(',')
+						return item
+					})
+				}
 				return currList
 			}
 		},

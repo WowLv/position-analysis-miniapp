@@ -1,4 +1,4 @@
-import { getRegionRank, getProvinceRank, getPosSalary } from '@/utils/api'
+import { getRegionRank, getProvinceRank, getPosSalary, posTrend } from '@/utils/api'
 import { TopFiveDate } from '@/utils/utils'
 const hope = {
 	state: {
@@ -10,7 +10,8 @@ const hope = {
 		hopePos: '',
 		regionRank: [],
 		skillRank: [],
-		salaryList: []
+		salaryList: [],
+		trendList: []
 	},
 	getters: {
 		isReady: state => state.isReady,
@@ -21,7 +22,8 @@ const hope = {
 		hopePos: state => state.hopePos,
 		regionRank: state => state.regionRank,
 		skillRank: state => state.skillRank,
-		salaryList: state => state.salaryList
+		salaryList: state => state.salaryList,
+		trendList: state => state.trendList
 	},
 	mutations: {
 		SET_READY: (state, isReady) => {
@@ -50,6 +52,9 @@ const hope = {
 		},
 		SET_SALARYLIST: (state, salaryList) => {
 			state.salaryList = salaryList
+		},
+		SET_TRENDLIST: (state, trendList) => {
+			state.trendList = trendList
 		},
 		CLEAR_ALL: (state) => {
 			state.hopeSalary = '',
@@ -80,8 +85,12 @@ const hope = {
 				case 'noHope':
 					let regionRes = await getProvinceRank()
 					let skillRes = await getRegionRank()
+					let salaryRes = await getPosSalary()
+					let trendRes = await posTrend()
 					commit('SET_REGIONRANK', TopFiveDate(regionRes.data))
 					commit('SET_SKILLRANK', TopFiveDate(skillRes.data.skill))
+					commit('SET_SALARYLIST', salaryRes.data)
+					commit('SET_TRENDLIST', trendRes.data)
 			}
 		},
 		async setReady({ commit }, hopeObj) {
@@ -91,10 +100,14 @@ const hope = {
 			let salaryRes
 			let regionRes
 			let skillRes
+			let trendRes
 			let res
+
+			trendRes = await posTrend()
 			if(pos && city) {
 				salaryRes = await getPosSalary({level: 3, region: city, position: pos})
 				res = await getRegionRank({level: 3, region: city, position: pos})
+				trendRes = await posTrend({city})
 				if(res.data.hotRegion) {
 					//nothing
 				}else {
@@ -119,6 +132,7 @@ const hope = {
 			}else if(!pos && city) {
 				salaryRes = await getPosSalary({level: 3, region: city})
 				res = await getRegionRank({level: 3, region: city})
+				trendRes = await posTrend({city})
 				commit('SET_REGIONRANK', res.data.hotRegion)
 				commit('SET_SKILLRANK', TopFiveDate(res.data.skill))
 			}else if(!pos && !city) {
@@ -129,6 +143,7 @@ const hope = {
 				commit('SET_SKILLRANK', TopFiveDate(skillRes.data.skill))
 			}
 			commit('SET_SALARYLIST', salaryRes.data)
+			commit('SET_TRENDLIST', trendRes.data)
 		},
 		clearAll({ commit }) {
 			commit('CLEAR_ALL')

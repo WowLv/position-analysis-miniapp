@@ -160,25 +160,24 @@ const user = {
 		},
 		SET_HABIT: (state, habit) => {
 			// 统计浏览记录前三
-			let { secondType, city, positionLables } = habit
+			let { secondType, thirdType, city, positionLables, posType } = habit
 			if(!Object.keys(state.userHabit).length) {
 				if(Array.isArray(city)) {
-					console.log('city is array')
 					state.userHabit.city = city
 				}else {
 					state.userHabit.city = [city]
 				}
-				if(Array.isArray(secondType)) {
-					state.userHabit.secondType = secondType
+				if(posType && posType.length) {
+					state.userHabit.posType = posType
 				}else {
-					state.userHabit.secondType = [secondType]
+					state.userHabit.posType = [`${secondType}-${thirdType}`]
 				}
 				// state.userHabit.city = [city]
 				// state.userHabit.secondType = [secondType]
 				state.userHabit.positionLables = [...positionLables]
 			}else {
 				console.log('执行SET_HABIT')
-				state.userHabit.secondType.push(secondType)
+				state.userHabit.posType.push(`${secondType}-${thirdType}`)
 				state.userHabit.city.push(city)
 				state.userHabit.positionLables.push(...positionLables)
 			}
@@ -186,6 +185,7 @@ const user = {
 			let cityList = {}
 			let typeList = {}
 			let skillList = {}
+			console.log(state.userHabit.city)
 			state.userHabit.city.map((item) => {
 				console.log('执行了筛选')
 				if(!Object.keys(cityList).includes(item)) {
@@ -194,7 +194,7 @@ const user = {
 					cityList[item] ++
 				}
 			})
-			state.userHabit.secondType.map((item) => {
+			state.userHabit.posType.map((item) => {
 				if(!Object.keys(typeList).includes(item)) {
 					typeList[item] = 1
 				}else {

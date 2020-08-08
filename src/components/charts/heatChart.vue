@@ -26,6 +26,7 @@ export default {
   },
   created() {
     data = this.newData;
+    console.log('heat')
   },
   computed: {
     newData() {

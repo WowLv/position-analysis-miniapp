@@ -26,6 +26,7 @@ export default {
   },
   created() {
     data = this.newData;
+    console.log(data)
   },
   computed: {
     newData() {
@@ -42,7 +43,9 @@ export default {
       chart.source(data);
       chart.scale("date", {
         type: "timeCat",
-        tickCount: 3,
+        mask: "M-DD",
+        tickCount: 10,
+        isRounding: true
       });
       chart.scale("value", {
         tickCount: 5,
