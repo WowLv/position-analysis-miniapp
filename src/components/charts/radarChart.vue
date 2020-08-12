@@ -11,9 +11,9 @@ var data = [];
 var chart = {}
 export default {
   props: {
-    radarData: {
+    cData: {
       type: Array,
-      default: []
+      default: [],
     }
   },
   data() {

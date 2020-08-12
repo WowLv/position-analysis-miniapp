@@ -8,6 +8,7 @@
 </template>
 
 <script>
+const PieLabel = require("@antv/f2/lib/plugin/pie-label");
 let data = [];
 let chart = {};
 export default {
@@ -21,8 +22,8 @@ export default {
     },
     cTitle: {
       type: String,
-      default: ''
-    }
+      default: "",
+    },
   },
   created() {
     data = this.newData;
@@ -37,48 +38,43 @@ export default {
   },
   methods: {
     onInitChart(F2, config) {
-      console.log(data);
       F2.Global.fontFamily = "sans-serif";
-      chart = new F2.Chart(config);
-      const rules = {
-        value: {
-          tickCount: 6,
-        },
-      };
-      chart.source(data, rules);
-      chart.axis("total", {
-        grid: false,
+      chart = new F2.Chart({ ...config, plugins: PieLabel });
+      let showData = data.filter((item) => {
+        return item.name === "上市公司";
+      })[0];
+      chart.source(data);
+      // chart.legend({ position: "right" });
+      chart.legend(false);
+      chart.coord("polar", {
+        transposed: true,
+        radius: 0.6,
+        innerRadius: 0.45,
       });
-      chart.axis("name", {
-        label: {
-          rotate: 120,
+      chart.axis(false);
+      chart.interval().position("const*value").color("name").adjust("stack");
+      chart.pieLabel({
+        sidePadding: 10,
+        activeShape: true,
+        skipOverlapLabels: true,
+        label1: function label1(data) {
+          return {
+            text: data.name,
+            fill: "#343434",
+            fontWeight: "bold",
+          };
         },
-        labelOffset: 15,
-        position: "bottom",
+        label2: function label2(data) {
+          return {
+            text: data.value,
+            fill: "#999",
+          };
+        },
       });
       chart.tooltip({
-        showItemMarker: false,
-        background: {
-          radius: 2,
-          fill: "#1890FF",
-          padding: [3, 5],
-        },
-        tooltipMarkerStyle: {
-          fill: "#1890FF",
-          fillOpacity: 0.1,
-        },
-        onShow(ev) {
-          const items = ev.items;
-          items[0].name = null;
-          items[0].value = items[0].value + "条";
-        },
+        triggerOn: ["touchstart"],
+        alwaysShow: true,
       });
-      // chart.tooltip(false)
-      chart
-        .interval()
-        .position("name*total")
-        .color("l(90) 0:#1890ff 1:#70cdd0");
-      // Step 4: 渲染图表
       chart.render();
       return chart;
     },
@@ -99,6 +95,6 @@ export default {
 }
 .chart_box {
   width: 100%;
-  height: 400rpx;
+  height: 450rpx;
 }
 </style>

@@ -1,8 +1,8 @@
 <template>
   <view class="container">
-    <text class="chart_title">{{cTitle}}</text>
+    <text class="chart_title" v-if="cTitle">{{cTitle}}</text>
     <view class="chart_box line_chart">
-      <f2 :onInit="onInitLineChart" v-if="cData.length" />
+      <f2 :onInit="onInitChart" v-if="cData.length" />
     </view>
   </view>
 </template>
@@ -37,7 +37,7 @@ export default {
     },
   },
   methods: {
-    onInitLineChart(F2, config) {
+    onInitChart(F2, config) {
       F2.Global.fontFamily = "sans-serif";
       chart = new F2.Chart(config);
       chart.source(data);
@@ -86,7 +86,7 @@ export default {
           legend.setItems(chart.getLegendItems().country);
         },
       });
-      chart.line().position("date*value").color("type");
+      chart.line().position("date*value").color("type").shape('smooth');
       chart.render();
       return chart;
     },

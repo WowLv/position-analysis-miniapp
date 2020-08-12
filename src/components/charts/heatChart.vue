@@ -2,7 +2,7 @@
   <view class="container">
     <text class="chart_title" v-if="cTitle">{{cTitle}}</text>
     <view class="chart_box">
-      <f2 :onInit="onInitHeatChart" v-if="cData.length" />
+      <f2 :onInit="onInitChart" v-if="cData.length" />
     </view>
   </view>
 </template>
@@ -49,7 +49,7 @@ export default {
     },
   },
   methods: {
-    onInitHeatChart(F2, config) {
+    onInitChart(F2, config) {
       F2.Global.fontFamily = "sans-serif";
       chart = new F2.Chart(config);
       chart.source(data, {

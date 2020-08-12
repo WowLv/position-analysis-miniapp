@@ -1,8 +1,8 @@
 <template>
   <view class="container">
-    <!-- <text class="chart_title"></text> -->
+    <text class="chart_title" v-if="cTitle">{{cTitle}}</text>
     <view class="chart_box">
-      <f2 :onInit="onInitCircleChart" v-if="cData.length" />
+      <f2 :onInit="onInitChart" v-if="cData.length" />
     </view>
   </view>
 </template>
@@ -19,6 +19,10 @@ export default {
       type: Array,
       default: [],
     },
+    cTitle: {
+      type: String,
+      default: ''
+    }
   },
   created() {
     console.log(this.cData);
@@ -39,7 +43,7 @@ export default {
     },
   },
   methods: {
-    onInitCircleChart(F2, config) {
+    onInitChart(F2, config) {
       F2.Global.fontFamily = "sans-serif";
       chart = new F2.Chart(config);
       chart.coord("polar", {

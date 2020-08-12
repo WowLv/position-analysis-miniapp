@@ -69,9 +69,35 @@ export function posTrend(city) {
 		data: city
 	})
 }
+
 export function getPosSalary(obj) {
 	return analysisReq({
 		url: '/Exp_Scalary_Servlet',
+		method: 'GET',
+		data: obj
+	})
+}
+
+export function getEducation(obj) {
+	console.log(obj)
+	return analysisReq({
+		url: '/EduInfo_Servlet',
+		method: 'GET',
+		data: obj
+	})
+}
+
+export function getCompanySize(obj) {
+	return analysisReq({
+		url: '/CompanySize_Servlet',
+		method: 'GET',
+		data: obj
+	})
+}
+
+export function getCompanyFinance(obj) {
+	return analysisReq({
+		url: '/CompanyFinance_Servlet',
 		method: 'GET',
 		data: obj
 	})

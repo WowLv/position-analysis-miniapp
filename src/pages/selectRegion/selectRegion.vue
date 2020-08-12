@@ -84,18 +84,14 @@
 						this.rightList.push({rid: i, value: el.value.replace(/(市|自治州|特别行政区|地区|盟|区)/g, '').slice(0,4)})
 					}
 				})
-				// console.log(this.rightList)
 				return this.rightList
 			}
 		},
 		methods: {
 			selectCity(e) {
-				// console.log(e)
 				this.currentIndex = e.target.dataset.index
-				console.log(this.currentIndex)
 			},
 			comfirmCity(e) {
-				// console.log(e.target.dataset.city)
 				// this.$store.dispatch('setHopeData', { type: 'hopeCity', data: e.target.dataset.city })
 				switch(this.selectMode) {
 					case 'search':
@@ -115,7 +111,6 @@
 				qqmapsdk.reverseGeocoder({
 					location: location,
 					success: (res) => {
-						console.log(res.result)
 						let city = res.result.address_component.city.replace("市", "")
 						this.currentCity = city
 					},
@@ -132,7 +127,6 @@
 							uni.getLocation({
 								type: 'wgs84',
 								success: (res) => {
-									console.log(res)
 									const data = { latitude: res.latitude, longitude: res.longitude }
 									this.formatLoction(data)
 								}

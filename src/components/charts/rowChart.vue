@@ -8,7 +8,7 @@
 </template>
 
 <script>
-let data = [];
+let data = []
 let chart = {};
 export default {
   data() {
@@ -40,47 +40,23 @@ export default {
       console.log(data);
       F2.Global.fontFamily = "sans-serif";
       chart = new F2.Chart(config);
-      const rules = {
-        value: {
-          tickCount: 6,
-        },
-      };
-      chart.source(data, rules);
-      chart.axis("total", {
-        grid: false,
-      });
-      chart.axis("name", {
-        label: {
-          rotate: 120,
-        },
-        labelOffset: 15,
-        position: "bottom",
+
+      chart.source(data);
+      chart.coord({
+        transposed: true,
       });
       chart.tooltip({
         showItemMarker: false,
-        background: {
-          radius: 2,
-          fill: "#1890FF",
-          padding: [3, 5],
-        },
-        tooltipMarkerStyle: {
-          fill: "#1890FF",
-          fillOpacity: 0.1,
-        },
-        onShow(ev) {
+        onShow: function onShow(ev) {
           const items = ev.items;
           items[0].name = null;
+          items[0].name = items[0].title;
           items[0].value = items[0].value + "条";
         },
       });
-      // chart.tooltip(false)
-      chart
-        .interval()
-        .position("name*total")
-        .color("l(90) 0:#1890ff 1:#70cdd0");
-      // Step 4: 渲染图表
+      chart.interval().position("name*value").color('l(90) 0:#1890ff 1:#70cdd0');;
       chart.render();
-      return chart;
+      return chart
     },
   },
 };

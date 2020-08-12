@@ -2,7 +2,7 @@
   <view class="container">
     <text class="chart_title" v-if="cTitle">{{cTitle}}</text>
     <view class="chart_box">
-      <f2 :onInit="onInitPieChart" v-if="cData.length" />
+      <f2 :onInit="onInitChart" v-if="cData.length" />
     </view>
   </view>
 </template>
@@ -26,6 +26,7 @@ export default {
   },
   created() {
     data = this.newData;
+    console.log(data);
   },
   computed: {
     newData() {
@@ -36,19 +37,23 @@ export default {
     },
   },
   methods: {
-    onInitPieChart(F2, config) {
+    onInitChart(F2, config) {
       F2.Global.fontFamily = "sans-serif";
       chart = new F2.Chart(config);
       chart.source(data);
-      chart.coord("polar");
+      chart.coord("polar", {
+        transposed: true,
+        radius: 0.95,
+      });
       chart.legend({
         position: "right",
       });
-      chart.axis(false);
-      chart.interval().position("year*population").color("year").style({
-        lineWidth: 1,
-        stroke: "#fff",
+      chart.tooltip({
+        triggerOn: [ 'touchstart', 'touchmove' ],
+        alwaysShow: true,
       });
+      chart.axis(false);
+      chart.interval().position("const*value").color("name").adjust("stack");
       chart.render();
       return chart;
     },
@@ -69,6 +74,6 @@ export default {
 }
 .chart_box {
   width: 100%;
-  height: 400rpx;
+  height: 450rpx;
 }
 </style>
