@@ -33,14 +33,14 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import LineChart from "@/components/charts/lineChart";
-import ColumnChart from "@/components/charts/columnChart";
-import CircleChart from "@/components/charts/circleChart";
-import PieChart from "@/components/charts/pieChart";
-import HeatChart from "@/components/charts/heatChart";
-import RowChart from "@/components/charts/rowChart";
+import LineChart from "../../components/charts/lineChart";
+import ColumnChart from "../../components/charts/columnChart";
+import CircleChart from "../../components/charts/circleChart";
+import PieChart from "../../components/charts/pieChart";
+import HeatChart from "../../components/charts/heatChart";
+import RowChart from "../../components/charts/rowChart";
 import MLoading from "@/components/mLoading/mLoading";
-import AnnularChart from '@/components/charts/annularChart'
+import AnnularChart from '../../components/charts/annularChart'
 // import { posTrend } from '@/utils/api'
 
 export default {

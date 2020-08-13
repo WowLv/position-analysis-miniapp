@@ -87,7 +87,7 @@ import Top from '../../components/top/top'
 import SearchFilter from '../../components/searchFilter/searchFilter'
 import PositionList from '../../../components/positionList/positionList'
 import { mapGetters, mapActions } from 'vuex'
-import { searchPos } from '../../../utils/api'
+import { searchPos } from '@/utils/api'
 import keys from './search'
 // import { debounce } from '../../../utils/utils'
 let timer = null

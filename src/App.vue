@@ -61,7 +61,6 @@ import { mapActions } from 'vuex'
 </script>
 	
 <style>
-/* @import unl('~@/static/styles/weui.wxss') */
-@import url('~@/static/styles/weui.wxss');
+/* @import url('~@/static/styles/weui.wxss'); */
 </style>
 

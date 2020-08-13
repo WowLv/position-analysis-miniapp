@@ -20,7 +20,9 @@
 		
 		<view class="index_navigator">
 			<view class="navigator_box">
-				<text class="nav_title">今日数据</text>
+				<navigator url="../../analysis/pages/analysis/analysis" open-type="navigate">
+					<text class="nav_title">今日数据</text><text class="iconfont icon-arrow-right"></text>
+				</navigator>
 			</view>
 		</view>
 		<view class="statistics">

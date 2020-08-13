@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import {debounce} from '../../../utils/utils'
+import {debounce} from '@/utils/utils'
 import {mapGetters, mapActions} from 'vuex'
 	export default {
 		data() {

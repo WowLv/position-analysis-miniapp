@@ -5,7 +5,6 @@
 			"style": {
 				"enablePullDownRefresh": true
 			}
-			
 		},
 		{
 			"path":"pages/filter/filter",
@@ -27,13 +26,6 @@
 				"navigationBarTitleText": "按分类搜索",
 				"navigationBarTextStyle": "black",
 				"navigationBarBackgroundColor": "#ffffff"
-			}
-		},
-		{
-			"path": "pages/analysis/analysis",
-			"style": {
-				"navigationBarTitleText": "职位分析",
-				"navigationBarTextStyle": "white"
 			}
 		},
 		{
@@ -59,6 +51,19 @@
         }
 	],
 	"subPackages": [
+		{
+			"root": "analysis",
+			"name": "analysis",
+			"pages": [
+				{
+					"path" : "pages/analysis/analysis",
+					"style" : {
+						"navigationBarTitleText": "职位分析",
+						"navigationBarTextStyle": "white"
+					}
+				}
+			]
+		},
 		{
 			"root": "filter",
 			"name": "filter",
@@ -147,7 +152,7 @@
 	"preloadRule": {
 		"pages/index/index": {
 			"network": "all",
-			"packages": ["filter"]
+			"packages": ["filter", "analysis"]
 		},
 		"pages/my/my": {
 			"network": "all",
@@ -171,13 +176,7 @@
 				"pagePath":"pages/index/index",
 				"iconPath":"static/home.png",
 				"selectedIconPath":"static/home-s.png",
-				"text":"招聘"
-			},
-			{
-				"pagePath":"pages/analysis/analysis",
-				"iconPath":"static/analysis.png",
-				"selectedIconPath":"static/analysis-s.png",
-				"text":"数据"
+				"text":"首页"
 			},
 			{
 				"pagePath":"pages/message/message",
@@ -213,7 +212,7 @@
 			},
 			{
 				"name": "analysis", 
-				"path":"pages/analysis/analysis",
+				"path":"analysis/pages/analysis/analysis",
 				"query": ""
 			},
 			{
