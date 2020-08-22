@@ -13,8 +13,12 @@ import { mapActions } from 'vuex'
 
 			let collectList = uni.getStorageSync('collectList')
 			if(collectList && collectList.length) {
-				console.log('ok')
 				this.setCollect(collectList)
+			}
+
+			let commitList = uni.getStorageSync('commitList')
+			if(commitList && commitList.length) {
+				this.setCommit(commitList)
 			}
 
 			let resumeInfo = uni.getStorageSync('infoObj')
@@ -54,7 +58,8 @@ import { mapActions } from 'vuex'
 				'setResumeInfo',
 				'setHopeData',
 				'setProjInfo',
-				'setUserHabit'
+				'setUserHabit',
+				'setCommit'
 			])
 		}
 	}

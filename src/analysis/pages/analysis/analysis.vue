@@ -1,7 +1,8 @@
 <template>
   <view class="container">
     <!-- 热门职位曲线对比图 -->
-    <line-chart :cData="lineData" cTitle="热门职位对比"></line-chart>
+    <m-loading v-if="!currentShow" lHeight="400"></m-loading>
+    <line-chart :cData="lineData" v-else cTitle="热门职位对比"></line-chart>
     <!-- <line-chart :cData="trendList" cTitle="热门职位对比" v-if="showTrend"></line-chart> -->
     <!-- 中间模块 -->
     <text v-if="hopeCity" class="chart_title">{{hopeCity}}市招聘数据分析</text>
@@ -40,12 +41,14 @@ import PieChart from "../../components/charts/pieChart";
 import HeatChart from "../../components/charts/heatChart";
 import RowChart from "../../components/charts/rowChart";
 import MLoading from "@/components/mLoading/mLoading";
-import AnnularChart from '../../components/charts/annularChart'
+import AnnularChart from "../../components/charts/annularChart";
 // import { posTrend } from '@/utils/api'
 
 export default {
   data() {
     return {
+      currentShow: false,
+
       showSkill: false,
       showRegion: false,
       showTrend: false,
@@ -89,15 +92,6 @@ export default {
         { date: "7-10", type: "能源", value: 140 },
         { date: "7-10", type: "金属", value: 120 },
         { date: "7-10", type: "农副产品", value: 107 },
-        { date: "8-10", type: "能源", value: 100 },
-        { date: "8-10", type: "金属", value: 122 },
-        { date: "8-10", type: "农副产品", value: 99 },
-        { date: "9-10", type: "能源", value: 96 },
-        { date: "9-10", type: "金属", value: 100 },
-        { date: "9-10", type: "农副产品", value: 103 },
-        { date: "10-10", type: "能源", value: 101 },
-        { date: "10-10", type: "金属", value: 108 },
-        { date: "10-10", type: "农副产品", value: 108 },
       ],
       // heatData: [
       //   { name: "不限", value: [3, 1, 5, 9, 4, 1, 1, 7, 2, 0, 1, 0] },
@@ -197,10 +191,14 @@ export default {
           name: "不需要融资",
           value: 18,
         },
-      ]
+      ],
     };
   },
   onLoad() {
+    setTimeout(() => {
+      this.currentShow = true;
+    }, 300);
+
     let firstHopeObj = uni.getStorageSync("hopeObj");
     let isEmpty = true;
     Object.values(firstHopeObj).map((item, index) => {
@@ -226,8 +224,8 @@ export default {
         if (this.companySizeList.length) {
           this.showCompanySize = true;
         }
-        if(this.FinanceList.length) {
-          this.showFinance = true
+        if (this.FinanceList.length) {
+          this.showFinance = true;
         }
         if (this.trendList.length) {
           this.showTrend = true;
@@ -250,8 +248,8 @@ export default {
         if (this.companySizeList.length) {
           this.showCompanySize = true;
         }
-        if(this.FinanceList.length) {
-          this.showFinance = true
+        if (this.FinanceList.length) {
+          this.showFinance = true;
         }
         if (this.trendList.length) {
           this.showTrend = true;
@@ -267,7 +265,7 @@ export default {
     HeatChart,
     RowChart,
     MLoading,
-    AnnularChart
+    AnnularChart,
   },
   computed: {
     ...mapGetters([
@@ -278,7 +276,7 @@ export default {
       "trendList",
       "eduList",
       "companySizeList",
-      "FinanceList"
+      "FinanceList",
     ]),
   },
   methods: {

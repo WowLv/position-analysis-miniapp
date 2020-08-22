@@ -82,7 +82,7 @@
 		</view>
 
 		<!-- 底部栏 -->
-		<Bottom class="pos_bottom" :data="posObj" :pid="pid"></Bottom>
+		<m-bottom class="pos_bottom" :bData="posObj" :pid="pid"></m-bottom>
 	</view>
 	
 </template>
@@ -132,7 +132,7 @@
 		"全职" 
 	]
 
-	import Bottom from '@/components/bottom/bottom.vue'
+	import mBottom from '@/components/mBottom/mBottom.vue'
 	import radarChart from '@/components/charts/radarChart.vue'
 	import { getPosDetail } from '@/utils/api'
 	import { mapGetters, mapActions }from 'vuex'
@@ -277,7 +277,7 @@
 			]),
 		},
 		components: {
-			Bottom,
+			mBottom,
 			radarChart
 		},
 		methods: {

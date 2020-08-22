@@ -12,7 +12,7 @@
 				:buttons="slideButtons" 
 				icon="true" 
 				@buttontap="handleTap"
-				:disable="mode !== 'collect'"
+				:disable="mode !== 'collect' || mode !== 'history'"
 				:data-id="item.positionId">
 					<view class="item_box" @click="toPosDetail" :data-pid="item.positionId">
 						<image :src="item.companyLogo" mode="widthFix"></image>	
@@ -122,12 +122,13 @@ import { searchPos } from '../../utils/api'
 			...mapActions([
 				'setSearchedPosList',
 				'deleteCollect',
-				'setUserInfo'
+				'setUserInfo',
+				'deleteCommit'
 			]),
 			toPosDetail(e) {
 				let pid = e.currentTarget.dataset.pid
 				console.log(pid)
-				if(this.mode === 'search' || this.mode === 'collect') {
+				if(this.mode === 'search' || this.mode === 'collect' || this.mode === 'history') {
 					uni.navigateTo({
 						url: `../../../pages/posDetail/posDetail?pid=${pid}`
 					})
@@ -165,6 +166,11 @@ import { searchPos } from '../../utils/api'
 					this.deleteCollect(pid)
 					uni.showToast({
 						title: '已取消'
+					})
+				}else if( this.mode === 'history') {
+					this.deleteCommit(pid)
+					uni.showToast({
+						title: '已删除'
 					})
 				}
 			}

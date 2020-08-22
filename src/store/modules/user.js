@@ -7,7 +7,8 @@ const user = {
 		eduInfo: [],
 		projInfo: [],
 		resumeInfo: {},
-		userHabit: {}
+		userHabit: {},
+		userCommit: []
 	},
 	getters: {
 		userInfo: state => state.userInfo,
@@ -25,7 +26,8 @@ const user = {
 		resumeInfo: state => state.resumeInfo,
 		eduInfo: state => state.eduInfo,
 		projInfo: state => state.projInfo,
-		userHabit: state => state.userHabit
+		userHabit: state => state.userHabit,
+		userCommit: state => state.userCommit
 	},
 	mutations: {
 		SET_USERLOCATION: (state, location) => {
@@ -80,9 +82,6 @@ const user = {
 			if(userCollect instanceof Array) {
 				state.userCollect = userCollect
 			}else {
-				// if(userCollect.companyLogo.indexOf('www.') > -1) {
-				// 	userCollect.companyLogo = `//www.lgstatic.com/thumbnail_160x160/${userCollect.companyLogo}`
-				// }
 				state.userCollect.unshift(userCollect)
 				uni.setStorageSync('collectList', state.userCollect)
 			}
@@ -97,6 +96,24 @@ const user = {
 			})
 			console.log(state.userCollect)
 			uni.setStorageSync('collectList', state.userCollect)
+		},
+		SET_COMMIT: (state, userCommit) => {
+			if(userCommit instanceof Array) {
+				state.userCommit = userCommit
+			}else {
+				state.userCommit.unshift(userCommit)
+				uni.setStorageSync('commitList', state.userCommit)
+			}
+		},
+		DELETE_COMMIT: (state, pid) => {
+			state.userCommit.map((item) => {
+				if(parseInt(item.positionId) === pid) {
+					let index = state.userCommit.indexOf(item)
+					state.userCommit.splice(index,1)
+				}
+			})
+			console.log(state.userCommit)
+			uni.setStorageSync('commitList', state.userCommit)
 		},
 		SET_RESUMEINFO: (state, resumeInfo) => {
 			state.resumeInfo = resumeInfo
@@ -244,6 +261,12 @@ const user = {
 		},
 		deleteCollect({ commit }, pid) {
 			commit('DELETE_COLLECT', pid)
+		},
+		setCommit({ commit }, userCommit) {
+			commit('SET_COMMIT', userCommit)
+		},
+		deleteCommit({ commit }, pid) {
+			commit('DELETE_COMMIT', pid)
 		},
 		setResumeInfo({ commit }, resumeInfo) {
 			commit('SET_RESUMEINFO', resumeInfo)
