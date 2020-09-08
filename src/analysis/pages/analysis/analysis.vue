@@ -1,8 +1,8 @@
 <template>
   <view class="container">
     <!-- 热门职位曲线对比图 -->
-    <m-loading v-if="!currentShow" lHeight="400"></m-loading>
-    <line-chart :cData="lineData" v-else cTitle="热门职位对比"></line-chart>
+    <m-loading v-if="!showTrend" lHeight="400"></m-loading>
+    <line-chart :cData="trendList" v-else cTitle="热门职位对比"></line-chart>
     <!-- <line-chart :cData="trendList" cTitle="热门职位对比" v-if="showTrend"></line-chart> -->
     <!-- 中间模块 -->
     <text v-if="hopeCity" class="chart_title">{{hopeCity}}市招聘数据分析</text>

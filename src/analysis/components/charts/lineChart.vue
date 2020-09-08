@@ -99,7 +99,13 @@ export default {
     onInitChart(F2, config) {
       F2.Global.fontFamily = "sans-serif";
       chart = new F2.Chart(config);
-      chart.source(data);
+      chart.source(data,{
+        date: {
+          type: "timeCat",
+          mask: "MM-DD",
+          tickCount: 5
+        }
+      });
       chart.axis("date", {
         label: function label(text, index, total) {
           // 只显示每一年的第一天
@@ -138,7 +144,6 @@ export default {
       });
       chart.line().position("date*value").color("type").shape("smooth");
       chart.render();
-      console.log(chart);
       return chart;
     },
   },

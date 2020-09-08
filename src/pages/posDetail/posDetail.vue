@@ -62,7 +62,7 @@
 		</view>
 		<!-- 数据分析 -->
 		<view class="chart_box">
-			<radarChart class="chart" :radarData="radarData" v-if="isShowRadar"></radarChart>
+			<radarChart class="chart" :cData="radarData" v-if="isShowRadar"></radarChart>
 		</view>
 		<!-- 工作地点 -->
 		<view class="pos_location">

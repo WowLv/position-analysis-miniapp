@@ -84,12 +84,12 @@ export default {
         success: (res) => {
           if (res.tapIndex === 0) {
             uni.navigateTo({
-              url: "../../person/pages/resumeOnline/resumeOnline?mode=submit",
+              url: `../../person/pages/resumeOnline/resumeOnline?mode=submit&posObj=${ bData }`,
             });
           } else {
             uni.navigateTo({
               url:
-                "../../person/pages/resumeAttachment/resumeAttachment?mode=submit",
+                `../../person/pages/resumeAttachment/resumeAttachment?mode=submit&posObj=${ bData }`,
             });
           }
         },

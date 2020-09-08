@@ -70,7 +70,7 @@ export default {
     data() {
         return {
             posFilter: [
-                { type: 'salary', name: '月薪范围', value: ['2k以下','2k-5k','5k-10','10k-15k','15k-25k','25k-50k','50k以上'] },
+                { type: 'salary', name: '月薪范围', value: ['2k以下','2k-5k','5k-10k','10k-15k','15k-25k','25k-50k','50k以上'] },
                 { type: 'workYear',name: '工作经验', value: ['应届毕业生', '三年及以下', '3-5年', '5-10年', '十年以上','经验不限'] },
                 { type: 'education',name: '学历要求', value: ['大专','本科','硕士','博士','不限'] },
                 { type: 'jobNature',name: '工作性质', value: ['全职','兼职','实习'] }
@@ -96,16 +96,29 @@ export default {
             let type = e.currentTarget.dataset.type
             let item = e.currentTarget.dataset.item 
             //判断是否已经选择，分别加入两个数组
-            if(this.activedList.indexOf(item) === -1){
-                this.activedList.push(item)
-                if(Object.keys(this.filter).indexOf(type) === -1) {
-                    this.filter[type] = []
-                }
-                this.filter[type].push(item)
+            if(type === 'salary') {
+                    this.filter[type] = [item]
+                    this.activedList.map((el, index) => {
+                        if(el.match(/k/g) && el.match(/k/g).length) {
+                            console.log(el)
+                            this.activedList.splice(this.activedList.indexOf(el),1)
+                        }
+                    })
+                    this.activedList.push(item)
             }else {
-                this.activedList.splice(this.activedList.indexOf(item),1)
-                this.filter[type].splice(this.filter[type].indexOf(item),1)
+                if(this.activedList.indexOf(item) === -1){
+                    this.activedList.push(item)
+                    if(Object.keys(this.filter).indexOf(type) === -1) {
+                        this.filter[type] = []
+                    }
+                    this.filter[type].push(item)
+                }else {
+                    this.activedList.splice(this.activedList.indexOf(item),1)
+                    this.filter[type].splice(this.filter[type].indexOf(item),1)
+                }
             }
+            console.log(this.activedList)
+            console.log(this.filter)
         },
         comfirm(e) {
             let type = e.currentTarget.dataset.type
@@ -114,7 +127,7 @@ export default {
                 const index = this.filter['workYear'].indexOf('经验不限')
                 this.filter['workYear'][index] = "不限"
             }
-            console.log(this.filter['workYear'])
+            console.log(this.filter)
             uni.$emit('filterRequest',this.filter)
         }
     }

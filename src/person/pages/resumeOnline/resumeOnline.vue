@@ -79,12 +79,13 @@ export default {
 	data() {
 		return {
 			avatarSrc: '',
-			mode: ''
+			mode: '',
+			posData: {}
 		}
 	},
 	onLoad(options) {
 		this.mode = options.mode
-
+		this.posData = options.posObj
 		// 监听从裁剪页发布的事件，获得裁剪结果
 		uni.$on('uAvatarCropper', path => {
 			this.avatarSrc = path;
@@ -148,6 +149,9 @@ export default {
 		}
 	},
 	methods: {
+		...mapActions([
+			'setCommit'
+		]),
 		toEditInfo() {
 			uni.navigateTo({
 				 url: '../editInfo/editInfo'
@@ -184,6 +188,7 @@ export default {
 			
 		},
 		handleSubmit() {
+			this.setCommit(this.posData)
 			uni.showToast({
 				title: '假装提交成功',
 				duration: 1500

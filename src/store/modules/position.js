@@ -29,7 +29,17 @@ const position = {
             searchedPosList.forEach(item => {
                 item.companyLogo = `//www.lgstatic.com/thumbnail_160x160/${item.companyLogo}`
             })
-            state.searchedPosList.push(...searchedPosList)
+            let currList = searchedPosList.filter((outItem) => {
+                let flag = 1
+                state.searchedPosList.map((inItem) => {
+                    if(parseInt(inItem.positionId) === parseInt(outItem.positionId)) {
+                        flag = 0
+                        console.log(`重复职位-${outItem.positionName}`)
+                    }
+                })
+                return flag
+            })
+            state.searchedPosList.push(...currList)
         },
         CLEAR_POSLIST: (state) => {
             state.loadedPosList = []

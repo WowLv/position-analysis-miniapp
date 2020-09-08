@@ -60,7 +60,7 @@
 		},
 		onLoad() {
 			this.key = this.hopePos
-			if(this.hopePos || this.hopeCity || this.hopeType) {
+			if(this.hopePos || this.hopeCity || this.hopeType || this.hopeSalary) {
 				this._searchPos(this.currentPage)
 			}else {
 				this._getPosList(this.currentPage)
@@ -88,7 +88,7 @@
 				this.key = this.hopePos
 				this.currentPage = 1
 				this.clearPosList()
-				if(this.hopePos || this.hopeCity || this.hopeType || this.userInfo.location) {
+				if(this.hopePos || this.hopeCity || this.hopeType || this.userInfo.location || this.hopeSalary) {
 					this._searchPos(this.currentPage)
 				}else {
 					this._getPosList(this.currentPage)
@@ -107,7 +107,7 @@
 			this.currentPage = 1
 			this.clearPosList()
 			// this.noResult = false
-			if(this.hopePos || this.hopeCity || this.hopeType || this.userInfo.location) {
+			if(this.hopePos || this.hopeCity || this.hopeType || this.userInfo.location || this.hopeSalary) {
 				this._searchPos(this.currentPage)
 			}else {
 				this._getPosList(this.currentPage)
@@ -160,6 +160,7 @@
 					city = this.userInfo.location
 				}
 				if(this.hopeType !== '') filter.jobNature = [this.hopeType]
+				if(this.hopeSalary !== '') filter.salary = [this.hopeSalary]
 				const res = await searchPos(key, city, page, filter)
 				let dataArr = res.data
 				if(dataArr.length) {

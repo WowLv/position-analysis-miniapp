@@ -21,13 +21,17 @@
 </template>
 
 <script>
-// import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
       // 存放简历信息
       attachmentList: [],
+      posData: {}
     };
+  },
+  onLoad(options){
+    this.posData = options.posObj
   },
   onShow() {
     //取缓存的数据
@@ -40,9 +44,23 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'setCommit'
+    ]),
     //上传文件
     upLoadFile() {
       console.log("upload");
+      this.setCommit(posData)
+      uni.showToast({
+				title: '假装提交成功',
+				duration: 1500
+			}).then(() => {
+					setTimeout(() => {
+						uni.navigateBack({
+							delta: 1
+						});
+					},1500)
+				});
     },
     // 选择简历文件
     chooseFile(e) {

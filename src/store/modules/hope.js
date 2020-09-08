@@ -101,14 +101,14 @@ const hope = {
 					let regionRes = await getProvinceRank()
 					let skillRes = await getRegionRank()
 					let salaryRes = await getPosSalary()
-					// let trendRes = await posTrend()
+					let trendRes = await posTrend()
 					let eduRes = await getEducation()
 					let companySizeRes = await getCompanySize()
 					let companyFinanceRes = await getCompanyFinance()
 					commit('SET_REGIONRANK', TopFiveDate(regionRes.data))
 					commit('SET_SKILLRANK', TopFiveDate(skillRes.data.skill))
 					commit('SET_SALARYLIST', salaryRes.data)
-					// commit('SET_TRENDLIST', trendRes.data)
+					commit('SET_TRENDLIST', trendRes.data)
 					commit('SET_EDULIST', eduRes.data)
 					commit('SET_COMPANYSIZELIST', companySizeRes.data)
 					commit('SET_FINANCELIST', companyFinanceRes.data)
@@ -126,11 +126,11 @@ const hope = {
 			let companyFinanceRes
 			let res
 
-			// trendRes = await posTrend()
+			
 			if(pos && city) {
 				salaryRes = await getPosSalary({level: 3, region: city, position: pos})
 				res = await getRegionRank({level: 3, region: city, position: pos})
-				// trendRes = await posTrend({city})
+				trendRes = await posTrend({city})
 				eduRes = await getEducation({level: 3, region: city, position: pos})
 				if(!eduRes.data.some(item => item.value)) {
 					eduRes = await getEducation()
@@ -154,6 +154,7 @@ const hope = {
 			}else if(pos && !city ) {
 				salaryRes = await getPosSalary({position: pos})
 				res = await getRegionRank({position: pos})
+				trendRes = await posTrend()
 				if(res.data.hotRegion) {
 					commit('SET_REGIONRANK', res.data.hotRegion)
 					commit('SET_SKILLRANK', TopFiveDate(res.data.skill))
@@ -181,7 +182,7 @@ const hope = {
 				salaryRes = await getPosSalary({level: 3, region: city})
 				res = await getRegionRank({level: 3, region: city})
 				eduRes = await getEducation({level: 3, region: city})
-				// trendRes = await posTrend({city})
+				trendRes = await posTrend({city})
 				if(!eduRes.data.some(item => item.value)) {
 					eduRes = await getEducation()
 				}
@@ -201,13 +202,15 @@ const hope = {
 				regionRes = await getProvinceRank()
 				skillRes = await getRegionRank()
 				salaryRes = await getPosSalary()
+				trendRes = await posTrend()
 				companySizeRes = await getCompanySize()
 				companyFinanceRes = await getCompanyFinance()
 				commit('SET_REGIONRANK', TopFiveDate(regionRes.data))
 				commit('SET_SKILLRANK', TopFiveDate(skillRes.data.skill))
 			}
+			console.log(trendRes.data)
 			commit('SET_SALARYLIST', salaryRes.data)
-			// commit('SET_TRENDLIST', trendRes.data)
+			commit('SET_TRENDLIST', trendRes.data)
 			commit('SET_EDULIST', eduRes.data)
 			commit('SET_COMPANYSIZELIST', companySizeRes.data)
 			commit('SET_FINANCELIST', companyFinanceRes.data)

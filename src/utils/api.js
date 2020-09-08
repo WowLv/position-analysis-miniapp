@@ -18,6 +18,7 @@ export function getPosList(page = 1) {
 }
 
 export function searchPos(key, location, page, filter) {
+	console.log(filter)
 	return request({
 		url: '/searchPos',
 		method: 'GET',

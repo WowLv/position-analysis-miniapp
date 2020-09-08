@@ -75,7 +75,8 @@ import { searchPos } from '../../utils/api'
 		data() {
 			return {
 				searchCurrentPage: 1,
-				noMore: false
+				noMore: false,
+				posCache: []
 			}
 		},
 		computed: {
@@ -141,16 +142,16 @@ import { searchPos } from '../../utils/api'
 			},
 			async _searchPos(key, location, page, filter) {
 				const res = await searchPos(key,location, page, filter)
-				console.log(res.data)
 				this.setSearchedPosList(res.data)
 				// this.resultList = res.data
-				if(!res.data.length) {
+				if(!res.data.length || JSON.stringify(this.posCache) === JSON.stringify(res.data)) {
 					this.noMore = true
 					uni.showToast({
 						title: '已经到底了！',
 						icon: 'none'
 					})
 				}
+				this.posCache = res.data
 			},
 			refreshPage() {
 				if(!this.noMore) {

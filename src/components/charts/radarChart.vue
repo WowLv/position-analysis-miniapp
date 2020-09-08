@@ -22,7 +22,8 @@ export default {
     };
   },
   created() {
-    data = this.radarData;
+    data = this.cData;
+    console.log(data)
   },
   // beforeDestroy() {
   //     chart.clear()

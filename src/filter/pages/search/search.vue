@@ -137,9 +137,11 @@ export default {
         ]),
         habitList() {
             // console.log([...this.userHabit.skillList, ...this.userHabit.typeList])
-            return [...this.userHabit.skillList].map((item) => {
-                return item[0]
-            })
+            if(this.userHabit.skillList) {
+                return [...this.userHabit.skillList].map((item) => {
+                    return item[0]
+                })
+            }
         },
          //搜索提示词
          searchShowing() {
@@ -175,12 +177,12 @@ export default {
         ]),
         async _searchPos(key, location, page, filter) {
             const res = await searchPos(key,location, page, filter)
-            this.setSearchedPosList(res.data)
             // this.resultList = res.data
-            if(!res.data.length) {
-                this.noResult = true
-            }else {
+            if(res.data.length) {
                 this.noResult = false
+                this.setSearchedPosList(res.data)
+            }else {
+                this.noResult = true
             }
         },
         //获取当前搜索框的内容

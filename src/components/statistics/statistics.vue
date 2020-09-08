@@ -37,42 +37,43 @@ export default {
   data() {
     return {
       isLoading: true,
-      dataObj: [
-        {
-          name: "招聘数量",
-          today: 138888,
-          yesterday: 134688,
-        },
-        {
-          name: "岗位",
-          today: 2888,
-          yesterday: 2788,
-        },
-        {
-          name: "企业数量",
-          today: 2888,
-          yesterday: 2688,
-        },
-        {
-          name: "城市数量",
-          today: 108,
-          yesterday: 110,
-        },
-        {
-          name: "实习岗位",
-          today: 988,
-          yesterday: 1080,
-        },
-        {
-          name: "一线城市",
-          today: 18,
-          yesterday: 18,
-        },
-      ],
+      dataObj: []
+      // dataObj: [
+      //   {
+      //     name: "招聘数量",
+      //     today: 138888,
+      //     yesterday: 134688,
+      //   },
+      //   {
+      //     name: "岗位",
+      //     today: 2888,
+      //     yesterday: 2788,
+      //   },
+      //   {
+      //     name: "企业数量",
+      //     today: 2888,
+      //     yesterday: 2688,
+      //   },
+      //   {
+      //     name: "城市数量",
+      //     today: 108,
+      //     yesterday: 110,
+      //   },
+      //   {
+      //     name: "实习岗位",
+      //     today: 988,
+      //     yesterday: 1080,
+      //   },
+      //   {
+      //     name: "一线城市",
+      //     today: 18,
+      //     yesterday: 18,
+      //   },
+      // ],
     };
   },
   created() {
-    // this._getCompare();
+    this._getCompare();
   },
   components: {
     MLoading
