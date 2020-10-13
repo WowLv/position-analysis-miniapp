@@ -12,7 +12,7 @@
 				:buttons="slideButtons" 
 				icon="true" 
 				@buttontap="handleTap"
-				:disable="mode !== 'collect' || mode !== 'history'"
+				:disable="mode === 'point'"
 				:data-id="item.positionId">
 					<view class="item_box" @click="toPosDetail" :data-pid="item.positionId">
 						<image :src="item.companyLogo" mode="widthFix"></image>	
@@ -72,6 +72,9 @@ import { searchPos } from '../../utils/api'
 				default: false
 			}
 		},
+		created() {
+			console.log(this.mode)
+		},
 		data() {
 			return {
 				searchCurrentPage: 1,
@@ -88,7 +91,7 @@ import { searchPos } from '../../utils/api'
 				let curList = []
 				this.posList.map((item, index) => {
 					let posName = ''
-					if(item.positionName.length > 11) {
+					if(item.positionName && item.positionName.length > 11) {
 						posName = item.positionName.substr(0,11).concat('...')
 					}else {
 						posName = item.positionName

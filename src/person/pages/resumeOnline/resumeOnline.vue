@@ -85,7 +85,7 @@ export default {
 	},
 	onLoad(options) {
 		this.mode = options.mode
-		this.posData = options.posObj
+		this.posData = JSON.parse(options.posObj)
 		// 监听从裁剪页发布的事件，获得裁剪结果
 		uni.$on('uAvatarCropper', path => {
 			this.avatarSrc = path;
@@ -188,6 +188,7 @@ export default {
 			
 		},
 		handleSubmit() {
+			console.log(this.posData)
 			this.setCommit(this.posData)
 			uni.showToast({
 				title: '假装提交成功',
