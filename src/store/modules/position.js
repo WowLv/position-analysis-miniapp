@@ -1,11 +1,14 @@
+import { getCountrySalary } from '@/utils/api'
 const position = {
     state: {
         loadedPosList: [],
-        searchedPosList: []
+        searchedPosList: [],
+        countrySalaryList: []
     },
 	getters: {
         loadedPosList: state => state.loadedPosList,
-        searchedPosList: state => state.searchedPosList
+        searchedPosList: state => state.searchedPosList,
+        countrySalaryList: state => state.countrySalaryList
     },
 	mutations: {
         SET_LOADEDPOSLIST: (state, loadedPosList) => {
@@ -46,6 +49,9 @@ const position = {
         },
         CLEAR_SEARCHLIST: (state) => {
             state.searchedPosList = []
+        },
+        GET_COUNTRY_SALARYLIST: (state, countrySalaryList) => {
+            state.countrySalaryList = countrySalaryList
         }
     },
     actions: {
@@ -60,6 +66,11 @@ const position = {
         },
         clearSearchList({ commit }) {
             commit('CLEAR_SEARCHLIST')
+        },
+        async set_country_salaryList({ commit }) {
+            let res = await getCountrySalary()
+            console.log(res.data)
+            commit('GET_COUNTRY_SALARYLIST', res.data)
         }
     }
 }

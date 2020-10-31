@@ -52,13 +52,12 @@
 			</view>
 			
 			<!-- 任职要求 -->
-			<!-- <view class="require"> -->
-				<!-- 基本要求 未改 -->
-				<!-- <text class="in_title">任职要求</text>
+			<view class="skill_require">
+				<!-- <text class="in_title">任职要求</text> -->
 				<view class="require_list" v-for="(item, index) in posObj.positionDesc" :key="index">
 					<text>{{item}}</text> 
 				</view>
-			</view>  -->
+			</view> 
 		</view>
 		<!-- 数据分析 -->
 		<view class="chart_box">
@@ -88,9 +87,9 @@
 </template>
 
 <script>
-	let salaryList = [
-		"5k", "13k", "18k", "25k", "60k"
-	]
+	// let salaryList = [
+	// 	"5k", "13k", "18k", "25k", "60k"
+	// ]
 	let workYearList = [
 		"不限",	
 		"应届毕业生",
@@ -247,8 +246,6 @@
 					city: this.posObj['city'],
 					positionLables: this.posObj['positionLables']
 				})
-				console.time('start')
-				console.log(this.posObj.workYearList)
 				this.getGrade({ 
 					workYear: workYearList,
 					education: educationList,
@@ -261,19 +258,19 @@
 					subcompanySize: this.posObj.companySizeList,
 					subjobNature: this.posObj.jobNatureList,
 				})
-				this.analyzeSalary(salaryList, this.posObj.salaryList)
+				this.analyzeSalary(this.countrySalaryList, this.posObj.salaryList)
 				let totalList = this.subOrder.concat(this.order)
 				this.radarData.forEach((item, index) => {
 					item.value = ( totalList[index] + 1 ) * 20
 				})
 				this.isShowRadar = true
-				console.timeEnd('start')
 			})
 		},
 		computed: {
 			...mapGetters([
 				'userCollect',
-				'userHabit'
+				'userHabit',
+				'countrySalaryList'
 			]),
 		},
 		components: {
@@ -289,16 +286,6 @@
 				this.posObj = _posObj.data
 				console.log(this.posObj)
 				this.posObj.companyLogo = `//www.lgstatic.com/thumbnail_160x160/${this.posObj.companyLogo}`
-				// this.posObj.positionDesc = [
-				// 	"职位描述:",
-				// 	"1、熟悉HTML5/CSS3/JS，掌握Angular/React/Vue中一种或多种开发框架，熟悉React框架优先。",
-				// 	"2、具备良好的沟通能力，对于用户体验、视觉及交互设计有一定的理解；",
-				// 	"3、熟悉SVN、GIT 等常用管理工具优先；",
-				// 	"4、具备良好的沟通能力，对于用户体验、视觉及交互设计有一定的理解。",
-				// 	"职位要求:",
-				// 	"1、二本以上计算机相关专业；",
-				// 	"2、需要懂vue框架，需要精通，马上能上手的。"
-				// ]
 
 				this.posObj.longitude = parseFloat(this.posObj.longitude)
 				this.posObj.latitude = parseFloat(this.posObj.latitude)
@@ -397,7 +384,7 @@
 					return ( parseInt(total.replace('k', '') ) + parseInt( val.replace('k', '') ) ) / 2
 				})
 				list.some((item, index) => {
-					if(parseInt(item.replace('k', '')) >= _salary ) {
+					if(item >= _salary ) {
 						this.order.unshift(index)
 						return true
 					} 
@@ -445,9 +432,6 @@
 				font-size: $main-size;
 				font-weight: 380;
 				display: flex;
-				text {
-					color: $middle-color;
-				}
 				.salary {
 					color: $salary-color;
 				}
@@ -523,6 +507,14 @@
 						border: 2rpx solid $circle-border-color;
 						border-radius: 40rpx;
 					}
+				}
+			}
+			.skill_require {
+				color: $middle-color;
+				font-size: $main-size;
+				margin: 20rpx 0;
+				.require_list {
+					margin-top: 12rpx
 				}
 			}
 		}

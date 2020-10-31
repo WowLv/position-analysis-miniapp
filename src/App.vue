@@ -49,6 +49,7 @@ import { mapActions } from 'vuex'
 				let userHabit = uni.getStorageSync('userHabit')
 				this.setUserHabit(userHabit)
 			}
+			this.set_country_salaryList()
 		},
 		methods: {
 			...mapActions([
@@ -59,7 +60,8 @@ import { mapActions } from 'vuex'
 				'setHopeData',
 				'setProjInfo',
 				'setUserHabit',
-				'setCommit'
+				'setCommit',
+				'set_country_salaryList'
 			])
 		}
 	}

@@ -103,3 +103,10 @@ export function getCompanyFinance(obj) {
 		data: obj
 	})
 }
+
+export function getCountrySalary() {
+	return analysisReq({
+		url: '/country_salary',
+		method: 'GET'
+	})
+}
