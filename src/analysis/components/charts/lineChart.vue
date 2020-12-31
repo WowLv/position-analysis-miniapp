@@ -37,72 +37,11 @@ export default {
     },
   },
   methods: {
-    // onInitChart(F2, config) {
-    //   F2.Global.fontFamily = "sans-serif";
-    //   chart = new F2.Chart(config);
-    //   chart.source(data, {
-    //     time: {
-    //       type: "timeCat",
-    //       tickCount: 3,
-    //       mask: "hh:mm",
-    //       range: [0, 1],
-    //     },
-    //     value: {
-    //       tickCount: 3,
-    //       formatter: function formatter(ivalue) {
-    //         return ivalue + "%";
-    //       },
-    //     },
-    //   });
-    //   chart.axis("time", {
-    //     line: null,
-    //     label: function label(text, index, total) {
-    //       const textCfg = {};
-    //       if (index === 0) {
-    //         textCfg.textAlign = "left";
-    //       } else if (index === total - 1) {
-    //         textCfg.textAlign = "right";
-    //       }
-    //       return textCfg;
-    //     },
-    //   });
-    //   chart.axis("tem", {
-    //     grid: function grid(text) {
-    //       if (text === "0%") {
-    //         return {
-    //           lineDash: null,
-    //           lineWidth: 1,
-    //         };
-    //       }
-    //     },
-    //   });
-    //   chart.legend({
-    //     position: "bottom",
-    //     offsetY: -5,
-    //   });
-    //   chart
-    //     .line()
-    //     .position("time*value")
-    //     .color("type")
-    //     .shape("type", function (type) {
-    //       if (type === "预期收益率") {
-    //         return "line";
-    //       }
-    //       if (type === "实际收益率") {
-    //         return "dash";
-    //       }
-    //     });
-
-    //   chart.render();
-    //   return chart;
-    // },
     onInitChart(F2, config) {
       F2.Global.fontFamily = "sans-serif";
       chart = new F2.Chart(config);
       chart.source(data,{
         date: {
-          type: "timeCat",
-          mask: "MM-DD",
           tickCount: 5
         }
       });
