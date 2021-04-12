@@ -59,12 +59,17 @@ export default {
             rightList: [],
             currentIndex: 0,
             posList: [],
-            selectMode: ''
+            selectMode: '',
+			lable:undefined,
+			lableData:[]
+			
         }
     },
     onLoad(option) {
         this.selectMode = option.mode
-        console.log(this.selectMode)
+		this.lable = option.lable
+		console.log(this.selectMode)
+		console.log(this.lable)
         this._getPosSelect()
     },
     computed: {
@@ -113,7 +118,37 @@ export default {
                 }else {
                     this.setSearchHistory({ value: this.rightList[index], id: length})
                 }
-                uni.$emit('request', this.rightList[index])
+                if(this.lable === undefined){
+					uni.$emit('request', this.rightList[index])
+				}else{
+					let obj = this
+					uni.getStorage({
+					    key: 'onlabelData',
+					    success: function (res) {
+							if(obj.lable == 6){
+								obj.lableData = res.data
+								obj.lableData.push(obj.rightList[index])
+								uni.setStorage({
+								    key: 'onlabelData',
+								    data: obj.lableData,
+								    success: function () {
+								        console.log('success',obj.lableData);
+								    }
+								});
+							}else{
+								obj.lableData = res.data
+								obj.lableData[obj.lable] = obj.rightList[index]
+								uni.setStorage({
+								    key: 'onlabelData',
+								    data: obj.lableData,
+								    success: function () {
+								        console.log('success',obj.lableData);
+								    }
+								});
+							}
+					    }
+					});
+				}
 
             }
             uni.navigateBack({

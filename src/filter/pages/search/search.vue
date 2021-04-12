@@ -77,6 +77,20 @@
                         </text>
                     </view>
                 </view>
+                <!-- 职位标签-->
+                <view class="recommend">
+                  <view class="recommend_title">职业标签</view>
+                  <view class="recommend_list" >
+                    <text class="recommend_item"
+                        v-for="(item ,index) in ProfessionalLabel"
+                        :key="index"
+                        @click="handleSelect"
+                        :data-index="index"
+                        data-type="ProfessionalLabel">
+                    {{item}}
+                  </text>
+                </view>
+              </view>
             </view>
         </view>
     </view>
@@ -102,12 +116,20 @@ export default {
             campanyList: ['虎牙科技', '字节跳动', 'Bigo', '小鹏汽车', '唯品会'],
             noResult: false,
             isSearching: false,
-            isComfirm: false
+            isComfirm: false,
+			ProfessionalLabel:[]
         }
     },
     onLoad() {
         let history = uni.getStorageSync("searchHistory") || []
         this.setSearchHistory(history)
+		let obj = this
+		uni.getStorage({
+		    key: 'onlabelData',
+		    success: function (res) {
+				obj.ProfessionalLabel = res.data
+		    }
+		});
     },
     onShow() {
         if(this.userInfo.location) {
@@ -127,6 +149,7 @@ export default {
     },
     onUnload() {
         uni.setStorageSync('searchHistory', this.searchHistory)
+		 
     },
     computed: {
         ...mapGetters([
@@ -187,6 +210,7 @@ export default {
         },
         //获取当前搜索框的内容
         nowSearchPos(data) {
+			console.log(data)
             this.sNowInput = data.trim()
             this.clearSearchList()
             this.isComfirm = false
@@ -235,6 +259,7 @@ export default {
                 this.sendRequest(key, 1, 0)
             }else {
                 const index = e.currentTarget.dataset.index
+				console.log(this)
                 this.nowSearchPos(this[type][index])
                 this.sendRequest(this[type][index], 1, 0)
             }

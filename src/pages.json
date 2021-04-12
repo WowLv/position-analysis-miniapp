@@ -7,6 +7,13 @@
 			}
 		},
 		{
+			"path":"pages/my/my",
+			"style": {
+				"navigationBarTitleText": "我的",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
 			"path":"pages/filter/filter",
 			"style": {
 				"navigationBarTitleText": "设置求职意向",
@@ -35,13 +42,7 @@
 				"navigationBarTextStyle": "white"
 			}
 		},
-		{
-			"path":"pages/my/my",
-			"style": {
-				"navigationBarTitleText": "我的",
-				"navigationBarTextStyle": "white"
-			}
-		},
+		
         {
             "path" : "pages/posDetail/posDetail",
             "style" : {
@@ -111,6 +112,13 @@
 					}
 				},
 				{
+					"path":"pages/ProfessionalLabel/ProfessionalLabel",
+					"style": {
+						"navigationBarTitleText": "职业标签",
+						"navigationBarTextStyle": "white"
+					}
+				},
+				{
 					"path":"pages/setting/setting",
 					"style": {
 						"navigationBarTitleText": "设置",
@@ -145,8 +153,8 @@
 						"navigationBarTextStyle": "white"
 					}
 				}
-				
-			]
+                
+            ]
 		}
 	],
 	"preloadRule": {
