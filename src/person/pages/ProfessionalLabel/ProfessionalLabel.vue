@@ -29,7 +29,6 @@ export default {
 		    key: 'onlabelData',
 		    success: function (res) {
 				obj.labelData = res.data
-				console.log('klasgnlsgnlkg',obj.labelData)
 		    },
 			fail:function(res){
 				console.log('shibai')
@@ -50,7 +49,6 @@ export default {
 		    key: 'onlabelData',
 		    success: function (res) {
 				obj.labelData = res.data
-				console.log('aoighasoghaosig',obj.labelData.length)
 		    }
 		});
 		
@@ -58,10 +56,8 @@ export default {
 	computed: {
 		showAdd:function(){
 			if( this.labelData.length <= 4 ){
-				console.log('dui')
 				return true
 			}else{
-				console.log('cuo')
 				return false
 				
 				/* let a = new Array(6)
