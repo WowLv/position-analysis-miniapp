@@ -7,7 +7,7 @@ const request = (params) => {
       })
 
     // const baseUrl = "http://192.168.1.106:3000"
-    const baseUrl = "https://coderush.top"
+    const baseUrl = "https://coderush.top:8081"
     return new Promise((resolve, reject) => {
         uni.request({
             ...params,

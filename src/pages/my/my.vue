@@ -40,6 +40,7 @@ import cell from '@/components/cell/cell'
 					{ name: '附件简历', class: 'icon-folder', url: '../../person/pages/resumeAttachment/resumeAttachment'},
 					{ name: '投递记录', class: 'icon-history', url: '../../person/pages/history/history'},
 					{ name: '我的收藏', class: 'icon-collection', url: '../../person/pages/collect/collect'},
+					{ name: '职业标签', class: 'icon-fire', url: '../../person/pages/ProfessionalLabel/ProfessionalLabel'},
 					{ name: '设置', class: 'icon-zhanghucaozuo', url: '../../person/pages/setting/setting'}
 				],
 				userInfo: null
